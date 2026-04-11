@@ -54,3 +54,8 @@ Shared contracts:
 - [SYSTEM_ARCHITECTURE.md](./SYSTEM_ARCHITECTURE.md)
 - [ROADMAP.md](./ROADMAP.md)
 - [DECISIONS.md](./DECISIONS.md)
+
+## Pitch Documents
+
+- [Aligned Pitch](docs/pitch/Aligned_Pitch.pdf)
+- [Aligned Pitch + Technical Report](docs/pitch/Aligned_Pitch_with_Technical_Report.pdf)
