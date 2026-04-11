@@ -1,0 +1,30 @@
+[
+  {
+    "userId": "user-lara",
+    "displayName": "Lara",
+    "city": "Berlin",
+    "neighborhoods": ["Neukolln"],
+    "signals": ["very direct", "quiet dates", "long-term intent"]
+  },
+  {
+    "userId": "user-jonas",
+    "displayName": "Jonas",
+    "city": "Berlin",
+    "neighborhoods": ["Friedrichshain"],
+    "signals": ["balanced spontaneity", "explicit pacing", "dating with intent"]
+  },
+  {
+    "userId": "user-merve",
+    "displayName": "Merve",
+    "city": "Berlin",
+    "neighborhoods": ["Charlottenburg"],
+    "signals": ["literal communication", "low-noise fit", "life-partner intent"]
+  },
+  {
+    "userId": "user-alex",
+    "displayName": "Alex",
+    "city": "Berlin",
+    "neighborhoods": ["Kreuzberg"],
+    "signals": ["bilingual", "gentle initiation", "clear exploration"]
+  }
+]

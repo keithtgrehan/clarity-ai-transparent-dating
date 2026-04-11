@@ -1,0 +1,16 @@
+[
+  {
+    "firstName": "Nina",
+    "city": "Berlin",
+    "neighborhood": "Prenzlauer Berg",
+    "source": "Berlin creator referral",
+    "interviewOptIn": true
+  },
+  {
+    "firstName": "David",
+    "city": "Berlin",
+    "neighborhood": "Wedding",
+    "source": "Newsletter",
+    "interviewOptIn": false
+  }
+]
