@@ -1,6 +1,6 @@
 # AI Boundaries
 
-## Role Of AI In Project A-Z
+## Role Of AI In Clarity.ai - transparent dating
 AI is allowed to help with clarity, summarization, bounded signal extraction, and moderation support. AI is not allowed to act as a therapist, diagnostician, truth engine, or hidden ranking oracle.
 
 ## Allowed AI Uses

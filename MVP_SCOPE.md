@@ -1,4 +1,4 @@
-# Project A-Z MVP Scope
+# Clarity.ai - transparent dating MVP Scope
 
 ## Scope Principle
 The MVP is a disciplined learning product, not a full dating platform. It should support real end-to-end flows locally while keeping risk, complexity, and false confidence low.

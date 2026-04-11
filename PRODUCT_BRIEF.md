@@ -1,7 +1,7 @@
-# Project A-Z Product Brief
+# Clarity.ai - transparent dating Product Brief
 
 ## Working Thesis
-Project A-Z is a Berlin-first dating product for people with ADHD, Autism, and AuDHD who want a calmer, clearer, less socially punishing way to meet compatible people. The product is not a mental health app, not a diagnostic tool, and not a gamified swipe machine. It is a structured dating environment built around explicit communication, lower ambiguity, and better alignment before users invest emotional energy.
+Clarity.ai - transparent dating is a Berlin-first dating product for people with ADHD, Autism, and AuDHD who want a calmer, clearer, less socially punishing way to meet compatible people. The product is not a mental health app, not a diagnostic tool, and not a gamified swipe machine. It is a structured dating environment built around explicit communication, lower ambiguity, and better alignment before users invest emotional energy.
 
 ## Problem Definition
 Mainstream dating products create avoidable strain for neurodivergent users:

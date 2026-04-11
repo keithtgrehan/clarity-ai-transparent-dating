@@ -1,7 +1,7 @@
 # Safety Principles
 
 ## Safety Position
-Project A-Z is a dating platform with elevated clarity and moderation needs, not a clinical service. Safety work should focus on consent, deception, harassment, coercion, exploitation, and platform misuse.
+Clarity.ai - transparent dating is a dating platform with elevated clarity and moderation needs, not a clinical service. Safety work should focus on consent, deception, harassment, coercion, exploitation, and platform misuse.
 
 ## Core Principles
 

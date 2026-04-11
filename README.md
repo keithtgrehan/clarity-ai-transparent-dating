@@ -1,6 +1,6 @@
-# Project A-Z
+# Clarity.ai - transparent dating
 
-Project A-Z is a Berlin-first dating product foundation for ADHD, Autism, and AuDHD users. This repository is a serious first-pass local monorepo intended for review and iteration, not a production-ready application.
+Clarity.ai - transparent dating is a Berlin-first dating product foundation for ADHD, Autism, and AuDHD users. This repository is a serious first-pass local monorepo intended for review and iteration, not a production-ready application.
 
 ## What This Repo Contains
 - concrete product, launch, safety, and architecture docs
@@ -19,7 +19,7 @@ Project A-Z is a Berlin-first dating product foundation for ADHD, Autism, and Au
 Fastify was chosen over FastAPI for this run because shared TypeScript contracts across web and API are more valuable than a second language/toolchain at this stage of solo founder execution.
 
 ## Quick Start
-1. `cd "/Users/keith/Documents/New project/Project A-Z"`
+1. `cd "/Users/keith/Documents/New project/Clarity.ai - transparent dating"`
 2. `npm run setup`
 3. `npm run dev`
 

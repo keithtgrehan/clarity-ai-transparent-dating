@@ -1,7 +1,7 @@
 # System Architecture
 
 ## Architecture Summary
-Project A-Z uses a local-first TypeScript monorepo:
+Clarity.ai - transparent dating uses a local-first TypeScript monorepo:
 - `apps/web`: React + Vite + TypeScript frontend
 - `apps/api`: Fastify + TypeScript API
 - `packages/shared`: shared Zod schemas, domain types, and API contracts
