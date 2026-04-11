@@ -1,35 +1,42 @@
-import type { Profile } from "@project-a-z/shared";
+import type { Profile } from "@clarity/shared";
 
-function textContains(text: string, phrases: string[]) {
+function includesAny(text: string, phrases: string[]) {
   return phrases.some((phrase) => text.includes(phrase));
 }
 
 export function detectProfileContradictions(profile: Profile) {
-  // TODO: Replace keyword heuristics with a reviewed semantic comparison flow once fixture coverage exists.
-  const text = [profile.bio, profile.whatHelpsMeCommunicate, profile.idealFirstDate]
+  const text = [profile.bio, profile.whatDrainsMe, profile.whatINeedFromAPartner]
+    .filter(Boolean)
     .join(" ")
     .toLowerCase();
   const contradictions: string[] = [];
 
   if (
-    profile.communicationPreferences.planningStyle === "scheduled" &&
-    textContains(text, ["last minute only", "spur of the moment", "super spontaneous"])
+    profile.communicationStyle === "direct" &&
+    includesAny(text, ["read between the lines", "pick up the hint", "just know what i mean"])
   ) {
-    contradictions.push("Structured planning preference conflicts with highly spontaneous profile language.");
+    contradictions.push("Profile asks for directness but the text also expects hints to be inferred.");
   }
 
   if (
-    profile.communicationPreferences.callPreference === "avoid_calls" &&
-    textContains(text, ["call me anytime", "phone me", "love long calls"])
+    profile.communicationStyle === "indirect" &&
+    includesAny(text, ["say it bluntly", "be very direct", "tell me exactly"])
   ) {
-    contradictions.push("Call preference conflicts with text that invites frequent phone calls.");
+    contradictions.push("Profile prefers indirect communication but the text asks for blunt clarity.");
   }
 
   if (
-    profile.sensoryPreferences.noiseTolerance === "low" &&
-    textContains(text, ["loud bar", "big parties", "packed clubs"])
+    profile.routinePreference === "routine" &&
+    includesAny(text, ["last minute only", "spur of the moment", "totally random plans"])
   ) {
-    contradictions.push("Low noise tolerance conflicts with loud-date profile language.");
+    contradictions.push("Routine preference conflicts with text that asks for very last-minute plans.");
+  }
+
+  if (
+    profile.sensoryProfile.calm === "essential" &&
+    includesAny(text, ["packed clubs", "loud bars", "chaotic nightlife"])
+  ) {
+    contradictions.push("Calm is marked as essential, but the text points toward loud or crowded dates.");
   }
 
   return contradictions;

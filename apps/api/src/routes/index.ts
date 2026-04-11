@@ -10,23 +10,24 @@ import { registerWaitlistRoutes } from "./waitlist.js";
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/health", async () => ({
     status: "ok",
-    app: "project-a-z-api",
-    stage: "foundation"
+    app: "clarity-ai-api",
+    stage: "mvp"
   }));
 
   app.get("/", async () => ({
-    message: "Project A-Z API foundation is running.",
+    message: "Clarity.ai local MVP API is running.",
     endpoints: [
-      "POST /waitlist/leads",
+      "GET /health",
       "GET /profiles/:userId",
       "PUT /profiles/:userId",
-      "POST /onboarding/submit",
-      "GET /matches/candidates?userId=:id",
+      "POST /onboarding",
+      "GET /matches?userId=:id",
       "GET /conversations?userId=:id",
       "GET /conversations/:conversationId/messages",
       "POST /conversations",
       "POST /messages",
-      "POST /safety/report-block",
+      "POST /reports",
+      "POST /waitlist/leads",
       "POST /admin/load-seeds"
     ]
   }));

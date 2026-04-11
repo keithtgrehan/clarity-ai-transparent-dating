@@ -1,28 +1,42 @@
-import type { MatchCandidate, Profile } from "@project-a-z/shared";
-import { nowIso } from "../lib/ids.js";
+import type { MatchCandidate, Profile } from "@clarity/shared";
+import { humanizeEnum, joinNaturalLanguage } from "../lib/format.js";
 import { buildProfileSummary } from "./ai/profileSummary.js";
-import { detectIntentClarity } from "./ai/intentClarity.js";
-import { detectLowSignalProfile } from "./ai/lowSignal.js";
-import { detectProfileContradictions } from "./ai/contradictions.js";
 
-function average(scores: number[]) {
-  return scores.reduce((sum, score) => sum + score, 0) / scores.length;
-}
+const communicationOrder = ["indirect", "balanced", "direct"] as const;
+const energyOrder = ["low", "medium", "high"] as const;
+const routineOrder = ["routine", "balanced", "spontaneous"] as const;
+const noiseOrder = ["low", "medium", "high"] as const;
+const calmOrder = ["not_important", "helpful", "essential"] as const;
 
-function overlapScore(left: string[], right: string[]) {
-  const leftSet = new Set(left.map((item) => item.toLowerCase()));
-  const overlapCount = right.filter((item) => leftSet.has(item.toLowerCase())).length;
-
-  if (left.length === 0 || right.length === 0) {
-    return 0;
+function scoreByDistance<T extends string>(
+  left: T | undefined,
+  right: T | undefined,
+  scale: readonly T[]
+) {
+  if (!left || !right) {
+    return 55;
   }
 
-  return Math.min(100, Math.round((overlapCount / Math.max(left.length, right.length)) * 100));
+  const distance = Math.abs(scale.indexOf(left) - scale.indexOf(right));
+
+  if (distance === 0) {
+    return 100;
+  }
+
+  if (distance === 1) {
+    return 76;
+  }
+
+  return 50;
 }
 
-function scoreRelationshipIntent(user: Profile, candidate: Profile) {
-  if (user.relationshipIntent.primary === candidate.relationshipIntent.primary) {
-    return 100;
+function areIntentCompatible(left: Profile["relationshipIntent"], right: Profile["relationshipIntent"]) {
+  if (!left || !right) {
+    return false;
+  }
+
+  if (left === right) {
+    return true;
   }
 
   const seriousIntentSet = new Set([
@@ -31,157 +45,227 @@ function scoreRelationshipIntent(user: Profile, candidate: Profile) {
     "dating_with_intent"
   ]);
 
-  if (
-    seriousIntentSet.has(user.relationshipIntent.primary) &&
-    seriousIntentSet.has(candidate.relationshipIntent.primary)
-  ) {
-    return 78;
-  }
-
-  if (
-    user.relationshipIntent.primary === "exploring_with_clarity" ||
-    candidate.relationshipIntent.primary === "exploring_with_clarity"
-  ) {
-    return 58;
-  }
-
-  return 25;
+  return seriousIntentSet.has(left) && seriousIntentSet.has(right);
 }
 
-function scoreCommunicationStyle(user: Profile, candidate: Profile) {
-  const scores = [
-    user.communicationPreferences.directness === candidate.communicationPreferences.directness ? 100 : 70,
-    user.communicationPreferences.planningStyle === candidate.communicationPreferences.planningStyle ? 100 : 65,
-    user.communicationPreferences.messageLength === candidate.communicationPreferences.messageLength ? 100 : 75,
-    user.communicationPreferences.callPreference === candidate.communicationPreferences.callPreference ? 100 : 70
-  ];
-
-  return Math.round(average(scores));
+function sameCity(left: Profile, right: Profile) {
+  return left.city.trim().toLowerCase() === right.city.trim().toLowerCase();
 }
 
-function scoreSensoryFit(user: Profile, candidate: Profile) {
-  const environmentScore = overlapScore(
-    user.sensoryPreferences.dateEnvironments,
-    candidate.sensoryPreferences.dateEnvironments
+function acceptsIdentity(profile: Profile, identity: Profile["identity"]) {
+  if (!identity) {
+    return false;
+  }
+
+  if (identity === "prefer_not_to_say") {
+    return profile.openTo.includes("everyone");
+  }
+
+  return profile.openTo.includes("everyone") || profile.openTo.includes(identity);
+}
+
+export function areProfilesEligibleForMatching(user: Profile, candidate: Profile) {
+  if (!user.onboardingCompleted || !candidate.onboardingCompleted) {
+    return false;
+  }
+
+  if (!sameCity(user, candidate)) {
+    return false;
+  }
+
+  if (!areIntentCompatible(user.relationshipIntent, candidate.relationshipIntent)) {
+    return false;
+  }
+
+  return acceptsIdentity(user, candidate.identity) && acceptsIdentity(candidate, user.identity);
+}
+
+function scoreCommunication(user: Profile, candidate: Profile) {
+  return scoreByDistance(user.communicationStyle, candidate.communicationStyle, communicationOrder);
+}
+
+function scoreEnergy(user: Profile, candidate: Profile) {
+  return scoreByDistance(user.socialEnergy, candidate.socialEnergy, energyOrder);
+}
+
+function scoreSensory(user: Profile, candidate: Profile) {
+  const noise = scoreByDistance(
+    user.sensoryProfile.noise,
+    candidate.sensoryProfile.noise,
+    noiseOrder
   );
+  const crowd = scoreByDistance(
+    user.sensoryProfile.crowd,
+    candidate.sensoryProfile.crowd,
+    noiseOrder
+  );
+  const calm = scoreByDistance(user.sensoryProfile.calm, candidate.sensoryProfile.calm, calmOrder);
 
-  const scores = [
-    environmentScore,
-    user.sensoryPreferences.noiseTolerance === candidate.sensoryPreferences.noiseTolerance ? 100 : 70,
-    user.sensoryPreferences.crowdTolerance === candidate.sensoryPreferences.crowdTolerance ? 100 : 70,
-    user.sensoryPreferences.touchPace === candidate.sensoryPreferences.touchPace ? 100 : 60
-  ];
-
-  return Math.round(average(scores));
+  return Math.round((noise + crowd + calm) / 3);
 }
 
-function scorePacingAndPlanning(user: Profile, candidate: Profile) {
-  const scores = [
-    user.relationshipIntent.pacing === candidate.relationshipIntent.pacing ? 100 : 70,
-    user.communicationPreferences.responseCadence ===
-    candidate.communicationPreferences.responseCadence
-      ? 100
-      : 68,
-    user.communicationPreferences.initiationPreference ===
-    candidate.communicationPreferences.initiationPreference
-      ? 100
-      : 74
-  ];
-
-  return Math.round(average(scores));
+function scoreRoutine(user: Profile, candidate: Profile) {
+  return scoreByDistance(user.routinePreference, candidate.routinePreference, routineOrder);
 }
 
-function scoreBerlinLogistics(user: Profile, candidate: Profile) {
-  const areaScore = overlapScore(user.berlinAreas, candidate.berlinAreas);
-  const languageScore = overlapScore(user.languages, candidate.languages);
+function sharedSignals(user: Profile, candidate: Profile) {
+  const signals: string[] = [];
 
-  return Math.round(average([areaScore, languageScore]));
+  if (user.communicationStyle && user.communicationStyle === candidate.communicationStyle) {
+    signals.push(`${humanizeEnum(user.communicationStyle)} communication`);
+  }
+
+  if (user.socialEnergy && user.socialEnergy === candidate.socialEnergy) {
+    signals.push(`${humanizeEnum(user.socialEnergy)} social energy`);
+  }
+
+  if (
+    user.sensoryProfile.calm &&
+    user.sensoryProfile.calm === candidate.sensoryProfile.calm
+  ) {
+    signals.push(`${humanizeEnum(user.sensoryProfile.calm)} calm`);
+  }
+
+  if (
+    user.routinePreference &&
+    user.routinePreference === candidate.routinePreference
+  ) {
+    signals.push(`${humanizeEnum(user.routinePreference)} planning`);
+  }
+
+  return signals.slice(0, 4);
 }
 
-function scoreProfileSignal(candidate: Profile) {
-  // TODO: Replace this hand-tuned signal score with a reviewed rubric tied to pilot outcomes.
-  const lowSignal = detectLowSignalProfile(candidate);
-  const clarity = detectIntentClarity(candidate);
-  const contradictionPenalty = detectProfileContradictions(candidate).length * 12;
-
-  const rawScore = candidate.profileCompleteness * 100 - lowSignal.score * 25 + clarity.score * 10;
-  return Math.max(0, Math.min(100, Math.round(rawScore - contradictionPenalty)));
-}
-
-function buildReasons(user: Profile, candidate: Profile) {
+function whyItCouldWork(user: Profile, candidate: Profile) {
   const reasons: string[] = [];
 
-  if (user.relationshipIntent.primary === candidate.relationshipIntent.primary) {
-    reasons.push("Shared relationship intent is strongly aligned.");
+  if (user.relationshipIntent && user.relationshipIntent === candidate.relationshipIntent) {
+    reasons.push("You want the same kind of relationship pace and direction.");
+  } else {
+    reasons.push("Your relationship goals sit in the same seriousness range.");
   }
 
-  if (user.communicationPreferences.planningStyle === candidate.communicationPreferences.planningStyle) {
-    reasons.push("Planning style looks compatible for predictable dating.");
+  if (user.communicationStyle && user.communicationStyle === candidate.communicationStyle) {
+    reasons.push(`You both prefer ${humanizeEnum(user.communicationStyle)} communication.`);
   }
 
-  if (overlapScore(user.sensoryPreferences.dateEnvironments, candidate.sensoryPreferences.dateEnvironments) >= 50) {
-    reasons.push("There is overlap in preferred first-date environments.");
+  if (
+    user.sensoryProfile.calm &&
+    user.sensoryProfile.calm === candidate.sensoryProfile.calm
+  ) {
+    reasons.push("Your sensory needs point toward a similarly calm date setup.");
   }
 
-  if (overlapScore(user.languages, candidate.languages) >= 50) {
-    reasons.push("Language comfort overlaps well for Berlin-based dating.");
+  if (
+    user.routinePreference &&
+    user.routinePreference === candidate.routinePreference &&
+    reasons.length < 3
+  ) {
+    reasons.push("Your planning styles line up well for early dating.");
   }
 
   if (reasons.length === 0) {
-    reasons.push("Structured preferences show enough overlap for an early conversation.");
+    reasons.push("Your structured preferences are compatible enough for a clear first conversation.");
   }
 
-  return reasons.slice(0, 4);
+  return reasons.slice(0, 3);
 }
 
-function buildCautionSignals(candidate: Profile) {
-  const lowSignal = detectLowSignalProfile(candidate).indicators;
-  const intentNotes = detectIntentClarity(candidate).notes;
-  const contradictions = detectProfileContradictions(candidate);
+function potentialFriction(user: Profile, candidate: Profile) {
+  const friction: string[] = [];
 
-  return [...lowSignal, ...intentNotes, ...contradictions].slice(0, 4);
+  if (
+    user.communicationStyle &&
+    candidate.communicationStyle &&
+    scoreCommunication(user, candidate) < 70
+  ) {
+    friction.push("Your communication styles may need more explicit check-ins.");
+  }
+
+  if (user.socialEnergy && candidate.socialEnergy && scoreEnergy(user, candidate) < 70) {
+    friction.push("Your ideal social pace could differ once plans get busier.");
+  }
+
+  if (user.routinePreference && candidate.routinePreference && scoreRoutine(user, candidate) < 70) {
+    friction.push("One of you may want more structure around planning than the other.");
+  }
+
+  if (friction.length === 0 && scoreSensory(user, candidate) < 70) {
+    friction.push("Date setup may need care so both of your sensory needs stay comfortable.");
+  }
+
+  return friction.slice(0, 2);
+}
+
+function confidenceFor(user: Profile, candidate: Profile) {
+  const averageCompleteness = (user.profileCompleteness + candidate.profileCompleteness) / 2;
+
+  if (averageCompleteness >= 0.85) {
+    return "high" as const;
+  }
+
+  if (averageCompleteness >= 0.6) {
+    return "medium" as const;
+  }
+
+  return "low" as const;
+}
+
+function firstMessagePrompt(candidate: Profile, signals: string[]) {
+  const signalText =
+    signals.length > 0
+      ? `You already share ${joinNaturalLanguage(signals)}.`
+      : "You already have some structured overlap.";
+
+  return `${signalText} Try asking ${candidate.displayName} what would make a first date feel easy for them.`;
+}
+
+function sortScore(user: Profile, candidate: Profile) {
+  const communication = scoreCommunication(user, candidate);
+  const energy = scoreEnergy(user, candidate);
+  const sensory = scoreSensory(user, candidate);
+  const routine = scoreRoutine(user, candidate);
+
+  return communication * 0.3 + energy * 0.2 + sensory * 0.3 + routine * 0.2;
 }
 
 export function calculateCompatibility(user: Profile, candidate: Profile): MatchCandidate {
-  const relationshipIntent = scoreRelationshipIntent(user, candidate);
-  const communicationStyle = scoreCommunicationStyle(user, candidate);
-  const sensoryFit = scoreSensoryFit(user, candidate);
-  const pacingAndPlanning = scorePacingAndPlanning(user, candidate);
-  const berlinLogistics = scoreBerlinLogistics(user, candidate);
-  const profileSignal = scoreProfileSignal(candidate);
-
-  // TODO: Calibrate weights against explicit match feedback, never retention or compulsive usage metrics.
-  const compatibilityScore = Math.round(
-    relationshipIntent * 0.24 +
-      communicationStyle * 0.22 +
-      sensoryFit * 0.18 +
-      pacingAndPlanning * 0.14 +
-      berlinLogistics * 0.1 +
-      profileSignal * 0.12
-  );
+  const signals = sharedSignals(user, candidate);
 
   return {
-    userId: user.userId,
     candidateUserId: candidate.userId,
-    compatibilityScore,
-    dimensionScores: {
-      relationshipIntent,
-      communicationStyle,
-      sensoryFit,
-      pacingAndPlanning,
-      berlinLogistics,
-      profileSignal
+    profile: {
+      userId: candidate.userId,
+      displayName: candidate.displayName,
+      age: candidate.age,
+      city: candidate.city,
+      locationLabel: candidate.locationLabel,
+      identity: candidate.identity,
+      diagnosisStatus: candidate.diagnosisStatus,
+      communicationStyle: candidate.communicationStyle,
+      socialEnergy: candidate.socialEnergy,
+      sensoryProfile: candidate.sensoryProfile,
+      routinePreference: candidate.routinePreference,
+      relationshipIntent: candidate.relationshipIntent,
+      summary: candidate.summary?.trim() || buildProfileSummary(candidate),
+      profileCompleteness: candidate.profileCompleteness
     },
-    reasons: buildReasons(user, candidate),
-    cautionSignals: buildCautionSignals(candidate),
-    profileSummary: buildProfileSummary(candidate),
-    lastComputedAt: nowIso()
+    whyItCouldWork: whyItCouldWork(user, candidate),
+    potentialFriction: potentialFriction(user, candidate),
+    confidence: confidenceFor(user, candidate),
+    sharedSignals: signals,
+    firstMessagePrompt: firstMessagePrompt(candidate, signals)
   };
 }
 
 export function getMatchCandidates(user: Profile, candidateProfiles: Profile[]) {
   return candidateProfiles
     .filter((candidate) => candidate.userId !== user.userId)
-    .map((candidate) => calculateCompatibility(user, candidate))
-    .sort((left, right) => right.compatibilityScore - left.compatibilityScore);
+    .filter((candidate) => areProfilesEligibleForMatching(user, candidate))
+    .map((candidate) => ({
+      candidate: calculateCompatibility(user, candidate),
+      sortScore: sortScore(user, candidate)
+    }))
+    .sort((left, right) => right.sortScore - left.sortScore)
+    .map((entry) => entry.candidate);
 }

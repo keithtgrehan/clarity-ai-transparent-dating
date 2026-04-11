@@ -6,7 +6,6 @@ import { MatchesPage } from "./pages/MatchesPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SafetyPage } from "./pages/SafetyPage";
-import { SettingsPage } from "./pages/SettingsPage";
 
 export default function App() {
   return (
@@ -17,7 +16,6 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/matches" element={<MatchesPage />} />
         <Route path="/chat" element={<ChatPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/safety" element={<SafetyPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

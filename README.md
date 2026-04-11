@@ -1,61 +1,79 @@
 # Clarity.ai - transparent dating
 
-Clarity.ai - transparent dating is a Berlin-first dating product foundation for ADHD, Autism, and AuDHD users. This repository is a serious first-pass local monorepo intended for review and iteration, not a production-ready application.
+Clarity.ai is a clarity-first dating MVP for people who want structured onboarding, structured profiles, explainable matching, and lower-ambiguity early conversations. This repo is intentionally local-first: no payments, no mobile app, no fake AI claims, and no pretend backend.
 
-## What This Repo Contains
-- concrete product, launch, safety, and architecture docs
-- a TypeScript monorepo with `apps/web`, `apps/api`, and `packages/shared`
-- local JSON-backed persistence scaffolding
-- first-pass domain models and API contracts
-- calm frontend route stubs for landing, onboarding, profile, matches, chat, settings, and safety flows
-- bounded matching, AI-support, and moderation scaffolds
-- Berlin-first waitlist, growth, and seed-data foundations
-
-## Stack Choice
-- frontend: React + Vite + TypeScript
-- backend: Fastify + TypeScript
-- shared contracts: Zod + TypeScript
-
-Fastify was chosen over FastAPI for this run because shared TypeScript contracts across web and API are more valuable than a second language/toolchain at this stage of solo founder execution.
+## What Works Now
+- backend starts locally with Fastify
+- frontend starts locally with Vite
+- onboarding saves a persisted profile for the seeded viewer user
+- profile page shows structured traits, completeness, summary, and edit flow
+- matches return seeded candidates with plain-English reasons, friction notes, and confidence labels
+- chat creates conversations, loads threads, and sends messages
+- safety flow submits reports and blocks users
+- local setup, build, and backend MVP verification are scripted
 
 ## Quick Start
 1. `cd "/Users/keith/Documents/New project/Clarity.ai - transparent dating"`
 2. `npm run setup`
 3. `npm run dev`
 
-Web app:
-- [apps/web](./apps/web)
+Local URLs:
+- web: [http://localhost:5173](http://localhost:5173)
+- api: [http://localhost:4000](http://localhost:4000)
 
-API:
-- [apps/api](./apps/api)
+## Demo Flow
+After a fresh `npm run seed`, the repo starts with one seeded viewer user and three seeded candidate profiles.
 
-Shared contracts:
-- [packages/shared](./packages/shared)
+1. Open `/onboarding`
+2. Complete the seven-step onboarding flow for `Riley`
+3. Open `/profile` to see the persisted structured profile
+4. Open `/matches` to view seeded match candidates and explanations
+5. Open a conversation from a match card
+6. Send a message in `/chat`
+7. Use `/safety` or the chat report button to report and block a user
 
-## Key Commands
-- `npm run setup`: install workspace dependencies and prepare the local runtime store
-- `npm run dev`: start shared build watch, API dev server, and Vite web server
-- `npm run seed`: load Berlin-first seed data into the local runtime store
-- `npm run quality`: run type checks and builds across the workspace
+Reset the local runtime store at any time with:
+- `npm run seed`
 
-## Current Truth
-- this repo is intentionally honest about incomplete product logic
-- auth, deployment, legal review, deletion workflows, and production moderation operations are not done
-- AI features are bounded skeletons only
+## Commands
+- `npm run setup`: install dependencies, copy `.env` from `.env.example` if missing, build shared types, and seed the runtime store
+- `npm run dev`: start shared watch, API dev server, and Vite frontend
+- `npm run dev:api`: start only the backend
+- `npm run dev:web`: start only the frontend
+- `npm run seed`: reset the local JSON store from the seed bundle
+- `npm run typecheck`: strict workspace typecheck
+- `npm run build`: build shared, API, and web
+- `npm run quality`: run typecheck, build, and the backend MVP verification script
+- `npm run verify:mvp`: run the backend inject-based smoke verification directly
 
-## Core Docs
-- [PRODUCT_BRIEF.md](./PRODUCT_BRIEF.md)
-- [MVP_SCOPE.md](./MVP_SCOPE.md)
-- [BERLIN_LAUNCH_PLAN.md](./BERLIN_LAUNCH_PLAN.md)
-- [USER_PERSONAS.md](./USER_PERSONAS.md)
-- [MATCHING_MODEL.md](./MATCHING_MODEL.md)
-- [SAFETY_PRINCIPLES.md](./SAFETY_PRINCIPLES.md)
-- [AI_BOUNDARIES.md](./AI_BOUNDARIES.md)
-- [SYSTEM_ARCHITECTURE.md](./SYSTEM_ARCHITECTURE.md)
-- [ROADMAP.md](./ROADMAP.md)
-- [DECISIONS.md](./DECISIONS.md)
+## Local Environment
+The repo uses a root `.env` file. `npm run setup` will create it automatically from `.env.example` if needed.
 
-## Pitch Documents
+Current local env keys:
+- `WEB_PORT`
+- `API_PORT`
+- `VITE_API_BASE_URL`
+- `API_ALLOWED_ORIGIN`
+- `API_STORAGE_FILE`
+- `ALLOW_SEED_ENDPOINT`
 
-- [Aligned Pitch](docs/pitch/Aligned_Pitch.pdf)
-- [Aligned Pitch + Technical Report](docs/pitch/Aligned_Pitch_with_Technical_Report.pdf)
+## Architecture
+- frontend: React + Vite + TypeScript
+- backend: Fastify + TypeScript
+- shared contracts: Zod + TypeScript
+- persistence: local JSON store at `data/runtime/local-db.json`
+
+## Boundaries
+- matching is heuristic and explainable, not predictive
+- diagnosis status is user-declared only
+- no personality typing
+- no diagnosis inference
+- no realtime infra
+- no auth or multi-device session model yet
+- moderation is structured and minimal, not production-ops complete
+
+## Audit Docs
+- [audit/day2_audit_fix_report.md](./audit/day2_audit_fix_report.md)
+- [audit/day2_build_report.md](./audit/day2_build_report.md)
+- [audit/known_issues.md](./audit/known_issues.md)
+- [audit/next_steps.md](./audit/next_steps.md)

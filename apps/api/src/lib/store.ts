@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { LocalDataStoreSchema, type LocalDataStore } from "@project-a-z/shared";
+import { LocalDataStoreSchema, type LocalDataStore } from "@clarity/shared";
 import { resolveStorageFilePath } from "./paths.js";
 
 const emptyStore: LocalDataStore = {

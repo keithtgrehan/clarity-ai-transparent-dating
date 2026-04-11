@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { LocalDataStoreSchema, type LocalDataStore } from "@project-a-z/shared";
+import { LocalDataStoreSchema, type LocalDataStore } from "@clarity/shared";
 import { resolveRepoPath } from "./paths.js";
 import { writeStore } from "./store.js";
 

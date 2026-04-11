@@ -1,15 +1,17 @@
 import type {
   Conversation,
   ConversationListResponse,
+  ConversationMessagesResponse,
   CreateConversationInput,
-  CreateReportBlockInput,
+  CreateReportInput,
   CreateWaitlistLeadInput,
   MatchCandidateListResponse,
   Message,
-  Profile,
+  ProfileInput,
+  ProfileResponse,
   Report,
   WaitlistLead
-} from "@project-a-z/shared";
+} from "@clarity/shared";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
 
@@ -42,25 +44,25 @@ export async function createWaitlistLead(input: CreateWaitlistLeadInput) {
 }
 
 export async function fetchProfile(userId: string) {
-  return request<{ profile: Profile }>(`/profiles/${userId}`);
+  return request<ProfileResponse>(`/profiles/${userId}`);
 }
 
-export async function saveProfile(userId: string, profile: Profile) {
-  return request<{ profile: Profile }>(`/profiles/${userId}`, {
+export async function saveProfile(userId: string, profile: ProfileInput) {
+  return request<ProfileResponse>(`/profiles/${userId}`, {
     method: "PUT",
     body: JSON.stringify(profile)
   });
 }
 
-export async function submitOnboarding(userId: string, profile: Profile) {
-  return request<{ ok: boolean; profile: Profile }>("/onboarding/submit", {
+export async function submitOnboarding(userId: string, profile: ProfileInput) {
+  return request<ProfileResponse>("/onboarding", {
     method: "POST",
     body: JSON.stringify({ userId, profile })
   });
 }
 
 export async function fetchMatchCandidates(userId: string) {
-  return request<MatchCandidateListResponse>(`/matches/candidates?userId=${userId}`);
+  return request<MatchCandidateListResponse>(`/matches?userId=${userId}`);
 }
 
 export async function fetchConversations(userId: string) {
@@ -68,9 +70,7 @@ export async function fetchConversations(userId: string) {
 }
 
 export async function fetchConversationMessages(conversationId: string) {
-  return request<{ conversation: Conversation; messages: Message[] }>(
-    `/conversations/${conversationId}/messages`
-  );
+  return request<ConversationMessagesResponse>(`/conversations/${conversationId}/messages`);
 }
 
 export async function createConversation(input: CreateConversationInput) {
@@ -91,8 +91,8 @@ export async function sendMessage(input: {
   });
 }
 
-export async function createReport(input: CreateReportBlockInput) {
-  return request<{ report: Report }>("/safety/report-block", {
+export async function createReport(input: CreateReportInput) {
+  return request<{ report: Report }>("/reports", {
     method: "POST",
     body: JSON.stringify(input)
   });

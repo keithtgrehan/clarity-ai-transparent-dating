@@ -7,75 +7,62 @@ import {
 
 const TimestampSchema = z.string().min(1);
 const IdSchema = z.string().min(1);
+const ShortTextSchema = z.string().trim().min(1).max(140);
 
-export const NeurotypeSchema = z.enum([
-  "adhd",
-  "autism",
-  "audhd",
-  "anxiety_secondary",
-  "depression_secondary",
-  "neurotypical",
-  "undisclosed"
+export const AccountStatusSchema = z.enum(["invited", "active", "blocked"]);
+
+export const IdentitySchema = z.enum([
+  "woman",
+  "man",
+  "nonbinary",
+  "trans",
+  "queer",
+  "self_described",
+  "prefer_not_to_say"
 ]);
 
-export const RelationshipIntentSchema = z.object({
-  primary: z.enum([
-    "long_term_relationship",
-    "life_partner",
-    "dating_with_intent",
-    "exploring_with_clarity",
-    "short_term_connection"
-  ]),
-  pacing: z.enum(["slow_and_intentional", "steady", "flexible"]),
-  openness: z
-    .array(z.enum(["monogamous", "non_monogamous", "not_sure_yet"]))
-    .min(1)
-    .max(3),
-  notes: z.string().trim().max(280).optional()
-});
+export const IdentityPreferenceSchema = z.enum([
+  "woman",
+  "man",
+  "nonbinary",
+  "trans",
+  "queer",
+  "self_described",
+  "everyone"
+]);
 
-export const CommunicationPreferencesSchema = z.object({
-  responseCadence: z.enum(["same_day", "within_two_days", "variable"]),
-  planningStyle: z.enum(["scheduled", "semi_spontaneous", "spontaneous"]),
-  directness: z.enum(["very_direct", "direct_with_context", "mixed"]),
-  messageLength: z.enum(["short", "medium", "long"]),
-  callPreference: z.enum(["avoid_calls", "scheduled_calls_only", "open_to_calls"]),
-  initiationPreference: z.enum(["explicit", "gentle", "balanced"]),
-  repairStyle: z.enum(["name_it_directly", "need_processing_time", "context_then_repair"]),
-  notes: z.string().trim().max(280).optional()
-});
+export const DiagnosisStatusSchema = z.enum([
+  "diagnosed",
+  "self_identify",
+  "prefer_not_to_say",
+  "not_applicable"
+]);
 
-export const SensoryPreferencesSchema = z.object({
-  dateEnvironments: z
-    .array(
-      z.enum([
-        "quiet_cafe",
-        "park_walk",
-        "museum_or_gallery",
-        "structured_activity",
-        "video_call_first",
-        "home_cooking_later"
-      ])
-    )
-    .min(1)
-    .max(4),
-  noiseTolerance: z.enum(["low", "medium", "high"]),
-  crowdTolerance: z.enum(["low", "medium", "high"]),
-  lightingPreference: z.enum(["soft", "bright", "outdoor"]),
-  touchPace: z.enum(["ask_first", "slow_build", "context_dependent"]),
-  decompressionNeeds: z.string().trim().max(240).optional(),
-  notes: z.string().trim().max(280).optional()
+export const CommunicationStyleSchema = z.enum(["direct", "balanced", "indirect"]);
+export const SocialEnergySchema = z.enum(["low", "medium", "high"]);
+export const ToleranceSchema = z.enum(["low", "medium", "high"]);
+export const CalmNeedSchema = z.enum(["essential", "helpful", "not_important"]);
+export const RoutinePreferenceSchema = z.enum(["routine", "balanced", "spontaneous"]);
+export const RelationshipIntentSchema = z.enum([
+  "long_term_relationship",
+  "life_partner",
+  "dating_with_intent",
+  "exploring_with_clarity",
+  "friendship_first"
+]);
+export const MatchConfidenceSchema = z.enum(["high", "medium", "low"]);
+
+export const SensoryProfileSchema = z.object({
+  noise: ToleranceSchema.optional(),
+  crowd: ToleranceSchema.optional(),
+  calm: CalmNeedSchema.optional()
 });
 
 export const UserSchema = z.object({
   id: IdSchema,
-  email: z.string().email(),
   firstName: z.string().trim().min(1).max(60),
   city: z.string().trim().min(1).max(80),
-  neighborhoods: z.array(z.string().trim().min(1).max(80)).max(4).default([]),
-  languages: z.array(z.string().trim().min(1).max(40)).min(1).max(4),
-  neurotypeContexts: z.array(NeurotypeSchema).min(1).max(4),
-  accountStatus: z.enum(["waitlist", "active", "paused", "blocked"]),
+  accountStatus: AccountStatusSchema,
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema
 });
@@ -83,52 +70,67 @@ export const UserSchema = z.object({
 export const ProfileSchema = z.object({
   userId: IdSchema,
   displayName: z.string().trim().min(1).max(60),
-  age: z.number().int().min(18).max(80),
-  pronouns: z.string().trim().max(40).optional(),
-  tagline: z.string().trim().max(120),
-  bio: z.string().trim().min(24).max(800),
-  whatHelpsMeCommunicate: z.string().trim().min(24).max(500),
-  idealFirstDate: z.string().trim().min(12).max(280),
-  relationshipIntent: RelationshipIntentSchema,
-  communicationPreferences: CommunicationPreferencesSchema,
-  sensoryPreferences: SensoryPreferencesSchema,
-  interests: z.array(z.string().trim().min(1).max(40)).min(2).max(8),
-  languages: z.array(z.string().trim().min(1).max(40)).min(1).max(4),
-  berlinAreas: z.array(z.string().trim().min(1).max(80)).min(1).max(5),
-  neurotypeVisibility: z.enum(["show", "share_after_match", "private"]),
-  neurotypeMatchPreference: z.enum(["nd_only", "prefer_nd", "open_later"]),
+  age: z.number().int().min(18).max(80).optional(),
+  city: z.string().trim().min(1).max(80),
+  locationLabel: z.string().trim().max(120).optional(),
+  identity: IdentitySchema.optional(),
+  identityLabel: z.string().trim().max(60).optional(),
+  openTo: z.array(IdentityPreferenceSchema).min(1).max(6).default(["everyone"]),
+  diagnosisStatus: DiagnosisStatusSchema.optional(),
+  diagnosisLabel: z.string().trim().max(80).optional(),
+  communicationStyle: CommunicationStyleSchema.optional(),
+  socialEnergy: SocialEnergySchema.optional(),
+  sensoryProfile: SensoryProfileSchema.default({}),
+  routinePreference: RoutinePreferenceSchema.optional(),
+  relationshipIntent: RelationshipIntentSchema.optional(),
+  bio: z.string().trim().max(600).optional(),
+  whatDrainsMe: z.string().trim().max(280).optional(),
+  whatINeedFromAPartner: z.string().trim().max(280).optional(),
+  summary: z.string().trim().max(180).optional(),
   profileCompleteness: z.number().min(0).max(1),
+  onboardingCompleted: z.boolean(),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema
 });
 
-export const ProfileSummarySchema = z.object({
+export const ProfileAnalysisSchema = z.object({
+  summary: z.string().trim().min(1).max(180),
+  lowSignalIndicators: z.array(ShortTextSchema).max(4),
+  improvementSuggestions: z.array(ShortTextSchema).max(4),
+  contradictionHints: z.array(ShortTextSchema).max(3),
+  generatedAt: TimestampSchema
+});
+
+export const MatchProfileSchema = z.object({
   userId: IdSchema,
-  headline: z.string().trim().min(1).max(120),
-  summary: z.string().trim().min(1).max(280),
-  communicationTags: z.array(z.string().trim().min(1).max(40)).max(6),
-  lowSignalIndicators: z.array(z.string().trim().min(1).max(80)).max(6),
-  cautionNotes: z.array(z.string().trim().min(1).max(120)).max(4),
-  generatedAt: TimestampSchema,
-  editableByUser: z.boolean().default(true)
+  displayName: z.string().trim().min(1).max(60),
+  age: z.number().int().min(18).max(80).optional(),
+  city: z.string().trim().min(1).max(80),
+  locationLabel: z.string().trim().max(120).optional(),
+  identity: IdentitySchema.optional(),
+  diagnosisStatus: DiagnosisStatusSchema.optional(),
+  communicationStyle: CommunicationStyleSchema.optional(),
+  socialEnergy: SocialEnergySchema.optional(),
+  sensoryProfile: SensoryProfileSchema,
+  routinePreference: RoutinePreferenceSchema.optional(),
+  relationshipIntent: RelationshipIntentSchema.optional(),
+  summary: z.string().trim().min(1).max(180),
+  profileCompleteness: z.number().min(0).max(1)
 });
 
 export const MatchCandidateSchema = z.object({
-  userId: IdSchema,
   candidateUserId: IdSchema,
-  compatibilityScore: z.number().min(0).max(100),
-  dimensionScores: z.object({
-    relationshipIntent: z.number().min(0).max(100),
-    communicationStyle: z.number().min(0).max(100),
-    sensoryFit: z.number().min(0).max(100),
-    pacingAndPlanning: z.number().min(0).max(100),
-    berlinLogistics: z.number().min(0).max(100),
-    profileSignal: z.number().min(0).max(100)
-  }),
-  reasons: z.array(z.string().trim().min(1).max(120)).min(1).max(4),
-  cautionSignals: z.array(z.string().trim().min(1).max(120)).max(4),
-  profileSummary: ProfileSummarySchema,
-  lastComputedAt: TimestampSchema
+  profile: MatchProfileSchema,
+  whyItCouldWork: z.array(ShortTextSchema).min(1).max(3),
+  potentialFriction: z.array(ShortTextSchema).max(2),
+  confidence: MatchConfidenceSchema,
+  sharedSignals: z.array(z.string().trim().min(1).max(60)).max(4),
+  firstMessagePrompt: z.string().trim().min(1).max(200).optional()
+});
+
+export const ConversationParticipantSchema = z.object({
+  userId: IdSchema,
+  displayName: z.string().trim().min(1).max(60)
 });
 
 export const ConversationSchema = z.object({
@@ -138,6 +140,10 @@ export const ConversationSchema = z.object({
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
   lastMessagePreview: z.string().trim().max(180).optional()
+});
+
+export const ConversationListItemSchema = ConversationSchema.extend({
+  participants: z.array(ConversationParticipantSchema).length(2)
 });
 
 export const MessageSchema = z.object({
@@ -156,7 +162,7 @@ export const ModerationFlagSchema = z.object({
   category: z.enum(moderationCategories),
   severity: z.enum(moderationSeverityLevels),
   status: z.enum(moderationStatuses),
-  source: z.enum(["user_report", "ai_assist", "manual_review"]),
+  source: z.enum(["user_report", "pattern_match", "manual_review"]),
   evidenceSnippet: z.string().trim().max(240).optional(),
   notes: z.string().trim().max(500).optional(),
   createdAt: TimestampSchema
@@ -177,17 +183,12 @@ export const ReportSchema = z.object({
 
 export const WaitlistLeadSchema = z.object({
   id: IdSchema,
-  email: z.string().email(),
   firstName: z.string().trim().min(1).max(60),
+  email: z.string().email(),
   city: z.string().trim().min(1).max(80),
-  neighborhood: z.string().trim().min(1).max(80),
-  languages: z.array(z.string().trim().min(1).max(40)).min(1).max(4),
-  neurotypeContexts: z.array(NeurotypeSchema).min(1).max(4),
-  relationshipIntent: RelationshipIntentSchema,
-  communicationNeeds: z.string().trim().min(12).max(320),
-  source: z.string().trim().min(1).max(120),
-  interviewOptIn: z.boolean(),
-  pilotOptIn: z.boolean(),
+  relationshipIntent: RelationshipIntentSchema.optional(),
+  communicationStyle: CommunicationStyleSchema.optional(),
+  note: z.string().trim().max(400).optional(),
   createdAt: TimestampSchema
 });
 

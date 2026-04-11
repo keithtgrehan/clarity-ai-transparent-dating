@@ -10,6 +10,10 @@ if [ ! -f data/runtime/local-db.json ]; then
   cp data/fixtures/runtime-store-template.json data/runtime/local-db.json
 fi
 
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+
 npm install
 npm --workspace packages/shared run build
 npm run seed

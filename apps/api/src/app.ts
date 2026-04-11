@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import "./lib/env.js";
 import { ensureStoreFile } from "./lib/store.js";
 import { registerRoutes } from "./routes/index.js";
 

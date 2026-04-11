@@ -1,40 +1,28 @@
-import type { Profile } from "@project-a-z/shared";
+import type { Profile } from "@clarity/shared";
+import { humanizeEnum } from "../../lib/format.js";
 
-function includesAny(text: string, candidates: string[]) {
-  return candidates.some((candidate) => text.includes(candidate));
-}
+export function extractProfileTags(profile: Profile) {
+  const tags: string[] = [];
 
-export function extractCommunicationStyle(profile: Profile) {
-  const sourceText = [
-    profile.bio,
-    profile.whatHelpsMeCommunicate,
-    profile.idealFirstDate,
-    profile.communicationPreferences.notes ?? ""
-  ]
-    .join(" ")
-    .toLowerCase();
-
-  const tags = new Set<string>();
-
-  tags.add(profile.communicationPreferences.directness.replaceAll("_", " "));
-  tags.add(profile.communicationPreferences.planningStyle.replaceAll("_", " "));
-  tags.add(profile.communicationPreferences.callPreference.replaceAll("_", " "));
-
-  if (includesAny(sourceText, ["direct", "clear", "specific"])) {
-    tags.add("values explicit language");
+  if (profile.communicationStyle) {
+    tags.push(`${humanizeEnum(profile.communicationStyle)} communication`);
   }
 
-  if (includesAny(sourceText, ["plan ahead", "calendar", "scheduled"])) {
-    tags.add("likes planned dates");
+  if (profile.socialEnergy) {
+    tags.push(`${humanizeEnum(profile.socialEnergy)} social energy`);
   }
 
-  if (includesAny(sourceText, ["texting", "texts", "message"])) {
-    tags.add("text-centered communication");
+  if (profile.routinePreference) {
+    tags.push(`${humanizeEnum(profile.routinePreference)} routine`);
   }
 
-  if (includesAny(sourceText, ["quiet", "slow", "gentle"])) {
-    tags.add("prefers low-pressure pacing");
+  if (profile.relationshipIntent) {
+    tags.push(humanizeEnum(profile.relationshipIntent));
   }
 
-  return Array.from(tags).slice(0, 6);
+  if (profile.sensoryProfile.calm) {
+    tags.push(`${humanizeEnum(profile.sensoryProfile.calm)} calm`);
+  }
+
+  return tags.slice(0, 5);
 }

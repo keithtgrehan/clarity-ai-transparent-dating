@@ -7,7 +7,7 @@ async function start() {
 
   try {
     await app.listen({ port, host });
-    app.log.info(`Project A-Z API listening on http://${host}:${port}`);
+    app.log.info(`Clarity.ai API listening on http://${host}:${port}`);
   } catch (error) {
     app.log.error(error);
     process.exit(1);

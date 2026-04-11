@@ -6,5 +6,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   outDir: "dist",
-  noExternal: ["@project-a-z/shared"]
+  noExternal: ["@clarity/shared"]
 });

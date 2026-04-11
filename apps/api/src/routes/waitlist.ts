@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { CreateWaitlistLeadInputSchema } from "@project-a-z/shared";
+import { CreateWaitlistLeadInputSchema } from "@clarity/shared";
 import { createId, nowIso } from "../lib/ids.js";
 import { readStore, writeStore } from "../lib/store.js";
 

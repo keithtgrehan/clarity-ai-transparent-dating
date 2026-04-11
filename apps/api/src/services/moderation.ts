@@ -1,31 +1,25 @@
-import type { Message, ModerationFlag } from "@project-a-z/shared";
+import type { Message, ModerationFlag } from "@clarity/shared";
 import { createId, nowIso } from "../lib/ids.js";
 
 const moderationPatterns = [
   {
-    category: "coercion",
+    category: "sexual_pressure",
     severity: "high",
-    pattern: /(you owe me|don't say no|come now)/i
+    pattern: /(send nudes|you owe me sex|don't say no|prove you want me)/i
   },
   {
-    category: "spam_or_scam",
-    severity: "high",
-    pattern: /(send money|cashapp|bitcoin|wire transfer)/i
-  },
-  {
-    category: "unsafe_off_platform_request",
+    category: "fetishisation",
     severity: "medium",
-    pattern: /(hotel tonight|come to my place now|private address first)/i
+    pattern: /(always wanted to date an autistic|adhd girls are so fun|your autism is hot)/i
   },
   {
-    category: "manipulative_pressure",
+    category: "harassment",
     severity: "medium",
-    pattern: /(prove you're real|if you cared|reply right now)/i
+    pattern: /(idiot|crazy bitch|what is wrong with you|you're pathetic)/i
   }
 ] as const;
 
 export function analyzeMessageForModeration(message: Message) {
-  // TODO: Expand beyond regex patterns after real moderation review data exists.
   const flags: ModerationFlag[] = [];
 
   moderationPatterns.forEach((entry) => {
@@ -42,9 +36,9 @@ export function analyzeMessageForModeration(message: Message) {
       category: entry.category,
       severity: entry.severity,
       status: "open",
-      source: "ai_assist",
+      source: "pattern_match",
       evidenceSnippet: match[0],
-      notes: "Bounded regex-based moderation skeleton. Human review is still required.",
+      notes: "Bounded local pattern match. Human review is still required before enforcement.",
       createdAt: nowIso()
     });
   });

@@ -1,3 +1,4 @@
+import "../lib/env.js";
 import { resetStoreFromSeeds, summarizeStoreCounts } from "../lib/seeds.js";
 
 async function loadSeeds() {

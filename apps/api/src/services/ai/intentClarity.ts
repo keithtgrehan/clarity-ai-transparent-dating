@@ -1,27 +1,33 @@
-import type { Profile } from "@project-a-z/shared";
+import type { Profile } from "@clarity/shared";
+import { humanizeEnum } from "../../lib/format.js";
 
-const uncertaintyPhrases = ["not sure", "see what happens", "go with the flow", "figure it out"];
+const uncertaintyPhrases = [
+  "whatever happens",
+  "see where it goes",
+  "go with the flow",
+  "not sure what i want",
+  "open to anything"
+];
 
 export function detectIntentClarity(profile: Profile) {
-  const text = [profile.bio, profile.relationshipIntent.notes ?? ""].join(" ").toLowerCase();
+  const text = [profile.bio, profile.whatINeedFromAPartner].filter(Boolean).join(" ").toLowerCase();
   const notes: string[] = [];
 
+  if (!profile.relationshipIntent) {
+    notes.push("Relationship intent is still missing.");
+  }
+
   if (uncertaintyPhrases.some((phrase) => text.includes(phrase))) {
-    notes.push("Text suggests uncertainty about relationship direction.");
+    notes.push("Written text is still vague about dating intent.");
   }
 
-  if (
-    profile.relationshipIntent.primary === "life_partner" &&
-    profile.relationshipIntent.pacing === "flexible"
-  ) {
-    notes.push("Long-horizon intent is clear, but pacing is intentionally flexible.");
+  if (profile.relationshipIntent === "exploring_with_clarity" && !profile.whatINeedFromAPartner) {
+    notes.push("Exploring with clarity would benefit from a concrete note about what clarity means.");
   }
-
-  const score = Math.max(0, 1 - notes.length * 0.35);
 
   return {
-    score,
-    isClear: score >= 0.65,
-    notes
+    score: Math.max(0, 1 - notes.length * 0.35),
+    notes,
+    label: profile.relationshipIntent ? humanizeEnum(profile.relationshipIntent) : "unset"
   };
 }

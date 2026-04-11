@@ -1,19 +1,26 @@
 import type { FastifyInstance } from "fastify";
-import { UpsertProfileInputSchema } from "@project-a-z/shared";
-import { nowIso } from "../lib/ids.js";
+import { ProfileResponseSchema, UpsertProfileInputSchema } from "@clarity/shared";
+import {
+  buildProfilePayload,
+  buildStoredProfile,
+  createDefaultProfile
+} from "../lib/profiles.js";
 import { readStore, writeStore } from "../lib/store.js";
 
 export async function registerProfileRoutes(app: FastifyInstance) {
   app.get("/profiles/:userId", async (request, reply) => {
     const { userId } = request.params as { userId: string };
     const store = await readStore();
-    const profile = store.profiles.find((entry) => entry.userId === userId);
+    const user = store.users.find((entry) => entry.id === userId);
 
-    if (!profile) {
-      return reply.code(404).send({ error: "Profile not found." });
+    if (!user) {
+      return reply.code(404).send({ error: "User not found." });
     }
 
-    return { profile };
+    const existingProfile = store.profiles.find((entry) => entry.userId === userId);
+    const profile = existingProfile ?? createDefaultProfile(user);
+
+    return ProfileResponseSchema.parse(buildProfilePayload(profile, Boolean(existingProfile)));
   });
 
   app.put("/profiles/:userId", async (request, reply) => {
@@ -38,20 +45,21 @@ export async function registerProfileRoutes(app: FastifyInstance) {
       return reply.code(404).send({ error: "User must exist before profile upsert." });
     }
 
-    const nextProfile = {
-      ...parsed.data,
-      updatedAt: nowIso()
-    };
+    const existingProfile = store.profiles.find((entry) => entry.userId === userId);
+    const nextProfile = buildStoredProfile(user, parsed.data, existingProfile);
 
-    store.profiles = store.profiles.some((entry) => entry.userId === userId)
+    store.profiles = existingProfile
       ? store.profiles.map((entry) => (entry.userId === userId ? nextProfile : entry))
       : [...store.profiles, nextProfile];
 
-    user.accountStatus = "active";
-    user.updatedAt = nowIso();
+    if (nextProfile.onboardingCompleted) {
+      user.accountStatus = "active";
+    }
+
+    user.updatedAt = nextProfile.updatedAt;
 
     await writeStore(store);
 
-    return { profile: nextProfile };
+    return ProfileResponseSchema.parse(buildProfilePayload(nextProfile, Boolean(existingProfile)));
   });
 }

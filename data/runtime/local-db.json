@@ -1,402 +1,169 @@
 {
   "users": [
     {
-      "id": "user-lara",
-      "email": "lara@example.com",
-      "firstName": "Lara",
+      "id": "user-you",
+      "firstName": "Riley",
       "city": "Berlin",
-      "neighborhoods": [
-        "Neukolln"
-      ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "neurotypeContexts": [
-        "audhd"
-      ],
-      "accountStatus": "active",
-      "createdAt": "2026-04-11T08:00:00.000Z",
-      "updatedAt": "2026-04-11T08:00:00.000Z"
+      "accountStatus": "invited",
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:30:00.000Z"
     },
     {
       "id": "user-jonas",
-      "email": "jonas@example.com",
       "firstName": "Jonas",
       "city": "Berlin",
-      "neighborhoods": [
-        "Friedrichshain"
-      ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "neurotypeContexts": [
-        "adhd"
-      ],
       "accountStatus": "active",
-      "createdAt": "2026-04-11T08:05:00.000Z",
-      "updatedAt": "2026-04-11T08:05:00.000Z"
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     },
     {
       "id": "user-merve",
-      "email": "merve@example.com",
       "firstName": "Merve",
       "city": "Berlin",
-      "neighborhoods": [
-        "Charlottenburg"
-      ],
-      "languages": [
-        "English",
-        "German",
-        "Turkish"
-      ],
-      "neurotypeContexts": [
-        "autism"
-      ],
       "accountStatus": "active",
-      "createdAt": "2026-04-11T08:10:00.000Z",
-      "updatedAt": "2026-04-11T08:10:00.000Z"
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     },
     {
-      "id": "user-alex",
-      "email": "alex@example.com",
-      "firstName": "Alex",
+      "id": "user-sam",
+      "firstName": "Sam",
       "city": "Berlin",
-      "neighborhoods": [
-        "Kreuzberg"
-      ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "neurotypeContexts": [
-        "adhd"
-      ],
       "accountStatus": "active",
-      "createdAt": "2026-04-11T08:15:00.000Z",
-      "updatedAt": "2026-04-11T08:15:00.000Z"
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     }
   ],
   "profiles": [
     {
-      "userId": "user-lara",
-      "displayName": "Lara",
-      "age": 31,
-      "pronouns": "she/her",
-      "tagline": "AuDHD designer who likes direct plans, quiet rooms, and clear intent.",
-      "bio": "I am a product designer in Neukolln who does best with honest language, shared curiosity, and dates that do not feel like performance tests. I like museums, neighborhood walks, and people who mean what they say.",
-      "whatHelpsMeCommunicate": "Clear timing helps. If you need a day to reply, just say that. I appreciate direct questions more than vague flirting.",
-      "idealFirstDate": "A quiet cafe or museum with a clear start time and an easy exit plan if either of us gets overloaded.",
-      "relationshipIntent": {
-        "primary": "long_term_relationship",
-        "pacing": "steady",
-        "openness": [
-          "monogamous"
-        ],
-        "notes": "I am dating intentionally, but I do not want to rush emotional closeness."
-      },
-      "communicationPreferences": {
-        "responseCadence": "within_two_days",
-        "planningStyle": "scheduled",
-        "directness": "very_direct",
-        "messageLength": "medium",
-        "callPreference": "scheduled_calls_only",
-        "initiationPreference": "explicit",
-        "repairStyle": "name_it_directly",
-        "notes": "Specific beats charming every time."
-      },
-      "sensoryPreferences": {
-        "dateEnvironments": [
-          "quiet_cafe",
-          "museum_or_gallery",
-          "park_walk"
-        ],
-        "noiseTolerance": "low",
-        "crowdTolerance": "low",
-        "lightingPreference": "soft",
-        "touchPace": "ask_first",
-        "decompressionNeeds": "A little buffer time after social plans helps.",
-        "notes": "I avoid loud venues for first dates."
-      },
-      "interests": [
-        "design",
-        "museums",
-        "walks",
-        "books",
-        "coffee"
-      ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "berlinAreas": [
-        "Neukolln",
-        "Kreuzberg",
-        "Mitte"
-      ],
-      "neurotypeVisibility": "show",
-      "neurotypeMatchPreference": "nd_only",
-      "profileCompleteness": 0.95,
-      "createdAt": "2026-04-11T08:00:00.000Z",
-      "updatedAt": "2026-04-11T08:00:00.000Z"
-    },
-    {
       "userId": "user-jonas",
       "displayName": "Jonas",
-      "age": 28,
-      "pronouns": "he/him",
-      "tagline": "ADHD engineer who likes warm honesty, parks, and planned spontaneity.",
-      "bio": "I build software, cook a lot, and usually have three tabs open in my head. I am kind, interested, and not always fast to reply when work gets noisy, so I prefer dating with explicit expectations instead of guessing games.",
-      "whatHelpsMeCommunicate": "If we can be direct about response timing and energy levels, I relax a lot. Gentle reminders are good; pressure is not.",
-      "idealFirstDate": "A park walk, food market, or coffee somewhere that does not require yelling over music.",
-      "relationshipIntent": {
-        "primary": "dating_with_intent",
-        "pacing": "flexible",
-        "openness": [
-          "monogamous"
-        ],
-        "notes": "Open to serious connection if it feels grounded."
-      },
-      "communicationPreferences": {
-        "responseCadence": "variable",
-        "planningStyle": "semi_spontaneous",
-        "directness": "direct_with_context",
-        "messageLength": "medium",
-        "callPreference": "open_to_calls",
-        "initiationPreference": "balanced",
-        "repairStyle": "context_then_repair",
-        "notes": "I like clarity without rigid scripts."
-      },
-      "sensoryPreferences": {
-        "dateEnvironments": [
-          "park_walk",
-          "quiet_cafe",
-          "structured_activity"
-        ],
-        "noiseTolerance": "medium",
-        "crowdTolerance": "medium",
-        "lightingPreference": "outdoor",
-        "touchPace": "context_dependent",
-        "decompressionNeeds": "I may need a calm evening after a busy day.",
-        "notes": "I do well with movement and not-too-crowded places."
-      },
-      "interests": [
-        "cooking",
-        "running",
-        "comedy",
-        "tech",
-        "markets"
+      "age": 33,
+      "city": "Berlin",
+      "locationLabel": "Neukolln and Treptow",
+      "identity": "man",
+      "openTo": [
+        "everyone"
       ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "berlinAreas": [
-        "Friedrichshain",
-        "Kreuzberg",
-        "Neukolln"
-      ],
-      "neurotypeVisibility": "show",
-      "neurotypeMatchPreference": "prefer_nd",
-      "profileCompleteness": 0.88,
-      "createdAt": "2026-04-11T08:05:00.000Z",
-      "updatedAt": "2026-04-11T08:05:00.000Z"
+      "diagnosisStatus": "diagnosed",
+      "communicationStyle": "direct",
+      "socialEnergy": "medium",
+      "sensoryProfile": {
+        "noise": "medium",
+        "crowd": "medium",
+        "calm": "helpful"
+      },
+      "routinePreference": "balanced",
+      "relationshipIntent": "dating_with_intent",
+      "bio": "I do best when plans are clear enough to trust, but not so rigid that they feel like homework. Walks, coffee, and straightforward check-ins make dating much easier for me.",
+      "whatDrainsMe": "Long stretches of vague texting and plans that stay undefined.",
+      "whatINeedFromAPartner": "Direct updates, a little patience, and someone who says what they mean.",
+      "summary": "Direct communicator with medium social energy who prefers some calm and is dating with intent.",
+      "profileCompleteness": 0.96,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     },
     {
       "userId": "user-merve",
       "displayName": "Merve",
-      "age": 35,
-      "pronouns": "she/her",
-      "tagline": "Autistic researcher who values precision, quiet dates, and long-form conversation.",
-      "bio": "I am a researcher who prefers specificity over performance. I like galleries, tea, public transit that runs on time, and people who communicate with intention instead of strategic ambiguity.",
-      "whatHelpsMeCommunicate": "Literal language helps. If plans change, early notice matters. I am warm, but I dislike reading between the lines.",
-      "idealFirstDate": "Tea, a gallery, or a walk with a planned route and the option to leave before it gets noisy.",
-      "relationshipIntent": {
-        "primary": "life_partner",
-        "pacing": "slow_and_intentional",
-        "openness": [
-          "monogamous"
-        ],
-        "notes": "I value consistency more than intensity."
-      },
-      "communicationPreferences": {
-        "responseCadence": "within_two_days",
-        "planningStyle": "scheduled",
-        "directness": "very_direct",
-        "messageLength": "long",
-        "callPreference": "scheduled_calls_only",
-        "initiationPreference": "explicit",
-        "repairStyle": "need_processing_time",
-        "notes": "Specific questions make it easier for me to answer thoughtfully."
-      },
-      "sensoryPreferences": {
-        "dateEnvironments": [
-          "museum_or_gallery",
-          "quiet_cafe",
-          "park_walk"
-        ],
-        "noiseTolerance": "low",
-        "crowdTolerance": "low",
-        "lightingPreference": "soft",
-        "touchPace": "ask_first",
-        "decompressionNeeds": "I often need silence after social events.",
-        "notes": "Very loud environments are a hard no."
-      },
-      "interests": [
-        "research",
-        "tea",
-        "museums",
-        "urban walks",
-        "essays"
+      "age": 31,
+      "city": "Berlin",
+      "locationLabel": "Mitte and Prenzlauer Berg",
+      "identity": "woman",
+      "openTo": [
+        "everyone"
       ],
-      "languages": [
-        "English",
-        "German",
-        "Turkish"
-      ],
-      "berlinAreas": [
-        "Charlottenburg",
-        "Mitte",
-        "Tiergarten"
-      ],
-      "neurotypeVisibility": "show",
-      "neurotypeMatchPreference": "nd_only",
-      "profileCompleteness": 0.97,
-      "createdAt": "2026-04-11T08:10:00.000Z",
-      "updatedAt": "2026-04-11T08:10:00.000Z"
+      "diagnosisStatus": "self_identify",
+      "communicationStyle": "direct",
+      "socialEnergy": "low",
+      "sensoryProfile": {
+        "noise": "low",
+        "crowd": "low",
+        "calm": "essential"
+      },
+      "routinePreference": "routine",
+      "relationshipIntent": "life_partner",
+      "bio": "I like warm conversations that are specific, paced, and easy to trust. Quiet rooms, day dates, and people who follow through make it much easier for me to relax.",
+      "whatDrainsMe": "Last-minute changes, noisy venues, and people who treat mixed signals like flirting.",
+      "whatINeedFromAPartner": "Clear intention, gentle pacing, and explicit communication around plans.",
+      "summary": "Direct communicator with low social energy who needs calm, lower-noise plans and is looking for life partner.",
+      "profileCompleteness": 0.98,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     },
     {
-      "userId": "user-alex",
-      "displayName": "Alex",
-      "age": 33,
-      "pronouns": "they/them",
-      "tagline": "ADHD creative who wants directness, bilingual ease, and room to breathe.",
-      "bio": "I work across design and culture projects and like dates that feel curious rather than performative. I enjoy conversations that are playful but still honest about intention, social energy, and what helps each person relax.",
-      "whatHelpsMeCommunicate": "Tell me if you want more structure or slower pacing. I am good with direct feedback and appreciate people who say what they actually mean.",
-      "idealFirstDate": "Coffee and a short neighborhood walk, or a daytime exhibit if we both want something more structured.",
-      "relationshipIntent": {
-        "primary": "exploring_with_clarity",
-        "pacing": "steady",
-        "openness": [
-          "monogamous",
-          "not_sure_yet"
-        ],
-        "notes": "I am open-minded, but I want honest intent instead of vagueness."
-      },
-      "communicationPreferences": {
-        "responseCadence": "same_day",
-        "planningStyle": "semi_spontaneous",
-        "directness": "direct_with_context",
-        "messageLength": "short",
-        "callPreference": "open_to_calls",
-        "initiationPreference": "gentle",
-        "repairStyle": "context_then_repair",
-        "notes": "I like momentum, but not pressure."
-      },
-      "sensoryPreferences": {
-        "dateEnvironments": [
-          "quiet_cafe",
-          "park_walk",
-          "video_call_first"
-        ],
-        "noiseTolerance": "medium",
-        "crowdTolerance": "medium",
-        "lightingPreference": "outdoor",
-        "touchPace": "slow_build",
-        "decompressionNeeds": "Short breaks help if a day gets crowded.",
-        "notes": "Daylight is easier than dim nightlife for early dates."
-      },
-      "interests": [
-        "photography",
-        "music",
-        "cycling",
-        "films",
-        "cities"
+      "userId": "user-sam",
+      "displayName": "Sam",
+      "age": 29,
+      "city": "Berlin",
+      "locationLabel": "Friedrichshain and Kreuzberg",
+      "identity": "nonbinary",
+      "openTo": [
+        "everyone"
       ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "berlinAreas": [
-        "Kreuzberg",
-        "Neukolln",
-        "Friedrichshain"
-      ],
-      "neurotypeVisibility": "show",
-      "neurotypeMatchPreference": "prefer_nd",
-      "profileCompleteness": 0.9,
-      "createdAt": "2026-04-11T08:15:00.000Z",
-      "updatedAt": "2026-04-11T08:15:00.000Z"
+      "diagnosisStatus": "prefer_not_to_say",
+      "communicationStyle": "balanced",
+      "socialEnergy": "high",
+      "sensoryProfile": {
+        "noise": "medium",
+        "crowd": "high",
+        "calm": "helpful"
+      },
+      "routinePreference": "spontaneous",
+      "relationshipIntent": "exploring_with_clarity",
+      "bio": "I like honest conversations, a little momentum, and dates that feel alive without becoming chaotic. If we can name our energy and expectations clearly, I am very easy to be around.",
+      "whatDrainsMe": "Over-analysis before we know whether there is any real rapport.",
+      "whatINeedFromAPartner": "Kindness, curiosity, and enough directness that nobody has to guess.",
+      "summary": "Balanced communicator with high social energy who likes some calm, more openness, and exploring with clarity.",
+      "profileCompleteness": 0.94,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     }
   ],
   "conversations": [
     {
-      "id": "conv-lara-jonas",
+      "id": "conv-you-jonas",
       "participantUserIds": [
-        "user-lara",
+        "user-you",
         "user-jonas"
       ],
       "status": "active",
-      "createdAt": "2026-04-11T09:00:00.000Z",
-      "updatedAt": "2026-04-11T09:10:00.000Z",
-      "lastMessagePreview": "Quiet coffee near Kanal on Thursday works for me."
+      "createdAt": "2026-04-11T08:00:00.000Z",
+      "updatedAt": "2026-04-11T08:06:00.000Z",
+      "lastMessagePreview": "A quiet coffee in Neukolln sounds easy on my side."
     }
   ],
   "messages": [
     {
-      "id": "msg-lara-1",
-      "conversationId": "conv-lara-jonas",
-      "senderUserId": "user-lara",
-      "body": "Hi Jonas. I liked how specific your profile was about response timing. A park walk or quiet coffee sounds good to me.",
-      "sentAt": "2026-04-11T09:02:00.000Z",
+      "id": "msg-you-1",
+      "conversationId": "conv-you-jonas",
+      "senderUserId": "user-you",
+      "body": "Hi Jonas. I appreciated how clearly you described your pace and communication style.",
+      "sentAt": "2026-04-11T08:02:00.000Z",
       "moderationState": "clear"
     },
     {
       "id": "msg-jonas-1",
-      "conversationId": "conv-lara-jonas",
+      "conversationId": "conv-you-jonas",
       "senderUserId": "user-jonas",
-      "body": "Thanks, that is exactly the kind of pace I prefer too. I am free Thursday after work if a lower-noise cafe feels easier.",
-      "sentAt": "2026-04-11T09:06:00.000Z",
-      "moderationState": "clear"
-    },
-    {
-      "id": "msg-lara-2",
-      "conversationId": "conv-lara-jonas",
-      "senderUserId": "user-lara",
-      "body": "Quiet coffee near Kanal on Thursday works for me.",
-      "sentAt": "2026-04-11T09:10:00.000Z",
+      "body": "Thank you. Clear beats charming for me too. A quiet coffee in Neukolln sounds easy on my side.",
+      "sentAt": "2026-04-11T08:06:00.000Z",
       "moderationState": "clear"
     }
   ],
   "reports": [],
   "waitlistLeads": [
     {
-      "id": "lead-nina",
-      "email": "nina@example.com",
-      "firstName": "Nina",
+      "id": "lead-berlin-1",
+      "firstName": "Alicia",
+      "email": "alicia@example.com",
       "city": "Berlin",
-      "neighborhood": "Prenzlauer Berg",
-      "languages": [
-        "English",
-        "German"
-      ],
-      "neurotypeContexts": [
-        "audhd"
-      ],
-      "relationshipIntent": {
-        "primary": "dating_with_intent",
-        "pacing": "steady",
-        "openness": [
-          "monogamous"
-        ],
-        "notes": "Open to meeting people who communicate clearly."
-      },
-      "communicationNeeds": "I want explicit communication about response time, plans, and sensory comfort.",
-      "source": "Berlin creator referral",
-      "interviewOptIn": true,
-      "pilotOptIn": true,
-      "createdAt": "2026-04-11T10:00:00.000Z"
+      "relationshipIntent": "dating_with_intent",
+      "communicationStyle": "direct",
+      "note": "I want dating products that make expectations easier to talk about.",
+      "createdAt": "2026-04-11T07:50:00.000Z"
     }
   ],
   "moderationFlags": []

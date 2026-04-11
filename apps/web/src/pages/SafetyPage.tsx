@@ -1,27 +1,30 @@
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { createReport } from "../lib/api";
-import { defaultDemoUserId, demoUsers } from "../lib/demo";
-
-const categories = [
-  { value: "harassment", label: "Harassment" },
-  { value: "boundary_violation", label: "Boundary violation" },
-  { value: "coercion", label: "Coercion" },
-  { value: "fetishization", label: "Fetishization" },
-  { value: "impersonation", label: "Impersonation" },
-  { value: "hate_or_bigotry", label: "Hate or bigotry" },
-  { value: "sexual_content_without_consent", label: "Sexual content without consent" },
-  { value: "spam_or_scam", label: "Spam or scam" },
-  { value: "manipulative_pressure", label: "Manipulative pressure" },
-  { value: "unsafe_off_platform_request", label: "Unsafe off-platform request" }
-] as const;
+import {
+  candidateUsers,
+  reportCategories,
+  toggleArrayValue,
+  viewerUserId
+} from "../lib/profile";
 
 export function SafetyPage() {
-  const [reporterUserId, setReporterUserId] = useState<string>(defaultDemoUserId);
-  const [targetUserId, setTargetUserId] = useState<string>("user-jonas");
-  const [category, setCategory] = useState<(typeof categories)[number]["value"]>("boundary_violation");
+  const [searchParams] = useSearchParams();
+  const [targetUserId, setTargetUserId] = useState<string>(
+    searchParams.get("target") ?? candidateUsers[0]?.id ?? ""
+  );
+  const [conversationId, setConversationId] = useState<string>(
+    searchParams.get("conversation") ?? ""
+  );
+  const [categories, setCategories] = useState<string[]>(["harassment"]);
   const [description, setDescription] = useState("");
   const [blockUser, setBlockUser] = useState(true);
   const [status, setStatus] = useState("Report and block flow ready.");
+
+  const targetLabel = useMemo(
+    () => candidateUsers.find((candidate) => candidate.id === targetUserId)?.label ?? "this user",
+    [targetUserId]
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,14 +32,15 @@ export function SafetyPage() {
 
     try {
       await createReport({
-        reporterUserId,
+        reporterUserId: viewerUserId,
         targetUserId,
-        categories: [category],
+        conversationId: conversationId || undefined,
+        categories: categories as Array<(typeof reportCategories)[number]["value"]>,
         description,
         blockUser
       });
       setDescription("");
-      setStatus("Report saved locally. Matching and conversations will respect block state.");
+      setStatus("Report saved locally. Block state now affects matches and conversations.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save report.");
     }
@@ -45,31 +49,16 @@ export function SafetyPage() {
   return (
     <section className="page stack">
       <div className="panel">
-        <p className="eyebrow">Report and block flow</p>
-        <h2>Safety is foundational, not a post-launch patch.</h2>
+        <p className="eyebrow">Safety basics</p>
+        <h2>Report behavior and block fast, without turning moderation into theater.</h2>
         <p className="muted">
-          Reports in this repo are platform-safety structures. They are not clinical judgments,
-          and AI is not the final authority on enforcement.
+          Reports here are structured safety records. They are not diagnoses, and automated
+          moderation is only a bounded assist.
         </p>
       </div>
 
       <form className="panel stack" onSubmit={handleSubmit}>
         <div className="field-grid two-columns">
-          <label className="field">
-            <span>Reporter</span>
-            <select
-              className="input"
-              value={reporterUserId}
-              onChange={(event) => setReporterUserId(event.target.value)}
-            >
-              {demoUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
           <label className="field">
             <span>Reported user</span>
             <select
@@ -77,40 +66,54 @@ export function SafetyPage() {
               value={targetUserId}
               onChange={(event) => setTargetUserId(event.target.value)}
             >
-              {demoUsers
-                .filter((user) => user.id !== reporterUserId)
-                .map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.label}
-                  </option>
-                ))}
-            </select>
-          </label>
-
-          <label className="field">
-            <span>Category</span>
-            <select
-              className="input"
-              value={category}
-              onChange={(event) => setCategory(event.target.value as typeof category)}
-            >
-              {categories.map((entry) => (
-                <option key={entry.value} value={entry.value}>
-                  {entry.label}
+              {candidateUsers.map((candidate) => (
+                <option key={candidate.id} value={candidate.id}>
+                  {candidate.label}
                 </option>
               ))}
             </select>
           </label>
+
+          <label className="field">
+            <span>Conversation ID</span>
+            <input
+              className="input"
+              value={conversationId}
+              onChange={(event) => setConversationId(event.target.value)}
+              placeholder="Optional"
+            />
+          </label>
+        </div>
+
+        <div className="stack-small">
+          <span className="field-label">Categories</span>
+          <div className="checkbox-row">
+            {reportCategories.map((category) => (
+              <label className="checkbox-pill" key={category.value}>
+                <input
+                  type="checkbox"
+                  checked={categories.includes(category.value)}
+                  onChange={() =>
+                    setCategories((current) => {
+                      const next = toggleArrayValue(current, category.value);
+                      return next.length > 0 ? next : current;
+                    })
+                  }
+                />
+                <span>{category.label}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <label className="field">
-          <span>Description</span>
+          <span>What happened with {targetLabel}?</span>
           <textarea
             className="textarea"
-            rows={5}
+            rows={6}
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="Describe the behavior or message that crossed a line."
+            placeholder="Describe the behavior, message, or pressure that crossed a line."
             required
           />
         </label>

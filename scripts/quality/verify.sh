@@ -6,3 +6,4 @@ cd "$ROOT_DIR"
 
 npm run typecheck
 npm run build
+npm run verify:mvp
