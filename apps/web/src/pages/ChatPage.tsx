@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import type { Conversation, Message } from "@clarity/shared";
+import type { Conversation, MatchCandidate, Message } from "@clarity/shared";
 import {
   createConversation,
   fetchConversationMessages,
+  fetchMatchCandidates,
   fetchConversations,
   sendMessage
 } from "../lib/api";
-import { viewerUserId } from "../lib/profile";
+import { humanizeEnum, viewerUserId } from "../lib/profile";
 
 function otherParticipant(conversation: Conversation) {
   return conversation.participants.find((participant) => participant.userId !== viewerUserId);
@@ -22,6 +23,7 @@ export function ChatPage() {
   const [status, setStatus] = useState("Loading conversations...");
   const [firstMessagePrompt, setFirstMessagePrompt] = useState<string | undefined>();
   const [handledCandidateId, setHandledCandidateId] = useState("");
+  const [candidateLookup, setCandidateLookup] = useState<Record<string, MatchCandidate>>({});
   const navigate = useNavigate();
 
   const candidateId = searchParams.get("candidate") ?? "";
@@ -47,6 +49,20 @@ export function ChatPage() {
       .catch((error) =>
         setStatus(error instanceof Error ? error.message : "Could not load conversations.")
       );
+  }, []);
+
+  useEffect(() => {
+    fetchMatchCandidates(viewerUserId)
+      .then((result) =>
+        setCandidateLookup(
+          Object.fromEntries(
+            result.candidates.map((candidate) => [candidate.candidateUserId, candidate])
+          )
+        )
+      )
+      .catch(() => {
+        setCandidateLookup({});
+      });
   }, []);
 
   useEffect(() => {
@@ -118,24 +134,35 @@ export function ChatPage() {
     [conversations, selectedConversationId]
   );
   const selectedParticipant = selectedConversation ? otherParticipant(selectedConversation) : undefined;
+  const selectedCandidate = selectedParticipant
+    ? candidateLookup[selectedParticipant.userId]
+    : undefined;
 
   return (
     <section className="page stack">
-      <div className="panel split-header">
-        <div className="stack-small">
+      <header className="page-header">
+        <div className="page-header-copy">
           <p className="eyebrow">Conversations</p>
           <h2>Simple, readable chat with no realtime theater</h2>
-          <p className="muted">
+          <p className="lead">
             Open a conversation from matches, send a message, and report or block from the
             same flow when something crosses a line.
           </p>
         </div>
-        <span className="status-text">{status}</span>
-      </div>
+        <div className="page-header-meta">
+          <span className="info-pill">{conversations.length} conversations</span>
+          <span className="status-text">{status}</span>
+        </div>
+      </header>
 
       <div className="chat-layout">
         <div className="panel stack-small">
-          <h3>Conversation list</h3>
+          <div className="stack-small">
+            <h3>Conversation list</h3>
+            <p className="field-hint">
+              Threads stay intentionally simple: one list, one composer, one clear safety exit.
+            </p>
+          </div>
           {conversations.length > 0 ? (
             conversations.map((conversation) => {
               const participant = otherParticipant(conversation);
@@ -151,8 +178,8 @@ export function ChatPage() {
                   onClick={() => setSelectedConversationId(conversation.id)}
                   type="button"
                 >
-                  <span>{participant?.displayName ?? "Conversation"}</span>
-                  <span className="muted">
+                  <span className="list-button-label">{participant?.displayName ?? "Conversation"}</span>
+                  <span className="list-button-meta">
                     {conversation.lastMessagePreview || "No messages yet"}
                   </span>
                 </button>
@@ -165,7 +192,7 @@ export function ChatPage() {
           )}
         </div>
 
-        <div className="panel stack">
+        <div className="panel chat-thread">
           {selectedConversation ? (
             <>
               <div className="split-header">
@@ -193,9 +220,44 @@ export function ChatPage() {
                 ) : null}
               </div>
 
-              {firstMessagePrompt ? (
-                <div className="helper-callout">
-                  <strong>First message helper:</strong> {firstMessagePrompt}
+              <div className="section-card section-card-muted conversation-context">
+                <p className="eyebrow">Profile context</p>
+                {selectedCandidate ? (
+                  <>
+                    <p className="muted">{selectedCandidate.profile.summary}</p>
+                    <div className="pill-row">
+                      <span className="info-pill">
+                        {humanizeEnum(selectedCandidate.profile.identity)}
+                      </span>
+                      <span className="info-pill">
+                        {humanizeEnum(selectedCandidate.profile.relationshipIntent)}
+                      </span>
+                      <span className="info-pill">
+                        {humanizeEnum(selectedCandidate.profile.communicationStyle)}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="muted">
+                    Structured match context is not available for this thread yet, but the
+                    conversation remains fully usable.
+                  </p>
+                )}
+
+                {firstMessagePrompt ? (
+                  <div className="helper-callout">
+                    <strong>First message helper:</strong> {firstMessagePrompt}
+                  </div>
+                ) : null}
+              </div>
+
+              {selectedConversation.status === "blocked" ? (
+                <div className="section-card danger-panel stack-small">
+                  <p className="eyebrow">Conversation state</p>
+                  <p className="muted">
+                    This thread is currently blocked. Messages remain visible for context, but the
+                    composer is disabled.
+                  </p>
                 </div>
               ) : null}
 
@@ -216,7 +278,7 @@ export function ChatPage() {
                 ))}
               </div>
 
-              <form className="stack-small" onSubmit={handleSendMessage}>
+              <form className="composer-panel" onSubmit={handleSendMessage}>
                 <label className="field">
                   <span>New message</span>
                   <textarea
@@ -227,13 +289,18 @@ export function ChatPage() {
                     placeholder="Write something clear, specific, and low-pressure."
                   />
                 </label>
-                <button
-                  className="button"
-                  disabled={selectedConversation.status === "blocked"}
-                  type="submit"
-                >
-                  Send message
-                </button>
+                <div className="action-row action-row-spread">
+                  <span className="field-hint">
+                    Keep the opener specific, readable, and easy to respond to.
+                  </span>
+                  <button
+                    className="button"
+                    disabled={selectedConversation.status === "blocked"}
+                    type="submit"
+                  >
+                    Send message
+                  </button>
+                </div>
               </form>
             </>
           ) : (

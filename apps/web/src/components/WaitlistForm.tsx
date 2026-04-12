@@ -34,7 +34,7 @@ export function WaitlistForm() {
 
   return (
     <form className="panel stack" onSubmit={handleSubmit}>
-      <div>
+      <div className="stack-small">
         <p className="eyebrow">Waitlist</p>
         <h3>Join the Berlin pilot list</h3>
         <p className="muted">
@@ -43,81 +43,93 @@ export function WaitlistForm() {
         </p>
       </div>
 
-      <div className="field-grid two-columns">
-        <label className="field">
-          <span>First name</span>
-          <input
-            className="input"
-            value={draft.firstName}
-            onChange={(event) => setDraft({ ...draft, firstName: event.target.value })}
-            placeholder="Riley"
-            required
-          />
-        </label>
+      <div className="section-card section-card-muted stack">
+        <div className="section-title-row">
+          <div className="stack-small">
+            <h4>Core contact details</h4>
+            <p className="field-hint">
+              Keep this concise. The goal is pilot follow-up, not a second onboarding funnel.
+            </p>
+          </div>
+          <span className="status-chip">Berlin pilot</span>
+        </div>
 
-        <label className="field">
-          <span>Email</span>
-          <input
-            className="input"
-            type="email"
-            value={draft.email}
-            onChange={(event) => setDraft({ ...draft, email: event.target.value })}
-            placeholder="you@example.com"
-            required
-          />
-        </label>
+        <div className="field-grid two-columns">
+          <label className="field">
+            <span>First name</span>
+            <input
+              className="input"
+              value={draft.firstName}
+              onChange={(event) => setDraft({ ...draft, firstName: event.target.value })}
+              placeholder="Riley"
+              required
+            />
+          </label>
 
-        <label className="field">
-          <span>City</span>
-          <input
-            className="input"
-            value={draft.city}
-            onChange={(event) => setDraft({ ...draft, city: event.target.value })}
-            required
-          />
-        </label>
+          <label className="field">
+            <span>Email</span>
+            <input
+              className="input"
+              type="email"
+              value={draft.email}
+              onChange={(event) => setDraft({ ...draft, email: event.target.value })}
+              placeholder="you@example.com"
+              required
+            />
+          </label>
 
-        <label className="field">
-          <span>Relationship intent</span>
-          <select
-            className="input"
-            value={draft.relationshipIntent ?? ""}
-            onChange={(event) =>
-              setDraft({
-                ...draft,
-                relationshipIntent:
-                  event.target.value as CreateWaitlistLeadInput["relationshipIntent"]
-              })
-            }
-          >
-            {relationshipIntentOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className="field">
+            <span>City</span>
+            <input
+              className="input"
+              value={draft.city}
+              onChange={(event) => setDraft({ ...draft, city: event.target.value })}
+              required
+            />
+          </label>
 
-        <label className="field">
-          <span>Communication preference</span>
-          <select
-            className="input"
-            value={draft.communicationStyle ?? ""}
-            onChange={(event) =>
-              setDraft({
-                ...draft,
-                communicationStyle:
-                  event.target.value as CreateWaitlistLeadInput["communicationStyle"]
-              })
-            }
-          >
-            {communicationOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className="field">
+            <span>Relationship intent</span>
+            <select
+              className="input"
+              value={draft.relationshipIntent ?? ""}
+              onChange={(event) =>
+                setDraft({
+                  ...draft,
+                  relationshipIntent:
+                    event.target.value as CreateWaitlistLeadInput["relationshipIntent"]
+                })
+              }
+            >
+              {relationshipIntentOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="field">
+            <span>Communication preference</span>
+            <select
+              className="input"
+              value={draft.communicationStyle ?? ""}
+              onChange={(event) =>
+                setDraft({
+                  ...draft,
+                  communicationStyle:
+                    event.target.value as CreateWaitlistLeadInput["communicationStyle"]
+                })
+              }
+            >
+              {communicationOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
 
       <label className="field">

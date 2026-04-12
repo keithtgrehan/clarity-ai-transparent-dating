@@ -40,8 +40,8 @@ function ProfileDetails({
   return (
     <div className="stack">
       <article className="panel stack-small">
-        <p className="eyebrow">Profile summary</p>
-        <h2>{draft.displayName}</h2>
+        <p className="eyebrow">Interpreted summary</p>
+        <h3>{draft.displayName}</h3>
         <p className="muted">{analysis.summary}</p>
         <div className="pill-row">
           <span className="info-pill">{completenessLabel(completeness)}</span>
@@ -55,28 +55,28 @@ function ProfileDetails({
 
       <article className="panel stack-small">
         <p className="eyebrow">Structured profile</p>
-        <div className="field-grid two-columns">
-          <div>
+        <div className="key-value-grid">
+          <div className="key-value">
             <strong>Identity</strong>
             <p className="muted">{humanizeEnum(draft.identity)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Diagnosis status</strong>
             <p className="muted">{humanizeEnum(draft.diagnosisStatus)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Match filter</strong>
             <p className="muted">{draft.openTo.map((item) => humanizeEnum(item)).join(", ")}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Communication</strong>
             <p className="muted">{humanizeEnum(draft.communicationStyle)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Social energy</strong>
             <p className="muted">{humanizeEnum(draft.socialEnergy)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Sensory profile</strong>
             <p className="muted">
               Noise {humanizeEnum(draft.sensoryProfile.noise)}, crowd{" "}
@@ -84,15 +84,15 @@ function ProfileDetails({
               {humanizeEnum(draft.sensoryProfile.calm)}
             </p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Routine</strong>
             <p className="muted">{humanizeEnum(draft.routinePreference)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Intent</strong>
             <p className="muted">{humanizeEnum(draft.relationshipIntent)}</p>
           </div>
-          <div>
+          <div className="key-value">
             <strong>Location</strong>
             <p className="muted">{draft.locationLabel || draft.city}</p>
           </div>
@@ -198,340 +198,378 @@ export function ProfilePage() {
 
   return (
     <section className="page stack">
-      <div className="panel split-header">
-        <div className="stack-small">
+      <header className="page-header">
+        <div className="page-header-copy">
           <p className="eyebrow">Structured profile</p>
           <h2>Edit the signals your matches will actually see</h2>
-          <p className="muted">
+          <p className="lead">
             This page shows the persisted profile, summary, completeness, and improvement cues
             generated from the current backend state.
           </p>
         </div>
-        <div className="stack-small align-end">
+        <div className="page-header-meta">
           <span className="info-pill">{completenessLabel(completeness)}</span>
           <span className="status-text">{status}</span>
         </div>
+      </header>
+
+      <div className="progress-rail" aria-hidden="true">
+        <div className="progress-bar" style={{ width: `${completeness * 100}%` }} />
       </div>
 
       <div className="field-grid profile-layout">
         <ProfileDetails analysis={analysis} draft={draft} completeness={completeness} />
 
         <form className="panel stack" onSubmit={handleSubmit}>
-          <div className="field-grid two-columns">
-            <label className="field">
-              <span>Display name</span>
-              <input
-                className="input"
-                value={draft.displayName}
-                onChange={(event) => setDraft({ ...draft, displayName: event.target.value })}
-              />
-            </label>
+          <div className="section-card section-card-muted stack">
+            <div className="stack-small">
+              <p className="eyebrow">Basics</p>
+              <h3>Public profile facts</h3>
+              <p className="field-hint">
+                Keep the essentials easy to scan. These fields set context before deeper matching
+                signals appear.
+              </p>
+            </div>
 
-            <label className="field">
-              <span>Age</span>
-              <input
-                className="input"
-                type="number"
-                min={18}
-                max={80}
-                value={draft.age ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    age: event.target.value ? Number(event.target.value) : undefined
-                  })
-                }
-              />
-            </label>
+            <div className="field-grid two-columns">
+              <label className="field">
+                <span>Display name</span>
+                <input
+                  className="input"
+                  value={draft.displayName}
+                  onChange={(event) => setDraft({ ...draft, displayName: event.target.value })}
+                />
+              </label>
 
-            <label className="field">
-              <span>City</span>
-              <input
-                className="input"
-                value={draft.city}
-                onChange={(event) => setDraft({ ...draft, city: event.target.value })}
-              />
-            </label>
+              <label className="field">
+                <span>Age</span>
+                <input
+                  className="input"
+                  type="number"
+                  min={18}
+                  max={80}
+                  value={draft.age ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      age: event.target.value ? Number(event.target.value) : undefined
+                    })
+                  }
+                />
+              </label>
 
-            <label className="field">
-              <span>Berlin area</span>
-              <input
-                className="input"
-                value={draft.locationLabel ?? ""}
-                onChange={(event) =>
-                  setDraft({ ...draft, locationLabel: event.target.value || undefined })
-                }
-              />
-            </label>
-          </div>
+              <label className="field">
+                <span>City</span>
+                <input
+                  className="input"
+                  value={draft.city}
+                  onChange={(event) => setDraft({ ...draft, city: event.target.value })}
+                />
+              </label>
 
-          <div className="field-grid two-columns">
-            <label className="field">
-              <span>Identity (ADHD / Autism / AuDHD)</span>
-              <select
-                className="input"
-                value={draft.identity ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    identity: (event.target.value || undefined) as IdentityValue | undefined
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {identityOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span>Diagnosis status</span>
-              <select
-                className="input"
-                value={draft.diagnosisStatus ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    diagnosisStatus: (event.target.value || undefined) as DiagnosisValue | undefined
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {diagnosisOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="stack-small">
-            <span className="field-label">Show me matches from</span>
-            <div className="checkbox-row">
-              {openToOptions.map((option) => (
-                <label className="checkbox-pill" key={option.value}>
-                  <input
-                    type="checkbox"
-                    checked={draft.openTo.includes(option.value)}
-                    onChange={() =>
-                      setDraft({
-                        ...draft,
-                        openTo: toggleArrayValue(draft.openTo, option.value as OpenToValue)
-                      })
-                    }
-                  />
-                  <span>{option.label}</span>
-                </label>
-              ))}
+              <label className="field">
+                <span>Berlin area</span>
+                <input
+                  className="input"
+                  value={draft.locationLabel ?? ""}
+                  onChange={(event) =>
+                    setDraft({ ...draft, locationLabel: event.target.value || undefined })
+                  }
+                />
+              </label>
             </div>
           </div>
 
-          <div className="field-grid two-columns">
-            <label className="field">
-              <span>Communication style</span>
-              <select
-                className="input"
-                value={draft.communicationStyle ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    communicationStyle:
-                      (event.target.value || undefined) as CommunicationValue | undefined
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {communicationOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
+          <div className="section-card stack">
+            <div className="stack-small">
+              <p className="eyebrow">Matching filters</p>
+              <h3>Identity and intent boundaries</h3>
+            </div>
+
+            <div className="field-grid two-columns">
+              <label className="field">
+                <span>Identity (ADHD / Autism / AuDHD)</span>
+                <select
+                  className="input"
+                  value={draft.identity ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      identity: (event.target.value || undefined) as IdentityValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {identityOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Diagnosis status</span>
+                <select
+                  className="input"
+                  value={draft.diagnosisStatus ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      diagnosisStatus:
+                        (event.target.value || undefined) as DiagnosisValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {diagnosisOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="stack-small">
+              <span className="field-label">Show me matches from</span>
+              <div className="checkbox-row">
+                {openToOptions.map((option) => (
+                  <label className="checkbox-pill" key={option.value}>
+                    <input
+                      type="checkbox"
+                      checked={draft.openTo.includes(option.value)}
+                      onChange={() =>
+                        setDraft({
+                          ...draft,
+                          openTo: toggleArrayValue(draft.openTo, option.value as OpenToValue)
+                        })
+                      }
+                    />
+                    <span>{option.label}</span>
+                  </label>
                 ))}
-              </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="section-card stack">
+            <div className="stack-small">
+              <p className="eyebrow">Rhythm and compatibility</p>
+              <h3>How you like dating to feel in practice</h3>
+            </div>
+
+            <div className="field-grid two-columns">
+              <label className="field">
+                <span>Communication style</span>
+                <select
+                  className="input"
+                  value={draft.communicationStyle ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      communicationStyle:
+                        (event.target.value || undefined) as CommunicationValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {communicationOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Social energy</span>
+                <select
+                  className="input"
+                  value={draft.socialEnergy ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      socialEnergy:
+                        (event.target.value || undefined) as SocialEnergyValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {socialEnergyOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Routine</span>
+                <select
+                  className="input"
+                  value={draft.routinePreference ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      routinePreference:
+                        (event.target.value || undefined) as RoutineValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {routineOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Relationship intent</span>
+                <select
+                  className="input"
+                  value={draft.relationshipIntent ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      relationshipIntent:
+                        (event.target.value || undefined) as IntentValue | undefined
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {relationshipIntentOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="field-grid three-columns">
+              <label className="field">
+                <span>Noise</span>
+                <select
+                  className="input"
+                  value={draft.sensoryProfile.noise ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      sensoryProfile: {
+                        ...draft.sensoryProfile,
+                        noise: (event.target.value || undefined) as SensoryNoiseValue | undefined
+                      }
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {toleranceOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Crowd</span>
+                <select
+                  className="input"
+                  value={draft.sensoryProfile.crowd ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      sensoryProfile: {
+                        ...draft.sensoryProfile,
+                        crowd: (event.target.value || undefined) as SensoryNoiseValue | undefined
+                      }
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {toleranceOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="field">
+                <span>Calm</span>
+                <select
+                  className="input"
+                  value={draft.sensoryProfile.calm ?? ""}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      sensoryProfile: {
+                        ...draft.sensoryProfile,
+                        calm: (event.target.value || undefined) as SensoryCalmValue | undefined
+                      }
+                    })
+                  }
+                >
+                  <option value="">Choose...</option>
+                  {calmNeedOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div className="section-card stack">
+            <div className="stack-small">
+              <p className="eyebrow">Open text</p>
+              <h3>Context that makes the profile easier to understand</h3>
+            </div>
+
+            <label className="field">
+              <span>Bio</span>
+              <textarea
+                className="textarea"
+                rows={4}
+                value={draft.bio ?? ""}
+                onChange={(event) => setDraft({ ...draft, bio: event.target.value || undefined })}
+              />
             </label>
 
             <label className="field">
-              <span>Social energy</span>
-              <select
-                className="input"
-                value={draft.socialEnergy ?? ""}
+              <span>What drains me</span>
+              <textarea
+                className="textarea"
+                rows={4}
+                value={draft.whatDrainsMe ?? ""}
                 onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    socialEnergy:
-                      (event.target.value || undefined) as SocialEnergyValue | undefined
-                  })
+                  setDraft({ ...draft, whatDrainsMe: event.target.value || undefined })
                 }
-              >
-                <option value="">Choose...</option>
-                {socialEnergyOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              />
             </label>
 
             <label className="field">
-              <span>Routine</span>
-              <select
-                className="input"
-                value={draft.routinePreference ?? ""}
+              <span>What I need from a partner</span>
+              <textarea
+                className="textarea"
+                rows={4}
+                value={draft.whatINeedFromAPartner ?? ""}
                 onChange={(event) =>
                   setDraft({
                     ...draft,
-                    routinePreference:
-                      (event.target.value || undefined) as RoutineValue | undefined
+                    whatINeedFromAPartner: event.target.value || undefined
                   })
                 }
-              >
-                <option value="">Choose...</option>
-                {routineOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span>Relationship intent</span>
-              <select
-                className="input"
-                value={draft.relationshipIntent ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    relationshipIntent:
-                      (event.target.value || undefined) as IntentValue | undefined
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {relationshipIntentOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              />
             </label>
           </div>
 
-          <div className="field-grid three-columns">
-            <label className="field">
-              <span>Noise</span>
-              <select
-                className="input"
-                value={draft.sensoryProfile.noise ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    sensoryProfile: {
-                      ...draft.sensoryProfile,
-                      noise: (event.target.value || undefined) as SensoryNoiseValue | undefined
-                    }
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {toleranceOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span>Crowd</span>
-              <select
-                className="input"
-                value={draft.sensoryProfile.crowd ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    sensoryProfile: {
-                      ...draft.sensoryProfile,
-                      crowd: (event.target.value || undefined) as SensoryNoiseValue | undefined
-                    }
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {toleranceOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span>Calm</span>
-              <select
-                className="input"
-                value={draft.sensoryProfile.calm ?? ""}
-                onChange={(event) =>
-                  setDraft({
-                    ...draft,
-                    sensoryProfile: {
-                      ...draft.sensoryProfile,
-                      calm: (event.target.value || undefined) as SensoryCalmValue | undefined
-                    }
-                  })
-                }
-              >
-                <option value="">Choose...</option>
-                {calmNeedOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <label className="field">
-            <span>Bio</span>
-            <textarea
-              className="textarea"
-              rows={4}
-              value={draft.bio ?? ""}
-              onChange={(event) => setDraft({ ...draft, bio: event.target.value || undefined })}
-            />
-          </label>
-
-          <label className="field">
-            <span>What drains me</span>
-            <textarea
-              className="textarea"
-              rows={4}
-              value={draft.whatDrainsMe ?? ""}
-              onChange={(event) =>
-                setDraft({ ...draft, whatDrainsMe: event.target.value || undefined })
-              }
-            />
-          </label>
-
-          <label className="field">
-            <span>What I need from a partner</span>
-            <textarea
-              className="textarea"
-              rows={4}
-              value={draft.whatINeedFromAPartner ?? ""}
-              onChange={(event) =>
-                setDraft({
-                  ...draft,
-                  whatINeedFromAPartner: event.target.value || undefined
-                })
-              }
-            />
-          </label>
-
-          <div className="action-row">
+          <div className="action-row action-row-spread">
+            <span className="status-text">{status}</span>
             <button className="button" type="submit">
               Save profile
             </button>

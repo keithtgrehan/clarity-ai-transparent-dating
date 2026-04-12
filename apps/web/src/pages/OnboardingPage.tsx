@@ -518,21 +518,28 @@ export function OnboardingPage() {
   }
 
   const activeStep = steps[stepIndex];
+  const currentStepError = validateStep(draft, stepIndex);
 
   return (
     <section className="page stack">
-      <div className="panel split-header">
-        <div className="stack-small">
+      <header className="page-header">
+        <div className="page-header-copy">
           <p className="eyebrow">Structured onboarding</p>
           <h2>{activeStep.title}</h2>
-          <p className="muted">{activeStep.helper}</p>
+          <p className="lead">
+            Structured data first, free text second. Each section is short on purpose so the
+            profile stays readable and matching stays explainable.
+          </p>
         </div>
 
-        <div className="stack-small align-end">
+        <div className="page-header-meta">
           <span className="info-pill">Step {stepIndex + 1} of {steps.length}</span>
           <span className="info-pill">{completenessLabel(completion)}</span>
+          <p className="status-text">
+            {currentStepError ? currentStepError : "Current step has enough signal to continue."}
+          </p>
         </div>
-      </div>
+      </header>
 
       <div className="progress-rail" aria-hidden="true">
         <div className="progress-bar" style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }} />
@@ -540,32 +547,63 @@ export function OnboardingPage() {
 
       <div className="field-grid onboarding-layout">
         <form className="panel stack" onSubmit={handleSubmit}>
+          <div className="section-card section-card-muted stack-small">
+            <p className="eyebrow">Current section</p>
+            <h3>{activeStep.title}</h3>
+            <p className="muted">{activeStep.helper}</p>
+          </div>
+
           {renderStep(draft, setDraft, stepIndex)}
 
-          <div className="action-row">
-            <button
-              className="button button-ghost"
-              disabled={stepIndex === 0}
-              onClick={() => setStepIndex((current) => Math.max(current - 1, 0))}
-              type="button"
-            >
-              Back
-            </button>
+          <div className="action-row action-row-spread">
+            <span className="status-text">{status}</span>
+            <div className="action-row">
+              <button
+                className="button button-ghost"
+                disabled={stepIndex === 0}
+                onClick={() => setStepIndex((current) => Math.max(current - 1, 0))}
+                type="button"
+              >
+                Back
+              </button>
 
-            {stepIndex < steps.length - 1 ? (
-              <button className="button" onClick={handleNext} type="button">
-                Continue
-              </button>
-            ) : (
-              <button className="button" type="submit">
-                Save onboarding
-              </button>
-            )}
+              {stepIndex < steps.length - 1 ? (
+                <button className="button" onClick={handleNext} type="button">
+                  Continue
+                </button>
+              ) : (
+                <button className="button" type="submit">
+                  Save onboarding
+                </button>
+              )}
+            </div>
           </div>
-          <span className="status-text">{status}</span>
         </form>
 
         <div className="stack">
+          <article className="panel stack-small">
+            <p className="eyebrow">Progress map</p>
+            <ol className="step-list">
+              {steps.map((step, index) => {
+                const stepState =
+                  index < stepIndex ? "Complete" : index === stepIndex ? "Current" : "Up next";
+
+                return (
+                  <li
+                    className={index === stepIndex ? "step-item step-item-active" : "step-item"}
+                    key={step.title}
+                  >
+                    <span className="step-index">{index + 1}</span>
+                    <div className="step-body">
+                      <strong>{step.title}</strong>
+                      <p>{stepState}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </article>
+
           <article className="panel stack-small">
             <p className="eyebrow">Profile snapshot</p>
             <h3>{draft.displayName}</h3>
