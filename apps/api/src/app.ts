@@ -1,6 +1,9 @@
+import { existsSync } from "node:fs";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
 import "./lib/env.js";
+import { resolveRepoPath } from "./lib/paths.js";
 import { ensureStoreFile } from "./lib/store.js";
 import { registerRoutes } from "./routes/index.js";
 
@@ -8,14 +11,61 @@ export async function buildApp() {
   const app = Fastify({
     logger: true
   });
+  const allowedOrigins = process.env.API_ALLOWED_ORIGIN
+    ? process.env.API_ALLOWED_ORIGIN.split(",").map((origin) => origin.trim())
+    : true;
+  const shouldServeWeb =
+    process.env.SERVE_WEB === "true" || process.env.APP_ENV === "production";
+  const webDistPath = resolveRepoPath("apps/web/dist");
+  const apiPrefixes = [
+    "/health",
+    "/api",
+    "/api/health",
+    "/api/profiles",
+    "/api/onboarding",
+    "/api/matches",
+    "/api/conversations",
+    "/api/messages",
+    "/api/reports",
+    "/api/waitlist",
+    "/api/admin"
+  ];
 
   await ensureStoreFile();
 
   await app.register(cors, {
-    origin: process.env.API_ALLOWED_ORIGIN ?? "http://localhost:5173"
+    origin: allowedOrigins
   });
 
-  await app.register(registerRoutes);
+  app.get("/health", async () => ({
+    status: "ok",
+    app: "clarity-ai-api",
+    stage: "mvp"
+  }));
+
+  await app.register(registerRoutes, { prefix: "/api" });
+
+  if (shouldServeWeb && existsSync(webDistPath)) {
+    await app.register(fastifyStatic, {
+      root: webDistPath
+    });
+
+    app.get("/", async (_request, reply) => reply.type("text/html").sendFile("index.html"));
+
+    app.setNotFoundHandler((request, reply) => {
+      const pathname = request.url.split("?")[0];
+      const isApiRoute = apiPrefixes.some(
+        (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+      );
+      const isSpaRoute = ["GET", "HEAD"].includes(request.method) && !pathname.includes(".");
+
+      if (!isApiRoute && isSpaRoute) {
+        return reply.type("text/html").sendFile("index.html");
+      }
+
+      return reply.status(404).send({ error: "Route not found." });
+    });
+  }
 
   return app;
 }

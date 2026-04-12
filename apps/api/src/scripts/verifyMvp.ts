@@ -24,7 +24,7 @@ async function main() {
 
     const defaultProfileResponse = await app.inject({
       method: "GET",
-      url: `/profiles/${viewerUserId}`
+      url: `/api/profiles/${viewerUserId}`
     });
     assert.equal(defaultProfileResponse.statusCode, 200, "Profile draft should load.");
 
@@ -58,14 +58,14 @@ async function main() {
 
     const onboarding = await app.inject({
       method: "POST",
-      url: "/onboarding",
+      url: "/api/onboarding",
       payload: onboardingPayload
     });
     assert.equal(onboarding.statusCode, 200, "Onboarding should persist.");
 
     const persistedProfile = await app.inject({
       method: "GET",
-      url: `/profiles/${viewerUserId}`
+      url: `/api/profiles/${viewerUserId}`
     });
     assert.equal(persistedProfile.statusCode, 200, "Persisted profile should load.");
     assert.equal(
@@ -76,14 +76,14 @@ async function main() {
 
     const matches = await app.inject({
       method: "GET",
-      url: `/matches?userId=${viewerUserId}`
+      url: `/api/matches?userId=${viewerUserId}`
     });
     assert.equal(matches.statusCode, 200, "Matches should load.");
     assert.ok(matches.json().candidates.length >= 2, "Viewer should receive seeded matches.");
 
     const conversation = await app.inject({
       method: "POST",
-      url: "/conversations",
+      url: "/api/conversations",
       payload: {
         participantUserIds: [viewerUserId, "user-merve"]
       }
@@ -94,7 +94,7 @@ async function main() {
 
     const sendMessage = await app.inject({
       method: "POST",
-      url: "/messages",
+      url: "/api/messages",
       payload: {
         conversationId,
         senderUserId: viewerUserId,
@@ -105,7 +105,7 @@ async function main() {
 
     const report = await app.inject({
       method: "POST",
-      url: "/reports",
+      url: "/api/reports",
       payload: {
         reporterUserId: viewerUserId,
         targetUserId: "user-merve",
@@ -119,7 +119,7 @@ async function main() {
 
     const matchesAfterBlock = await app.inject({
       method: "GET",
-      url: `/matches?userId=${viewerUserId}`
+      url: `/api/matches?userId=${viewerUserId}`
     });
     assert.equal(matchesAfterBlock.statusCode, 200, "Matches should still load after blocking.");
     assert.ok(
