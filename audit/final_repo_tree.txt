@@ -4,10 +4,12 @@
 ./AI_BOUNDARIES.md
 ./BERLIN_LAUNCH_PLAN.md
 ./DECISIONS.md
+./GIT_RECONCILIATION_REPORT.md
 ./MATCHING_MODEL.md
 ./MVP_SCOPE.md
 ./PRODUCT_BRIEF.md
 ./README.md
+./REPO_DECISION.md
 ./ROADMAP.md
 ./SAFETY_PRINCIPLES.md
 ./SYSTEM_ARCHITECTURE.md
@@ -91,6 +93,7 @@
 ./audit/next_steps.md
 ./audit/open_questions.md
 ./audit/overnight_run_report.md
+./audit/repo_recovery_report.md
 ./data
 ./data/fixtures
 ./data/fixtures/berlin_test_profiles.json
