@@ -1,18 +1,13 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
-import { createReport } from "../lib/api";
-import {
-  candidateUsers,
-  reportCategories,
-  toggleArrayValue,
-  viewerUserId
-} from "../lib/profile";
+import type { MatchCandidate } from "@clarity/shared";
+import { createReport, fetchMatchCandidates } from "../lib/api";
+import { candidateName, reportCategories, toggleArrayValue, viewerUserId } from "../lib/profile";
 
 export function SafetyPage() {
   const [searchParams] = useSearchParams();
-  const [targetUserId, setTargetUserId] = useState<string>(
-    searchParams.get("target") ?? candidateUsers[0]?.id ?? ""
-  );
+  const [candidates, setCandidates] = useState<MatchCandidate[]>([]);
+  const [targetUserId, setTargetUserId] = useState<string>(searchParams.get("target") ?? "");
   const [conversationId, setConversationId] = useState<string>(
     searchParams.get("conversation") ?? ""
   );
@@ -21,9 +16,36 @@ export function SafetyPage() {
   const [blockUser, setBlockUser] = useState(true);
   const [status, setStatus] = useState("Report and block flow ready.");
 
+  useEffect(() => {
+    fetchMatchCandidates(viewerUserId)
+      .then((result) => {
+        setCandidates(result.candidates);
+        setTargetUserId((current) => current || result.candidates[0]?.candidateUserId || "");
+      })
+      .catch(() => {
+        setCandidates([]);
+      });
+  }, []);
+
+  const candidateOptions = useMemo(
+    () =>
+      candidates.map((candidate) => ({
+        id: candidate.candidateUserId,
+        label: candidateName(candidate)
+      })),
+    [candidates]
+  );
+
+  const selectedCandidate = useMemo(
+    () => candidateOptions.find((candidate) => candidate.id === targetUserId),
+    [candidateOptions, targetUserId]
+  );
+
   const targetLabel = useMemo(
-    () => candidateUsers.find((candidate) => candidate.id === targetUserId)?.label ?? "this user",
-    [targetUserId]
+    () =>
+      selectedCandidate?.label ??
+      (targetUserId ? `user ${targetUserId}` : "this user"),
+    [selectedCandidate, targetUserId]
   );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -61,17 +83,29 @@ export function SafetyPage() {
         <div className="field-grid two-columns">
           <label className="field">
             <span>Reported user</span>
-            <select
-              className="input"
-              value={targetUserId}
-              onChange={(event) => setTargetUserId(event.target.value)}
-            >
-              {candidateUsers.map((candidate) => (
-                <option key={candidate.id} value={candidate.id}>
-                  {candidate.label}
-                </option>
-              ))}
-            </select>
+            {candidateOptions.length > 0 ? (
+              <select
+                className="input"
+                value={targetUserId}
+                onChange={(event) => setTargetUserId(event.target.value)}
+              >
+                {targetUserId && !selectedCandidate ? (
+                  <option value={targetUserId}>{targetLabel}</option>
+                ) : null}
+                {candidateOptions.map((candidate) => (
+                  <option key={candidate.id} value={candidate.id}>
+                    {candidate.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                className="input"
+                onChange={(event) => setTargetUserId(event.target.value)}
+                placeholder="Enter a user ID"
+                value={targetUserId}
+              />
+            )}
           </label>
 
           <label className="field">

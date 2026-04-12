@@ -12,28 +12,24 @@ const ShortTextSchema = z.string().trim().min(1).max(140);
 export const AccountStatusSchema = z.enum(["invited", "active", "blocked"]);
 
 export const IdentitySchema = z.enum([
-  "woman",
-  "man",
-  "nonbinary",
-  "trans",
-  "queer",
-  "self_described",
+  "adhd",
+  "autism",
+  "audhd",
+  "neurotypical_ally",
   "prefer_not_to_say"
 ]);
 
 export const IdentityPreferenceSchema = z.enum([
-  "woman",
-  "man",
-  "nonbinary",
-  "trans",
-  "queer",
-  "self_described",
+  "adhd",
+  "autism",
+  "audhd",
+  "neurotypical_ally",
   "everyone"
 ]);
 
 export const DiagnosisStatusSchema = z.enum([
   "diagnosed",
-  "self_identify",
+  "self_identified",
   "prefer_not_to_say",
   "not_applicable"
 ]);
@@ -51,11 +47,20 @@ export const RelationshipIntentSchema = z.enum([
   "friendship_first"
 ]);
 export const MatchConfidenceSchema = z.enum(["high", "medium", "low"]);
+export const ClarityLevelSchema = z.enum(["high", "medium", "low"]);
 
 export const SensoryProfileSchema = z.object({
   noise: ToleranceSchema.optional(),
   crowd: ToleranceSchema.optional(),
   calm: CalmNeedSchema.optional()
+});
+
+export const ProfileSummaryOutputSchema = z.object({
+  shortSummary: z.string().trim().min(1).max(180),
+  communicationStyleNote: z.string().trim().min(1).max(160),
+  clarityLevel: ClarityLevelSchema,
+  suggestion: z.string().trim().max(180).optional(),
+  generatedAt: TimestampSchema
 });
 
 export const UserSchema = z.object({
@@ -74,10 +79,8 @@ export const ProfileSchema = z.object({
   city: z.string().trim().min(1).max(80),
   locationLabel: z.string().trim().max(120).optional(),
   identity: IdentitySchema.optional(),
-  identityLabel: z.string().trim().max(60).optional(),
-  openTo: z.array(IdentityPreferenceSchema).min(1).max(6).default(["everyone"]),
+  openTo: z.array(IdentityPreferenceSchema).min(1).max(5).default(["adhd", "autism", "audhd"]),
   diagnosisStatus: DiagnosisStatusSchema.optional(),
-  diagnosisLabel: z.string().trim().max(80).optional(),
   communicationStyle: CommunicationStyleSchema.optional(),
   socialEnergy: SocialEnergySchema.optional(),
   sensoryProfile: SensoryProfileSchema.default({}),
@@ -87,6 +90,7 @@ export const ProfileSchema = z.object({
   whatDrainsMe: z.string().trim().max(280).optional(),
   whatINeedFromAPartner: z.string().trim().max(280).optional(),
   summary: z.string().trim().max(180).optional(),
+  profileSummary: ProfileSummaryOutputSchema.optional(),
   profileCompleteness: z.number().min(0).max(1),
   onboardingCompleted: z.boolean(),
   createdAt: TimestampSchema,
@@ -95,6 +99,8 @@ export const ProfileSchema = z.object({
 
 export const ProfileAnalysisSchema = z.object({
   summary: z.string().trim().min(1).max(180),
+  communicationStyleNote: z.string().trim().min(1).max(160),
+  clarityLevel: ClarityLevelSchema,
   lowSignalIndicators: z.array(ShortTextSchema).max(4),
   improvementSuggestions: z.array(ShortTextSchema).max(4),
   contradictionHints: z.array(ShortTextSchema).max(3),
@@ -115,6 +121,7 @@ export const MatchProfileSchema = z.object({
   routinePreference: RoutinePreferenceSchema.optional(),
   relationshipIntent: RelationshipIntentSchema.optional(),
   summary: z.string().trim().min(1).max(180),
+  profileSummary: ProfileSummaryOutputSchema.optional(),
   profileCompleteness: z.number().min(0).max(1)
 });
 

@@ -111,6 +111,10 @@ function scoreRoutine(user: Profile, candidate: Profile) {
 function sharedSignals(user: Profile, candidate: Profile) {
   const signals: string[] = [];
 
+  if (user.identity && user.identity === candidate.identity) {
+    signals.push(`Shared ${humanizeEnum(user.identity)} identity`);
+  }
+
   if (user.communicationStyle && user.communicationStyle === candidate.communicationStyle) {
     signals.push(`${humanizeEnum(user.communicationStyle)} communication`);
   }
@@ -231,6 +235,7 @@ function sortScore(user: Profile, candidate: Profile) {
 
 export function calculateCompatibility(user: Profile, candidate: Profile): MatchCandidate {
   const signals = sharedSignals(user, candidate);
+  const summary = candidate.profileSummary ?? buildProfileSummary(candidate);
 
   return {
     candidateUserId: candidate.userId,
@@ -247,7 +252,8 @@ export function calculateCompatibility(user: Profile, candidate: Profile): Match
       sensoryProfile: candidate.sensoryProfile,
       routinePreference: candidate.routinePreference,
       relationshipIntent: candidate.relationshipIntent,
-      summary: candidate.summary?.trim() || buildProfileSummary(candidate),
+      summary: candidate.summary?.trim() || summary.shortSummary,
+      profileSummary: summary,
       profileCompleteness: candidate.profileCompleteness
     },
     whyItCouldWork: whyItCouldWork(user, candidate),

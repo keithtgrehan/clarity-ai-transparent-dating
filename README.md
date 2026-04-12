@@ -1,55 +1,72 @@
 # Clarity.ai - transparent dating
 
-Clarity.ai is a clarity-first dating MVP for people who want structured onboarding, structured profiles, explainable matching, and lower-ambiguity early conversations. This repo is intentionally local-first: no payments, no mobile app, no fake AI claims, and no pretend backend.
+Clarity.ai is a Berlin-first, neurodivergent-first dating MVP slice focused on structured onboarding, readable profiles, explainable matching, calm local messaging, and basic safety tooling. The repo is intentionally local-first and intentionally bounded: no auth, no deployment infra, no payments, no mobile app, and no fake AI certainty.
 
-## What Works Now
-- backend starts locally with Fastify
-- frontend starts locally with Vite
-- onboarding saves a persisted profile for the seeded viewer user
-- profile page shows structured traits, completeness, summary, and edit flow
-- matches return seeded candidates with plain-English reasons, friction notes, and confidence labels
-- chat creates conversations, loads threads, and sends messages
-- safety flow submits reports and blocks users
-- local setup, build, and backend MVP verification are scripted
+## Working MVP Slice
+- multi-step onboarding for ADHD, Autism, AuDHD, and optional neurotypical ally identity support
+- persisted profile view/edit loop with completeness and profile summary output
+- explainable matches with identity and intent filters, compatibility reasons, and friction notes
+- simple conversation list and message flow
+- first-message helper based on shared structured traits
+- report and block flow with local moderation flag records
+- Berlin seed bundle with realistic local candidate profiles
+- local JSON persistence plus repeatable setup, seed, typecheck, build, and smoke verification scripts
 
-## Quick Start
+## Install
 1. `cd "/Users/keith/Documents/New project/Clarity.ai - transparent dating"`
 2. `npm run setup`
-3. `npm run dev`
 
-Local URLs:
-- web: [http://localhost:5173](http://localhost:5173)
-- api: [http://localhost:4000](http://localhost:4000)
+`npm run setup` will:
+- install workspace dependencies
+- create `.env` from `.env.example` if needed
+- create `data/runtime/local-db.json` if needed
+- build shared contracts
+- seed the local runtime store
 
-## Demo Flow
-After a fresh `npm run seed`, the repo starts with one seeded viewer user and three seeded candidate profiles.
+## Run The Backend
+1. Open a terminal in `/Users/keith/Documents/New project/Clarity.ai - transparent dating`
+2. Run `npm run dev:api`
+3. Confirm the API at [http://localhost:4000/health](http://localhost:4000/health)
 
-1. Open `/onboarding`
-2. Complete the seven-step onboarding flow for `Riley`
-3. Open `/profile` to see the persisted structured profile
-4. Open `/matches` to view seeded match candidates and explanations
-5. Open a conversation from a match card
-6. Send a message in `/chat`
-7. Use `/safety` or the chat report button to report and block a user
+## Run The Frontend
+1. Open a second terminal in `/Users/keith/Documents/New project/Clarity.ai - transparent dating`
+2. Run `npm run dev:web`
+3. Open [http://localhost:5173](http://localhost:5173)
 
-Reset the local runtime store at any time with:
-- `npm run seed`
+## Run Both Together
+- `npm run dev`
+
+This starts:
+- shared package watch
+- Fastify API on `4000`
+- Vite web app on `5173`
+
+If either port is already in use, stop the older process first and restart.
+
+## Review Flow
+1. Run `npm run seed` for a clean baseline
+2. Open `/onboarding`
+3. Complete the seven-step onboarding flow for `Riley`
+4. Open `/profile` to review the persisted profile, completeness, and summary
+5. Open `/matches` to see seeded Berlin candidates
+6. Open a conversation from a match card in `/chat`
+7. Send a message
+8. Use the report button in chat or `/safety` to submit a basic report and block
 
 ## Commands
-- `npm run setup`: install dependencies, copy `.env` from `.env.example` if missing, build shared types, and seed the runtime store
-- `npm run dev`: start shared watch, API dev server, and Vite frontend
-- `npm run dev:api`: start only the backend
-- `npm run dev:web`: start only the frontend
-- `npm run seed`: reset the local JSON store from the seed bundle
-- `npm run typecheck`: strict workspace typecheck
-- `npm run build`: build shared, API, and web
-- `npm run quality`: run typecheck, build, and the backend MVP verification script
-- `npm run verify:mvp`: run the backend inject-based smoke verification directly
+- `npm run setup` installs dependencies, prepares `.env`, and seeds runtime data
+- `npm run dev` starts shared watch, backend, and frontend together
+- `npm run dev:api` starts only the backend
+- `npm run dev:web` starts only the frontend
+- `npm run seed` resets `data/runtime/local-db.json` from the seed bundle
+- `npm run typecheck` runs strict TypeScript checks across all workspaces
+- `npm run build` builds shared, API, and web packages
+- `npm run quality` runs typecheck, build, and the backend MVP verification script
+- `npm run verify:mvp` runs the backend smoke verification directly
 
 ## Local Environment
-The repo uses a root `.env` file. `npm run setup` will create it automatically from `.env.example` if needed.
-
-Current local env keys:
+The root `.env.example` currently defines:
+- `APP_ENV`
 - `WEB_PORT`
 - `API_PORT`
 - `VITE_API_BASE_URL`
@@ -57,23 +74,16 @@ Current local env keys:
 - `API_STORAGE_FILE`
 - `ALLOW_SEED_ENDPOINT`
 
-## Architecture
-- frontend: React + Vite + TypeScript
-- backend: Fastify + TypeScript
-- shared contracts: Zod + TypeScript
-- persistence: local JSON store at `data/runtime/local-db.json`
-
-## Boundaries
+## Current Boundaries
+- no auth or real account/session model yet
+- no realtime chat infrastructure
+- no production moderation queue or reviewer dashboard
+- no diagnosis inference, severity inference, or personality typing
+- no legal/compliance implementation beyond explicit TODO boundaries
 - matching is heuristic and explainable, not predictive
-- diagnosis status is user-declared only
-- no personality typing
-- no diagnosis inference
-- no realtime infra
-- no auth or multi-device session model yet
-- moderation is structured and minimal, not production-ops complete
 
 ## Audit Docs
-- [audit/day2_audit_fix_report.md](./audit/day2_audit_fix_report.md)
-- [audit/day2_build_report.md](./audit/day2_build_report.md)
-- [audit/known_issues.md](./audit/known_issues.md)
-- [audit/next_steps.md](./audit/next_steps.md)
+- [day2_audit_fix_report.md](/Users/keith/Documents/New project/Clarity.ai - transparent dating/audit/day2_audit_fix_report.md)
+- [day2_build_report.md](/Users/keith/Documents/New project/Clarity.ai - transparent dating/audit/day2_build_report.md)
+- [known_issues.md](/Users/keith/Documents/New project/Clarity.ai - transparent dating/audit/known_issues.md)
+- [next_steps.md](/Users/keith/Documents/New project/Clarity.ai - transparent dating/audit/next_steps.md)

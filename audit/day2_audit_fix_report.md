@@ -1,44 +1,46 @@
-# Day 2 Audit And Fix Report
+# Day 2 Audit Fix Report
 
 ## What Was Broken
-- Workspace typechecking was not actually clean. The API could build, but TypeScript failed because the shared package declarations were not resolving safely in the monorepo.
-- The frontend onboarding flow was only a stub that edited a fully seeded profile. It did not represent a real user starting from incomplete state.
-- Match output leaned on a compatibility number and thin explanation text, which did not fit the product requirement for explainable, plain-English matching.
-- Frontend dev startup was misleading. Vite could show as "ready" while still serving a broken root path in the tested invocation.
-- Root `.env.example` existed, but local run behavior was only partially wired. The API and frontend were not consistently using the root env story.
-- The product still carried mixed naming from the older "Project A-Z" scaffold.
-- Safety categories and reporting flow did not match the requested MVP shape.
+- The live dev servers were not trustworthy at first. Older Node listeners were still bound to `4000` and `5173`, which meant the running apps could diverge from the current code.
+- The product model had drifted on the most important axis: `identity` was still acting like a gender-style field in parts of the stack instead of the requested neurotype identity model.
+- `SafetyPage` still depended on a removed local `candidateUsers` stub, which broke frontend typechecking.
+- The API contract for onboarding/profile writes was brittle because nested profile payloads still required `userId`.
+- Seed and fixture stories had diverged. The main Berlin seed bundle, lightweight fixtures, and audit docs were describing different candidate sets and counts.
+- Empty or junk directories were left behind from the overnight scaffold pass, and Vite recreated a workspace-local `.vite` cache under `apps/web/node_modules` during dev.
 
 ## What Was Fixed
-- Renamed the workspace packages and visible product naming to Clarity.ai.
-- Added shared workspace path mapping and removed the API `rootDir` constraint that blocked strict cross-package typechecking.
-- Reworked the shared contracts around the actual MVP:
-  - structured onboarding/profile traits
-  - explainable match candidates
-  - profile analysis output
-  - simplified waitlist and report contracts
-- Rebuilt the API around the new model:
-  - default draft profile generation for the seeded viewer
-  - onboarding persistence
-  - profile GET/PUT with computed completeness and summary
-  - `/matches` with hard filters, soft scoring, friction notes, and confidence labels
-  - conversation create/list/thread load
+- Audited the repo structure and removed empty scaffold leftovers:
+  - `apps/api/src/storage`
+  - `apps/web/src/features`
+- Cleaned stale listeners off `4000` and `5173`, then restarted the backend and frontend from a known-clean state.
+- Normalized the shared neurotype model across contracts, seeds, matching, summaries, and frontend labels:
+  - `adhd`
+  - `autism`
+  - `audhd`
+  - `neurotypical_ally`
+  - `prefer_not_to_say`
+- Added structured `profileSummary` output with:
+  - short summary
+  - communication style note
+  - clarity level
+  - bounded suggestion when signal is weak
+- Fixed the onboarding/profile input contract so `userId` is no longer required inside nested profile payloads.
+- Reworked `SafetyPage` to use live match candidates instead of a dead stub list.
+- Rewrote the Berlin seed bundle and lightweight profile fixtures so the review data matches the product model.
+- Re-ran:
+  - `npm run seed`
+  - `npm run typecheck`
+  - `npm run quality`
+- Re-verified the live local API slice on the running dev servers:
+  - onboarding save
+  - profile fetch
+  - match retrieval
+  - conversation create
   - message send
-  - report/block flow
-- Replaced the seeded data with one real viewer account plus seeded candidate profiles.
-- Rebuilt the frontend MVP slice:
-  - seven-step onboarding flow with progress and validation
-  - structured profile page with edit flow
-  - explainable match cards
-  - chat UI with first-message helper
-  - report/block page and chat entrypoint
-- Fixed local startup behavior:
-  - Vite now serves cleanly from `npm run dev`
-  - root `.env` is auto-created by `npm run setup`
-  - `npm run quality` now runs a backend MVP verification script
+  - report/block create
 
-## What Is Still Unclear
-- There is no auth model yet, so the app is intentionally centered on one seeded viewer account.
-- Matching weights are heuristic. They are readable and bounded, but they are not calibrated against pilot feedback yet.
-- The frontend has not been browser-E2E tested in an automated runner. It has been verified through build health, dev startup, API-backed flows, and backend smoke verification.
-- Reporting/blocking is structured, but there is no moderator dashboard or resolution workflow yet.
+## What Remains Uncertain
+- Frontend behavior is manually verified through build health and live API-backed flows, but there is still no browser E2E test runner protecting the slice.
+- `tsx watch` can still briefly hit `EADDRINUSE` on `4000` when shared files change while the API dev server is already running. A clean restart resolves it, but the dev orchestration should be hardened.
+- Matching weights and summary phrasing are still heuristic first-pass logic. They are bounded and explainable, but not yet calibrated with pilot feedback.
+- There is still no auth, deletion flow, export flow, or moderator review UI.

@@ -81,6 +81,7 @@ export function MatchesPage() {
                 </div>
                 <p className="muted">
                   {candidate.profile.locationLabel || candidate.profile.city} •{" "}
+                  {humanizeEnum(candidate.profile.identity)} •{" "}
                   {humanizeEnum(candidate.profile.relationshipIntent)} •{" "}
                   {humanizeEnum(candidate.profile.communicationStyle)}
                 </p>

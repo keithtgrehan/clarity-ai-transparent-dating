@@ -1,21 +1,22 @@
 # Known Issues
 
-## Current Limits
-- No authentication. The MVP is intentionally centered on a seeded viewer account (`user-you`) plus seeded candidates.
-- No browser automation coverage yet. The backend smoke test is real and repeatable, but frontend interaction is still manually verified.
-- The local store is JSON-backed and single-instance. It is suitable for local review, not concurrent production usage.
-- Match scoring is heuristic and explainable, but not yet calibrated against real pilot feedback.
-- Reporting creates structured safety records and block effects, but there is no moderation queue, admin dashboard, or appeal flow.
-- Chat is request/response only. There is no realtime syncing, typing indicator, or notification layer.
+## Current Bugs And Rough Edges
+- `tsx watch` can sometimes collide with port `4000` after shared-package edits and require a clean API restart.
+- There is no browser E2E suite yet, so frontend regressions are still caught by manual verification plus TypeScript/build checks.
+- The frontend dev server recreates `apps/web/node_modules/.vite` while running. It is only cache data, but it adds noise to the local workspace during dev.
 
-## Product Boundaries Still Enforced
-- No diagnosis inference
-- No personality typing
-- No fake compatibility percentages in the UI
-- No manipulative engagement loops
-- No payments
-- No mobile app
+## Current Product Limitations
+- no auth or current-user session model
+- one local seeded viewer account for review flows
+- no realtime messaging
+- no moderation review dashboard
+- no deletion/export/privacy workflow implementation yet
+- no pilot-calibrated matching weights yet
 
-## Minor Technical Notes
-- Running `npm run dev:web -- --host 0.0.0.0` is unnecessary now because Vite is configured to serve on host automatically through the config.
-- `data/runtime/local-db.json` is a seeded local artifact for the review flow. Use `npm run seed` whenever you want to reset it to baseline.
+## Intentional Boundaries
+- no diagnosis inference
+- no mental-health severity inference
+- no personality typing
+- no manipulative engagement loops
+- no payments
+- no mobile app

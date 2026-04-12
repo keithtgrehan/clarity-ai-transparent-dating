@@ -38,9 +38,9 @@ async function main() {
         displayName: "Riley",
         age: 30,
         locationLabel: "Neukolln and Kreuzberg",
-        identity: "nonbinary",
-        openTo: ["everyone"],
-        diagnosisStatus: "self_identify",
+        identity: "audhd",
+        openTo: ["adhd", "autism", "audhd"],
+        diagnosisStatus: "self_identified",
         communicationStyle: "direct",
         socialEnergy: "medium",
         sensoryProfile: {

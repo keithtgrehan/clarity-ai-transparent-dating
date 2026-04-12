@@ -45,10 +45,12 @@ function ProfileDetails({
         <p className="muted">{analysis.summary}</p>
         <div className="pill-row">
           <span className="info-pill">{completenessLabel(completeness)}</span>
+          <span className="info-pill">{humanizeEnum(analysis.clarityLevel)} clarity</span>
           <span className="info-pill">{humanizeEnum(draft.relationshipIntent)}</span>
           <span className="info-pill">{humanizeEnum(draft.communicationStyle)}</span>
           <span className="info-pill">{humanizeEnum(draft.socialEnergy)}</span>
         </div>
+        <p className="muted">{analysis.communicationStyleNote}</p>
       </article>
 
       <article className="panel stack-small">
@@ -61,6 +63,10 @@ function ProfileDetails({
           <div>
             <strong>Diagnosis status</strong>
             <p className="muted">{humanizeEnum(draft.diagnosisStatus)}</p>
+          </div>
+          <div>
+            <strong>Match filter</strong>
+            <p className="muted">{draft.openTo.map((item) => humanizeEnum(item)).join(", ")}</p>
           </div>
           <div>
             <strong>Communication</strong>
@@ -261,7 +267,7 @@ export function ProfilePage() {
 
           <div className="field-grid two-columns">
             <label className="field">
-              <span>Identity</span>
+              <span>Identity (ADHD / Autism / AuDHD)</span>
               <select
                 className="input"
                 value={draft.identity ?? ""}
@@ -304,7 +310,7 @@ export function ProfilePage() {
           </div>
 
           <div className="stack-small">
-            <span className="field-label">Open to dating</span>
+            <span className="field-label">Show me matches from</span>
             <div className="checkbox-row">
               {openToOptions.map((option) => (
                 <label className="checkbox-pill" key={option.value}>

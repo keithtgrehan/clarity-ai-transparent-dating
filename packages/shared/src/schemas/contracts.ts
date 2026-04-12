@@ -10,7 +10,9 @@ import {
 } from "./domain.js";
 
 export const ProfileInputSchema = ProfileSchema.omit({
+  userId: true,
   summary: true,
+  profileSummary: true,
   profileCompleteness: true,
   onboardingCompleted: true,
   createdAt: true,
@@ -33,7 +35,21 @@ function requireOnboardingField<T>(
 }
 
 export const OnboardingProfileInputSchema = ProfileInputSchema.superRefine((profile, context) => {
-  requireOnboardingField(profile.identity, ["identity"], "Choose an identity label.", context);
+  requireOnboardingField(
+    profile.identity,
+    ["identity"],
+    "Choose whether you identify as ADHD, Autism, AuDHD, or another supported option.",
+    context
+  );
+
+  if (profile.openTo.length === 0) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Choose at least one identity group to match with.",
+      path: ["openTo"]
+    });
+  }
+
   requireOnboardingField(
     profile.diagnosisStatus,
     ["diagnosisStatus"],

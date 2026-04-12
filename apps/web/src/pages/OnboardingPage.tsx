@@ -25,7 +25,7 @@ type SensoryCalmValue = NonNullable<ProfileInput["sensoryProfile"]["calm"]>;
 const steps = [
   {
     title: "Identity and diagnosis status",
-    helper: "Choose how you want to describe yourself. No inference, no personality typing."
+    helper: "Choose the neurotype identity and diagnosis status you want matching to respect. No inference, no personality typing."
   },
   {
     title: "Communication style",
@@ -170,7 +170,7 @@ function renderStep(draft: ProfileInput, setDraft: (next: ProfileInput) => void,
           </div>
 
           <div className="stack-small">
-            <span className="field-label">Identity</span>
+            <span className="field-label">Identity (ADHD / Autism / AuDHD)</span>
             <div className="choice-grid">
               {identityOptions.map((option) => (
                 <button
@@ -188,7 +188,7 @@ function renderStep(draft: ProfileInput, setDraft: (next: ProfileInput) => void,
           </div>
 
           <div className="stack-small">
-            <span className="field-label">Open to dating</span>
+            <span className="field-label">Show me matches from</span>
             <div className="checkbox-row">
               {openToOptions.map((option) => (
                 <label className="checkbox-pill" key={option.value}>
@@ -572,6 +572,7 @@ export function OnboardingPage() {
             <p className="muted">{analysisSummary || "Summary will appear once you add more signal."}</p>
             <ul className="summary-list">
               <li>Identity: {humanizeEnum(draft.identity)}</li>
+              <li>Match filter: {draft.openTo.map((item) => humanizeEnum(item)).join(", ")}</li>
               <li>Communication: {humanizeEnum(draft.communicationStyle)}</li>
               <li>Energy: {humanizeEnum(draft.socialEnergy)}</li>
               <li>Routine: {humanizeEnum(draft.routinePreference)}</li>

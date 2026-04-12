@@ -34,10 +34,6 @@ export async function registerProfileRoutes(app: FastifyInstance) {
       });
     }
 
-    if (parsed.data.userId !== userId) {
-      return reply.code(400).send({ error: "Route userId and body userId must match." });
-    }
-
     const store = await readStore();
     const user = store.users.find((entry) => entry.id === userId);
 

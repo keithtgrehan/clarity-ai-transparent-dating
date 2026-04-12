@@ -31,6 +31,38 @@
       "accountStatus": "active",
       "createdAt": "2026-04-11T07:30:00.000Z",
       "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "id": "user-lara",
+      "firstName": "Lara",
+      "city": "Berlin",
+      "accountStatus": "active",
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "id": "user-emre",
+      "firstName": "Emre",
+      "city": "Berlin",
+      "accountStatus": "active",
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "id": "user-noor",
+      "firstName": "Noor",
+      "city": "Berlin",
+      "accountStatus": "active",
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "id": "user-maya",
+      "firstName": "Maya",
+      "city": "Berlin",
+      "accountStatus": "active",
+      "createdAt": "2026-04-11T07:30:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
     }
   ],
   "profiles": [
@@ -40,8 +72,8 @@
       "age": 33,
       "city": "Berlin",
       "locationLabel": "Neukolln and Treptow",
-      "identity": "man",
-      "openTo": ["everyone"],
+      "identity": "adhd",
+      "openTo": ["adhd", "autism", "audhd"],
       "diagnosisStatus": "diagnosed",
       "communicationStyle": "direct",
       "socialEnergy": "medium",
@@ -55,7 +87,13 @@
       "bio": "I do best when plans are clear enough to trust, but not so rigid that they feel like homework. Walks, coffee, and straightforward check-ins make dating much easier for me.",
       "whatDrainsMe": "Long stretches of vague texting and plans that stay undefined.",
       "whatINeedFromAPartner": "Direct updates, a little patience, and someone who says what they mean.",
-      "summary": "Direct communicator with medium social energy who prefers some calm and is dating with intent.",
+      "summary": "ADHD identity, direct communication, medium social energy, and looking for dating with intent.",
+      "profileSummary": {
+        "shortSummary": "ADHD identity, direct communication, medium social energy, and looking for dating with intent.",
+        "communicationStyleNote": "Direct, explicit communication is likely to land best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
       "profileCompleteness": 0.96,
       "onboardingCompleted": true,
       "createdAt": "2026-04-11T07:45:00.000Z",
@@ -67,9 +105,9 @@
       "age": 31,
       "city": "Berlin",
       "locationLabel": "Mitte and Prenzlauer Berg",
-      "identity": "woman",
-      "openTo": ["everyone"],
-      "diagnosisStatus": "self_identify",
+      "identity": "autism",
+      "openTo": ["adhd", "autism", "audhd"],
+      "diagnosisStatus": "diagnosed",
       "communicationStyle": "direct",
       "socialEnergy": "low",
       "sensoryProfile": {
@@ -82,7 +120,13 @@
       "bio": "I like warm conversations that are specific, paced, and easy to trust. Quiet rooms, day dates, and people who follow through make it much easier for me to relax.",
       "whatDrainsMe": "Last-minute changes, noisy venues, and people who treat mixed signals like flirting.",
       "whatINeedFromAPartner": "Clear intention, gentle pacing, and explicit communication around plans.",
-      "summary": "Direct communicator with low social energy who needs calm, lower-noise plans and is looking for life partner.",
+      "summary": "Autism identity, direct communication, low social energy, prefers essential calm, and is looking for life partner.",
+      "profileSummary": {
+        "shortSummary": "Autism identity, direct communication, low social energy, prefers essential calm, and is looking for life partner.",
+        "communicationStyleNote": "Direct, explicit communication is likely to land best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
       "profileCompleteness": 0.98,
       "onboardingCompleted": true,
       "createdAt": "2026-04-11T07:45:00.000Z",
@@ -94,9 +138,9 @@
       "age": 29,
       "city": "Berlin",
       "locationLabel": "Friedrichshain and Kreuzberg",
-      "identity": "nonbinary",
-      "openTo": ["everyone"],
-      "diagnosisStatus": "prefer_not_to_say",
+      "identity": "audhd",
+      "openTo": ["adhd", "autism", "audhd", "neurotypical_ally"],
+      "diagnosisStatus": "self_identified",
       "communicationStyle": "balanced",
       "socialEnergy": "high",
       "sensoryProfile": {
@@ -109,8 +153,146 @@
       "bio": "I like honest conversations, a little momentum, and dates that feel alive without becoming chaotic. If we can name our energy and expectations clearly, I am very easy to be around.",
       "whatDrainsMe": "Over-analysis before we know whether there is any real rapport.",
       "whatINeedFromAPartner": "Kindness, curiosity, and enough directness that nobody has to guess.",
-      "summary": "Balanced communicator with high social energy who likes some calm, more openness, and exploring with clarity.",
+      "summary": "AuDHD identity, balanced communication, high social energy, prefers helpful calm, and is exploring with clarity.",
+      "profileSummary": {
+        "shortSummary": "AuDHD identity, balanced communication, high social energy, prefers helpful calm, and is exploring with clarity.",
+        "communicationStyleNote": "Clear communication with a little softness or context is likely to work best.",
+        "clarityLevel": "medium",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
       "profileCompleteness": 0.94,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "userId": "user-lara",
+      "displayName": "Lara",
+      "age": 32,
+      "city": "Berlin",
+      "locationLabel": "Kreuzberg and Neukolln",
+      "identity": "audhd",
+      "openTo": ["adhd", "autism", "audhd"],
+      "diagnosisStatus": "diagnosed",
+      "communicationStyle": "direct",
+      "socialEnergy": "low",
+      "sensoryProfile": {
+        "noise": "low",
+        "crowd": "low",
+        "calm": "essential"
+      },
+      "routinePreference": "balanced",
+      "relationshipIntent": "long_term_relationship",
+      "bio": "I like calmer plans, meaningful conversation, and people who make expectations visible without turning dating into a puzzle.",
+      "whatDrainsMe": "Chaotic plans, social over-stimulation, and people who leave intent undefined for too long.",
+      "whatINeedFromAPartner": "Gentle directness, predictable planning, and a shared respect for recovery time.",
+      "summary": "AuDHD identity, direct communication, low social energy, prefers essential calm, and is looking for long term relationship.",
+      "profileSummary": {
+        "shortSummary": "AuDHD identity, direct communication, low social energy, prefers essential calm, and is looking for long term relationship.",
+        "communicationStyleNote": "Direct, explicit communication is likely to land best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
+      "profileCompleteness": 0.97,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "userId": "user-emre",
+      "displayName": "Emre",
+      "age": 30,
+      "city": "Berlin",
+      "locationLabel": "Wedding and Mitte",
+      "identity": "adhd",
+      "openTo": ["adhd", "autism", "audhd"],
+      "diagnosisStatus": "self_identified",
+      "communicationStyle": "balanced",
+      "socialEnergy": "medium",
+      "sensoryProfile": {
+        "noise": "medium",
+        "crowd": "medium",
+        "calm": "helpful"
+      },
+      "routinePreference": "balanced",
+      "relationshipIntent": "dating_with_intent",
+      "bio": "I like dates that have enough shape to feel safe, but still leave room for humor and curiosity. Clear expectations make me much more relaxed.",
+      "whatDrainsMe": "Being treated like disorganization means disinterest.",
+      "whatINeedFromAPartner": "A little grace, concrete plans, and honest updates if capacity changes.",
+      "summary": "ADHD identity, balanced communication, medium social energy, prefers helpful calm, and is looking for dating with intent.",
+      "profileSummary": {
+        "shortSummary": "ADHD identity, balanced communication, medium social energy, prefers helpful calm, and is looking for dating with intent.",
+        "communicationStyleNote": "Clear communication with a little softness or context is likely to work best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
+      "profileCompleteness": 0.95,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "userId": "user-noor",
+      "displayName": "Noor",
+      "age": 34,
+      "city": "Berlin",
+      "locationLabel": "Charlottenburg and Tiergarten",
+      "identity": "autism",
+      "openTo": ["adhd", "autism", "audhd"],
+      "diagnosisStatus": "diagnosed",
+      "communicationStyle": "balanced",
+      "socialEnergy": "low",
+      "sensoryProfile": {
+        "noise": "low",
+        "crowd": "low",
+        "calm": "helpful"
+      },
+      "routinePreference": "routine",
+      "relationshipIntent": "long_term_relationship",
+      "bio": "I like dating that feels calm, explicit, and respectful of recovery time. I warm up slowly, but I am very consistent when something feels safe.",
+      "whatDrainsMe": "Unclear expectations, very loud environments, and sudden social intensity.",
+      "whatINeedFromAPartner": "Consistency, respect for pacing, and a willingness to make plans explicit.",
+      "summary": "Autism identity, balanced communication, low social energy, prefers helpful calm, and is looking for long term relationship.",
+      "profileSummary": {
+        "shortSummary": "Autism identity, balanced communication, low social energy, prefers helpful calm, and is looking for long term relationship.",
+        "communicationStyleNote": "Clear communication with a little softness or context is likely to work best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
+      "profileCompleteness": 0.96,
+      "onboardingCompleted": true,
+      "createdAt": "2026-04-11T07:45:00.000Z",
+      "updatedAt": "2026-04-11T07:45:00.000Z"
+    },
+    {
+      "userId": "user-maya",
+      "displayName": "Maya",
+      "age": 35,
+      "city": "Berlin",
+      "locationLabel": "Schoneberg and Mitte",
+      "identity": "neurotypical_ally",
+      "openTo": ["adhd", "autism", "audhd", "neurotypical_ally", "everyone"],
+      "diagnosisStatus": "not_applicable",
+      "communicationStyle": "balanced",
+      "socialEnergy": "medium",
+      "sensoryProfile": {
+        "noise": "medium",
+        "crowd": "medium",
+        "calm": "helpful"
+      },
+      "routinePreference": "balanced",
+      "relationshipIntent": "dating_with_intent",
+      "bio": "I care a lot about clear communication, respecting stated needs, and not treating somebody's differences like a novelty. I prefer thoughtful dates over chaotic ones.",
+      "whatDrainsMe": "People who say they are open-minded but never follow through on practical care.",
+      "whatINeedFromAPartner": "Mutual curiosity, explicit expectations, and the sense that both people are opting into clarity.",
+      "summary": "Neurotypical ally identity, balanced communication, medium social energy, prefers helpful calm, and is looking for dating with intent.",
+      "profileSummary": {
+        "shortSummary": "Neurotypical ally identity, balanced communication, medium social energy, prefers helpful calm, and is looking for dating with intent.",
+        "communicationStyleNote": "Clear communication with a little softness or context is likely to work best.",
+        "clarityLevel": "high",
+        "generatedAt": "2026-04-11T07:45:00.000Z"
+      },
+      "profileCompleteness": 0.95,
       "onboardingCompleted": true,
       "createdAt": "2026-04-11T07:45:00.000Z",
       "updatedAt": "2026-04-11T07:45:00.000Z"

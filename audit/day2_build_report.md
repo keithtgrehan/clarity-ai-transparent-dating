@@ -1,50 +1,60 @@
 # Day 2 Build Report
 
-## Verified Outcomes
-- `npm run setup` succeeds
-- `npm run dev` starts shared watch, backend, and frontend cleanly
-- backend health endpoint responds at `http://localhost:4000/health`
-- frontend serves at `http://localhost:5173/`
-- onboarding persists a profile for the seeded viewer user
-- persisted profile is visible through the profile page and API
-- seeded matches load after onboarding
-- each match includes:
-  - structured traits
-  - why it could work
-  - potential friction
-  - high/medium/low confidence
-- conversations can be created from matches
-- messages can be sent
-- reports can be submitted and can block users
+## What Was Built
+- a working onboarding flow with seven calm, structured steps
+- persisted profile create/update flow backed by the local API
+- profile completeness and bounded profile summary output
+- explainable matching with identity and intent filters plus simple compatibility scoring
+- conversation create/list/send flow
+- first-message helper generation
+- report and block flow with moderation flag creation
+- aligned Berlin seed data and lightweight fixtures for review
 
-## Verification Methods Used
+## What Is Working
+- `npm run setup`
+- `npm run dev:api`
+- `npm run dev:web`
+- `npm run dev`
 - `npm run typecheck`
-- `npm run build`
 - `npm run quality`
-- live `npm run dev` startup check
-- live API requests for:
+- onboarding persists a viewer profile and computes `profileSummary`
+- profile GET/PUT work with the updated shared contract
+- `/matches` returns curated candidates after onboarding
+- `/conversations`, `/messages`, and `/reports` work locally
+- the frontend pages for onboarding, profile, matches, chat, and safety compile and run against the live API
+
+## What Is Partially Working
+- frontend validation and flows are working, but there is no automated browser coverage yet
+- moderation is structurally correct for MVP use, but there is no reviewer dashboard or appeal workflow
+- local persistence is durable across sessions on one machine, but it is still JSON-backed and single-instance
+- AI output is deliberately bounded and deterministic/heuristic rather than model-backed
+
+## What Is Not Built
+- authentication and a real multi-user session model
+- realtime chat or notifications
+- legal/privacy/compliance implementation beyond documented placeholders
+- production moderation tooling
+- deployment infrastructure
+- payments or premium mechanics
+
+## Verification Completed
+- `npm run seed`
+- `npm run typecheck`
+- `npm run quality`
+- live API verification against running dev servers for:
   - onboarding
-  - profile fetch
-  - match fetch
-  - conversation create
+  - profile retrieval
+  - match retrieval
+  - conversation creation
   - message send
-  - report submit
+  - report/block creation
 
-## Key Repo Changes
-- normalized package and product naming to Clarity.ai
-- rebuilt the shared contracts around the actual MVP model
-- replaced seeded full-profile editing with draft-to-persist onboarding
-- added safe profile summary and low-signal guidance
-- implemented explainable matching with hard filters and bounded confidence
-- upgraded the frontend from page stubs to a real MVP slice
-- added backend MVP smoke verification script
-
-## Local Runtime State After Reset
-After `npm run seed`, the runtime store contains:
-- 4 users
-- 3 seeded candidate profiles
-- 1 existing seeded conversation
-- 2 existing seeded messages
+## Baseline Runtime After Reset
+After `npm run seed`, the local runtime store contains:
+- 8 users
+- 7 seeded profiles
+- 1 seeded conversation
+- 2 seeded messages
 - 0 reports
 - 1 waitlist lead
 - 0 moderation flags

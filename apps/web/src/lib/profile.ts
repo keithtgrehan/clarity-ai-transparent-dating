@@ -1,36 +1,34 @@
 import type { MatchCandidate, Profile, ProfileInput } from "@clarity/shared";
 
+const enumLabels: Record<string, string> = {
+  adhd: "ADHD",
+  audhd: "AuDHD",
+  autism: "Autism",
+  neurotypical_ally: "Neurotypical ally",
+  prefer_not_to_say: "Prefer not to say"
+};
+
 export const viewerUserId = "user-you";
 
-export const candidateUsers = [
-  { id: "user-jonas", label: "Jonas" },
-  { id: "user-merve", label: "Merve" },
-  { id: "user-sam", label: "Sam" }
-] as const;
-
 export const identityOptions = [
-  { value: "woman", label: "Woman" },
-  { value: "man", label: "Man" },
-  { value: "nonbinary", label: "Nonbinary" },
-  { value: "trans", label: "Trans" },
-  { value: "queer", label: "Queer" },
-  { value: "self_described", label: "Self-described" },
+  { value: "adhd", label: "ADHD" },
+  { value: "autism", label: "Autism" },
+  { value: "audhd", label: "AuDHD" },
+  { value: "neurotypical_ally", label: "Neurotypical ally" },
   { value: "prefer_not_to_say", label: "Prefer not to say" }
 ] as const;
 
 export const openToOptions = [
-  { value: "everyone", label: "Everyone" },
-  { value: "woman", label: "Women" },
-  { value: "man", label: "Men" },
-  { value: "nonbinary", label: "Nonbinary people" },
-  { value: "trans", label: "Trans people" },
-  { value: "queer", label: "Queer people" },
-  { value: "self_described", label: "Self-described identities" }
+  { value: "adhd", label: "ADHD" },
+  { value: "autism", label: "Autism" },
+  { value: "audhd", label: "AuDHD" },
+  { value: "neurotypical_ally", label: "Neurotypical ally" },
+  { value: "everyone", label: "Everyone" }
 ] as const;
 
 export const diagnosisOptions = [
   { value: "diagnosed", label: "Diagnosed" },
-  { value: "self_identify", label: "Self-identify" },
+  { value: "self_identified", label: "Self-identified" },
   { value: "prefer_not_to_say", label: "Prefer not to say" },
   { value: "not_applicable", label: "Not applicable" }
 ] as const;
@@ -38,7 +36,7 @@ export const diagnosisOptions = [
 export const communicationOptions = [
   { value: "direct", label: "Direct", help: "Say it clearly and early." },
   { value: "balanced", label: "Balanced", help: "Clear, but with some softness and context." },
-  { value: "indirect", label: "Indirect", help: "Gentler phrasing helps you ease into things." }
+  { value: "indirect", label: "Gentle", help: "Gentler phrasing helps you ease into things." }
 ] as const;
 
 export const socialEnergyOptions = [
@@ -85,6 +83,10 @@ export function humanizeEnum(value?: string) {
     return "Not set";
   }
 
+  if (enumLabels[value]) {
+    return enumLabels[value];
+  }
+
   return value
     .replaceAll("_", " ")
     .replace(/\b\w/g, (part) => part.toUpperCase());
@@ -92,7 +94,9 @@ export function humanizeEnum(value?: string) {
 
 export function profileToInput(profile: Profile): ProfileInput {
   const {
+    userId: _userId,
     summary: _summary,
+    profileSummary: _profileSummary,
     profileCompleteness: _profileCompleteness,
     onboardingCompleted: _onboardingCompleted,
     createdAt: _createdAt,

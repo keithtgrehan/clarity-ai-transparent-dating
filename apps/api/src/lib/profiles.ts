@@ -37,26 +37,28 @@ function readPath(profile: ProfileInput | Profile, path: string) {
   }, profile);
 }
 
+function identityPreferenceScore(profile: ProfileInput | Profile) {
+  return profile.openTo.length > 0 ? 1 : 0;
+}
+
 export function calculateProfileCompleteness(profile: ProfileInput | Profile) {
   const optionalChecks = [
     hasValue(profile.age),
     hasValue(profile.locationLabel),
     hasValue(profile.bio),
     hasValue(profile.whatDrainsMe),
-    hasValue(profile.whatINeedFromAPartner),
-    profile.openTo.length > 0
+    hasValue(profile.whatINeedFromAPartner)
   ];
 
-  const requiredScore =
-    requiredCompletenessChecks.filter((path) => hasValue(readPath(profile, path))).length /
-    requiredCompletenessChecks.length;
+  const requiredHits = requiredCompletenessChecks.filter((path) => hasValue(readPath(profile, path))).length;
+  const requiredScore = (requiredHits + identityPreferenceScore(profile)) / (requiredCompletenessChecks.length + 1);
   const optionalScore = optionalChecks.filter(Boolean).length / optionalChecks.length;
 
   return Number((requiredScore * 0.75 + optionalScore * 0.25).toFixed(2));
 }
 
 export function isOnboardingComplete(profile: ProfileInput | Profile) {
-  return requiredCompletenessChecks.every((path) => hasValue(readPath(profile, path)));
+  return profile.openTo.length > 0 && requiredCompletenessChecks.every((path) => hasValue(readPath(profile, path)));
 }
 
 export function createDefaultProfile(user: User): Profile {
@@ -66,11 +68,18 @@ export function createDefaultProfile(user: User): Profile {
     userId: user.id,
     displayName: user.firstName,
     city: user.city,
-    openTo: ["everyone"],
+    openTo: ["adhd", "autism", "audhd"],
     sensoryProfile: {},
     profileCompleteness: 0,
     onboardingCompleted: false,
     summary: "Start onboarding to turn your preferences into a clearer profile.",
+    profileSummary: {
+      shortSummary: "Start onboarding to turn your preferences into a clearer profile.",
+      communicationStyleNote: "Communication guidance will appear after onboarding is complete.",
+      clarityLevel: "low",
+      suggestion: "Add more detail to improve matches.",
+      generatedAt: createdAt
+    },
     createdAt,
     updatedAt: createdAt
   };
@@ -92,15 +101,20 @@ export function buildStoredProfile(user: User, input: ProfileInput, existing?: P
     updatedAt: nowIso(),
     profileCompleteness: 0,
     onboardingCompleted: false,
-    summary: ""
+    summary: "",
+    profileSummary: undefined
   };
 
   const profileCompleteness = calculateProfileCompleteness(mergedProfile);
-  const summary = buildProfileSummary(mergedProfile);
+  const profileSummary = buildProfileSummary({
+    ...mergedProfile,
+    profileCompleteness
+  });
 
   return {
     ...mergedProfile,
-    summary,
+    summary: profileSummary.shortSummary,
+    profileSummary,
     profileCompleteness,
     onboardingCompleted: isOnboardingComplete(mergedProfile)
   };

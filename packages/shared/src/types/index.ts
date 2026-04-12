@@ -6,6 +6,7 @@ import {
   MessageSchema,
   ModerationFlagSchema,
   ProfileAnalysisSchema,
+  ProfileSummaryOutputSchema,
   ProfileSchema,
   ReportSchema,
   UserSchema,
@@ -29,6 +30,7 @@ export type User = z.infer<typeof UserSchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
 export type MatchCandidate = z.infer<typeof MatchCandidateSchema>;
 export type ProfileAnalysis = z.infer<typeof ProfileAnalysisSchema>;
+export type ProfileSummaryOutput = z.infer<typeof ProfileSummaryOutputSchema>;
 export type Conversation = z.infer<typeof ConversationListItemSchema>;
 export type Message = z.infer<typeof MessageSchema>;
 export type ModerationFlag = z.infer<typeof ModerationFlagSchema>;

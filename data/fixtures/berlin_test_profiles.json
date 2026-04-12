@@ -1,30 +1,74 @@
 [
   {
-    "userId": "user-lara",
-    "displayName": "Lara",
+    "userId": "user-you",
+    "displayName": "Riley",
     "city": "Berlin",
-    "neighborhoods": ["Neukolln"],
-    "signals": ["very direct", "quiet dates", "long-term intent"]
+    "identity": "audhd",
+    "neighborhoods": ["Prenzlauer Berg", "Mitte"],
+    "intent": "dating_with_intent",
+    "signals": ["clear plans", "kind directness", "medium social energy"]
   },
   {
     "userId": "user-jonas",
     "displayName": "Jonas",
     "city": "Berlin",
-    "neighborhoods": ["Friedrichshain"],
-    "signals": ["balanced spontaneity", "explicit pacing", "dating with intent"]
+    "identity": "adhd",
+    "neighborhoods": ["Neukolln", "Treptow"],
+    "intent": "dating_with_intent",
+    "signals": ["direct updates", "balanced spontaneity", "walk-first dates"]
   },
   {
     "userId": "user-merve",
     "displayName": "Merve",
     "city": "Berlin",
-    "neighborhoods": ["Charlottenburg"],
-    "signals": ["literal communication", "low-noise fit", "life-partner intent"]
+    "identity": "autism",
+    "neighborhoods": ["Mitte", "Prenzlauer Berg"],
+    "intent": "life_partner",
+    "signals": ["literal communication", "quiet rooms", "explicit pacing"]
   },
   {
-    "userId": "user-alex",
-    "displayName": "Alex",
+    "userId": "user-sam",
+    "displayName": "Sam",
     "city": "Berlin",
-    "neighborhoods": ["Kreuzberg"],
-    "signals": ["bilingual", "gentle initiation", "clear exploration"]
+    "identity": "audhd",
+    "neighborhoods": ["Friedrichshain", "Kreuzberg"],
+    "intent": "exploring_with_clarity",
+    "signals": ["honest energy check-ins", "lively dates", "soft structure"]
+  },
+  {
+    "userId": "user-lara",
+    "displayName": "Lara",
+    "city": "Berlin",
+    "identity": "audhd",
+    "neighborhoods": ["Kreuzberg", "Neukolln"],
+    "intent": "long_term_relationship",
+    "signals": ["quiet dates", "predictable planning", "gentle directness"]
+  },
+  {
+    "userId": "user-emre",
+    "displayName": "Emre",
+    "city": "Berlin",
+    "identity": "adhd",
+    "neighborhoods": ["Wedding", "Mitte"],
+    "intent": "dating_with_intent",
+    "signals": ["clear expectations", "medium stimulation", "curious conversation"]
+  },
+  {
+    "userId": "user-noor",
+    "displayName": "Noor",
+    "city": "Berlin",
+    "identity": "autism",
+    "neighborhoods": ["Tempelhof", "Schoneberg"],
+    "intent": "friendship_first",
+    "signals": ["low-pressure pacing", "calm spaces", "literal communication"]
+  },
+  {
+    "userId": "user-maya",
+    "displayName": "Maya",
+    "city": "Berlin",
+    "identity": "neurotypical_ally",
+    "neighborhoods": ["Moabit", "Tiergarten"],
+    "intent": "exploring_with_clarity",
+    "signals": ["respects sensory needs", "explicit consent", "steady follow-through"]
   }
 ]
