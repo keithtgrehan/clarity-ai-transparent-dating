@@ -44,7 +44,7 @@ export function ChatPage() {
   useEffect(() => {
     refreshConversations()
       .then((items) =>
-        setStatus(items.length > 0 ? "Conversation list loaded." : "No conversations yet.")
+        setStatus(items.length > 0 ? "Choose a conversation to continue." : "No conversations yet.")
       )
       .catch((error) =>
         setStatus(error instanceof Error ? error.message : "Could not load conversations.")
@@ -78,7 +78,7 @@ export function ChatPage() {
     })
       .then(async (result) => {
         await refreshConversations(result.conversation.id);
-        setStatus(result.reused ? "Conversation already existed." : "Conversation created.");
+        setStatus(result.reused ? "Conversation already existed." : "Conversation ready.");
       })
       .catch((error) =>
         setStatus(error instanceof Error ? error.message : "Could not open conversation.")
@@ -123,7 +123,7 @@ export function ChatPage() {
       const refreshed = await fetchConversationMessages(selectedConversationId);
       setMessages(refreshed.messages);
       setFirstMessagePrompt(refreshed.firstMessagePrompt);
-      setStatus("Message saved locally.");
+      setStatus("Message sent.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not send message.");
     }
@@ -143,10 +143,10 @@ export function ChatPage() {
       <header className="page-header">
         <div className="page-header-copy">
           <p className="eyebrow">Conversations</p>
-          <h2>Simple, readable chat with no realtime theater</h2>
+          <h2>Low-pressure conversations with enough context to feel grounded</h2>
           <p className="lead">
-            Open a conversation from matches, send a message, and report or block from the
-            same flow when something crosses a line.
+            Start from a match, keep the message readable, and use the same space to pause,
+            report, or block if the conversation stops feeling safe.
           </p>
         </div>
         <div className="page-header-meta">
@@ -160,7 +160,7 @@ export function ChatPage() {
           <div className="stack-small">
             <h3>Conversation list</h3>
             <p className="field-hint">
-              Threads stay intentionally simple: one list, one composer, one clear safety exit.
+              One list, one thread, one clear safety exit.
             </p>
           </div>
           {conversations.length > 0 ? (
@@ -187,7 +187,7 @@ export function ChatPage() {
             })
           ) : (
             <p className="muted">
-              No conversations yet. Open one from a match card to start.
+              No conversations yet. Start with a match that feels easy to message.
             </p>
           )}
         </div>
@@ -200,8 +200,8 @@ export function ChatPage() {
                   <h3>{selectedParticipant?.displayName ?? "Conversation"}</h3>
                   <p className="muted">
                     {selectedConversation.status === "blocked"
-                      ? "This conversation is blocked."
-                      : "Messages are saved locally and reload without websocket infrastructure."}
+                      ? "This conversation is currently blocked."
+                      : "Keep it direct, kind, and easy to answer."}
                   </p>
                 </div>
 
@@ -239,8 +239,8 @@ export function ChatPage() {
                   </>
                 ) : (
                   <p className="muted">
-                    Structured match context is not available for this thread yet, but the
-                    conversation remains fully usable.
+                    Structured match context is not available for this thread yet, but you can
+                    still continue the conversation normally.
                   </p>
                 )}
 
@@ -255,15 +255,21 @@ export function ChatPage() {
                 <div className="section-card danger-panel stack-small">
                   <p className="eyebrow">Conversation state</p>
                   <p className="muted">
-                    This thread is currently blocked. Messages remain visible for context, but the
-                    composer is disabled.
+                    This thread is blocked. Messages stay visible for context, but sending is turned off.
                   </p>
                 </div>
               ) : null}
 
               <div className="message-list">
                 {messages.map((message) => (
-                  <article className="message-card" key={message.id}>
+                  <article
+                    className={
+                      message.senderUserId === viewerUserId
+                        ? "message-card message-card-self"
+                        : "message-card"
+                    }
+                    key={message.id}
+                  >
                     <div className="card-header">
                       <strong>
                         {message.senderUserId === viewerUserId
@@ -273,7 +279,9 @@ export function ChatPage() {
                       <span className="muted">{message.sentAt}</span>
                     </div>
                     <p>{message.body}</p>
-                    <span className="message-meta">Moderation: {message.moderationState}</span>
+                    {message.moderationState !== "clear" ? (
+                      <span className="message-meta">Held for safety review</span>
+                    ) : null}
                   </article>
                 ))}
               </div>

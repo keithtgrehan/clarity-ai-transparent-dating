@@ -98,7 +98,7 @@ img {
 
 .app-shell {
   display: grid;
-  grid-template-columns: 272px minmax(0, 1fr);
+  grid-template-columns: 248px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -109,7 +109,7 @@ img {
   align-content: start;
   gap: var(--space-md);
   min-height: 100vh;
-  padding: 1.6rem 1.2rem;
+  padding: 1.35rem 1rem;
   border-right: 1px solid var(--border);
   background: rgba(246, 243, 236, 0.92);
   backdrop-filter: blur(14px);
@@ -148,7 +148,7 @@ img {
 }
 
 .sidebar-note {
-  padding: 1rem;
+  padding: 0.9rem;
   border-radius: 20px;
 }
 
@@ -228,12 +228,15 @@ img {
 }
 
 .content {
+  display: flex;
+  justify-content: center;
   padding: 1.8rem;
 }
 
 .page {
   display: grid;
   gap: var(--space-lg);
+  width: 100%;
   max-width: 1160px;
   padding: 2rem;
   border-radius: var(--radius-xl);
@@ -275,6 +278,11 @@ img {
   gap: var(--space-xs);
   justify-items: end;
   min-width: 220px;
+}
+
+.page-header-meta .status-text {
+  max-width: 28ch;
+  text-align: right;
 }
 
 .page-header-actions {
@@ -397,6 +405,12 @@ img {
   line-height: 1.45;
 }
 
+.field-error-text {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--danger-muted);
+}
+
 .input,
 .textarea {
   width: 100%;
@@ -413,6 +427,15 @@ img {
 .choice-card:hover,
 .list-button:hover {
   border-color: rgba(47, 106, 88, 0.22);
+}
+
+.input-invalid {
+  border-color: rgba(142, 91, 82, 0.55);
+  background: rgba(255, 247, 246, 0.92);
+}
+
+.input-invalid-block {
+  border-color: rgba(142, 91, 82, 0.4);
 }
 
 .input:focus,
@@ -628,6 +651,7 @@ img {
 .helper-callout {
   padding: 1rem 1.05rem;
   border-radius: 20px;
+  border-color: rgba(47, 106, 88, 0.22);
 }
 
 .helper-callout strong {
@@ -694,6 +718,10 @@ img {
 .match-summary {
   display: grid;
   gap: 0.7rem;
+  padding: 1rem 1.05rem;
+  border-radius: 20px;
+  border: 1px solid rgba(214, 206, 192, 0.9);
+  background: linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(236, 230, 218, 0.48));
 }
 
 .match-caption,
@@ -743,6 +771,7 @@ img {
 .conversation-context {
   display: grid;
   gap: 0.75rem;
+  border-color: rgba(47, 106, 88, 0.18);
 }
 
 .message-list {
@@ -757,6 +786,11 @@ img {
   padding: 1rem;
   border-radius: 18px;
   background: rgba(255, 253, 248, 0.96);
+}
+
+.message-card-self {
+  border-color: rgba(47, 106, 88, 0.24);
+  background: rgba(47, 106, 88, 0.08);
 }
 
 .message-card p {
@@ -855,6 +889,10 @@ img {
   .page-header-meta {
     justify-items: start;
     min-width: auto;
+  }
+
+  .page-header-meta .status-text {
+    text-align: left;
   }
 
   .button,

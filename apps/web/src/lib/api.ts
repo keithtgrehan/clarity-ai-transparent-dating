@@ -13,6 +13,23 @@ import type {
   WaitlistLead
 } from "@clarity/shared";
 
+export type ApiErrorDetails = {
+  formErrors?: string[];
+  fieldErrors?: Record<string, string[] | undefined>;
+};
+
+export class ApiError extends Error {
+  status: number;
+  details?: ApiErrorDetails;
+
+  constructor(message: string, status: number, details?: ApiErrorDetails) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.details = details;
+  }
+}
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ??
   (import.meta.env.PROD ? "/api" : "http://localhost:4000/api");
@@ -25,10 +42,23 @@ async function request<T>(path: string, init?: RequestInit) {
     ...init
   });
 
-  const body = await response.json();
+  const contentType = response.headers.get("content-type") ?? "";
+  const body =
+    contentType.includes("application/json")
+      ? await response.json().catch(() => null)
+      : await response.text().catch(() => null);
 
   if (!response.ok) {
-    throw new Error(body.error ?? "Request failed.");
+    if (body && typeof body === "object") {
+      const errorBody = body as { error?: string; details?: ApiErrorDetails };
+      throw new ApiError(
+        errorBody.error ?? `Request failed with status ${response.status}.`,
+        response.status,
+        errorBody.details
+      );
+    }
+
+    throw new ApiError(`Request failed with status ${response.status}.`, response.status);
   }
 
   return body as T;

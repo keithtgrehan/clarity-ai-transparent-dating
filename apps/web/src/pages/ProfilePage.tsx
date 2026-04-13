@@ -40,7 +40,7 @@ function ProfileDetails({
   return (
     <div className="stack">
       <article className="panel stack-small">
-        <p className="eyebrow">Interpreted summary</p>
+        <p className="eyebrow">How the profile reads</p>
         <h3>{draft.displayName}</h3>
         <p className="muted">{analysis.summary}</p>
         <div className="pill-row">
@@ -118,7 +118,7 @@ function ProfileDetails({
       </article>
 
       <article className="panel stack-small">
-        <p className="eyebrow">Profile guidance</p>
+        <p className="eyebrow">Ways to strengthen it</p>
         {analysis.lowSignalIndicators.length > 0 ? (
           <ul className="simple-list">
             {analysis.lowSignalIndicators.map((item) => (
@@ -161,7 +161,7 @@ export function ProfilePage() {
         setDraft(profileToInput(result.profile));
         setAnalysis(result.analysis);
         setCompleteness(result.profile.profileCompleteness);
-        setStatus("Profile loaded from the local store.");
+        setStatus("Profile ready to review.");
       })
       .catch((error) => setStatus(error instanceof Error ? error.message : "Could not load profile."));
   }, []);
@@ -180,7 +180,7 @@ export function ProfilePage() {
       setDraft(profileToInput(result.profile));
       setAnalysis(result.analysis);
       setCompleteness(result.profile.profileCompleteness);
-      setStatus("Profile saved locally.");
+      setStatus("Profile saved.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save profile.");
     }
@@ -201,10 +201,10 @@ export function ProfilePage() {
       <header className="page-header">
         <div className="page-header-copy">
           <p className="eyebrow">Structured profile</p>
-          <h2>Edit the signals your matches will actually see</h2>
+          <h2>Edit the details people will actually use to understand you</h2>
           <p className="lead">
-            This page shows the persisted profile, summary, completeness, and improvement cues
-            generated from the current backend state.
+            Keep the profile concrete, readable, and true to daily life. The goal is not to sound
+            impressive. It is to make the right kind of fit easier to recognize.
           </p>
         </div>
         <div className="page-header-meta">

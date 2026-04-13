@@ -1,17 +1,7 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { WaitlistForm } from "../components/WaitlistForm";
-import { fetchApiHealth } from "../lib/api";
 
 export function LandingPage() {
-  const [status, setStatus] = useState("Checking API...");
-
-  useEffect(() => {
-    fetchApiHealth()
-      .then((result) => setStatus(`API ${result.status} (${result.stage})`))
-      .catch(() => setStatus("API unavailable"));
-  }, []);
-
   return (
     <section className="page stack">
       <div className="hero-card stack">
@@ -19,10 +9,11 @@ export function LandingPage() {
           <div className="stack">
             <div className="stack-small">
               <p className="eyebrow">Quiet precision</p>
-              <h2>Less ambiguity. More signal. No swipe theater.</h2>
+              <h2>Less ambiguity. Better first dates. No swipe theater.</h2>
               <p className="lead">
-                Clarity.ai is a structured dating environment for people who want direct
-                onboarding, explainable matching, and calmer early-stage decisions.
+                Clarity.ai helps people understand each other earlier: how they communicate, what
+                pace feels good, where friction may show up, and whether starting a conversation
+                feels worth the emotional effort.
               </p>
             </div>
 
@@ -33,16 +24,16 @@ export function LandingPage() {
               <Link className="button button-secondary" to="/matches">
                 Review matches
               </Link>
-              <span className="status-chip">{status}</span>
+              <span className="status-chip">Berlin early access</span>
             </div>
           </div>
 
           <aside className="section-card section-card-muted stack-small">
-            <p className="eyebrow">Operating stance</p>
-            <h3>Built for clarity, not compulsion</h3>
+            <p className="eyebrow">Why it feels different</p>
+            <h3>Built for people who are tired of guessing</h3>
             <p className="muted">
-              The MVP emphasizes structured profile signal, slower decision-making, and
-              readable rationale over engagement loops.
+              Lower pressure, fewer mixed signals, and more readable decisions before time and
+              energy get spent in the wrong place.
             </p>
             <div className="pill-row">
               <span className="info-pill">Berlin-first</span>
@@ -57,8 +48,8 @@ export function LandingPage() {
             <p className="eyebrow">1. Structured onboarding</p>
             <h3>Reduce guesswork early</h3>
             <p className="muted">
-              Core compatibility questions are explicit, chunked, and saved step by step so
-              you do not have to improvise your profile from scratch.
+              Clarify the parts that usually stay fuzzy: communication, social energy, sensory
+              needs, routine, and relationship intent.
             </p>
           </article>
 
@@ -66,8 +57,8 @@ export function LandingPage() {
             <p className="eyebrow">2. Readable profiles</p>
             <h3>Separate facts from interpretation</h3>
             <p className="muted">
-              Profiles stay concrete: communication, energy, sensory needs, routine, intent,
-              and the practical context that makes dating easier.
+              Profiles stay concrete, so you can tell what daily life with someone might feel like
+              before you start projecting onto them.
             </p>
           </article>
 
@@ -75,8 +66,8 @@ export function LandingPage() {
             <p className="eyebrow">3. Explainable matching</p>
             <h3>See why the system suggested someone</h3>
             <p className="muted">
-              Each match shows fit rationale, likely friction, and a first-message helper
-              without pretending the system knows more than it does.
+              Fit notes, likely friction, and first-message guidance are shown in plain language
+              without pretending the product can predict chemistry.
             </p>
           </article>
         </div>

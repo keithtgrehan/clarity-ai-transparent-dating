@@ -8,6 +8,16 @@ import {
 const TimestampSchema = z.string().min(1);
 const IdSchema = z.string().min(1);
 const ShortTextSchema = z.string().trim().min(1).max(140);
+const OptionalIdInputSchema = z.preprocess(
+  (value) => {
+    if (typeof value === "string" && value.trim().length === 0) {
+      return undefined;
+    }
+
+    return value;
+  },
+  IdSchema.optional()
+);
 
 export const AccountStatusSchema = z.enum(["invited", "active", "blocked"]);
 
@@ -179,8 +189,8 @@ export const ReportSchema = z.object({
   id: IdSchema,
   reporterUserId: IdSchema,
   targetUserId: IdSchema,
-  conversationId: IdSchema.optional(),
-  messageId: IdSchema.optional(),
+  conversationId: OptionalIdInputSchema,
+  messageId: OptionalIdInputSchema,
   categories: z.array(z.enum(moderationCategories)).min(1).max(4),
   description: z.string().trim().min(12).max(1200),
   blockUser: z.boolean().default(true),

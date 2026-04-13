@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { MatchCandidate } from "@clarity/shared";
-import { createReport, fetchMatchCandidates } from "../lib/api";
+import type { Conversation, MatchCandidate } from "@clarity/shared";
+import {
+  ApiError,
+  createReport,
+  fetchConversations,
+  fetchMatchCandidates
+} from "../lib/api";
 import { candidateName, reportCategories, toggleArrayValue, viewerUserId } from "../lib/profile";
 
 const categoryGuidance: Record<string, string> = {
@@ -11,9 +16,50 @@ const categoryGuidance: Record<string, string> = {
   other: "Anything serious that does not fit the categories above."
 };
 
+type ReportTarget = {
+  id: string;
+  label: string;
+  conversationId?: string;
+  source: "conversation" | "match";
+};
+
+type SafetyFieldErrors = Partial<
+  Record<"targetUserId" | "conversationId" | "categories" | "description", string>
+>;
+
+function buildValidationErrors(input: {
+  targetUserId: string;
+  categories: string[];
+  description: string;
+}) {
+  const errors: SafetyFieldErrors = {};
+
+  if (!input.targetUserId.trim()) {
+    errors.targetUserId = "Choose who you are reporting.";
+  }
+
+  if (input.categories.length === 0) {
+    errors.categories = "Choose at least one category.";
+  }
+
+  if (input.description.trim().length < 12) {
+    errors.description = "Add a little more detail so the report can be understood clearly.";
+  }
+
+  return errors;
+}
+
+function firstFieldError(
+  details: ApiError["details"],
+  fieldName: keyof SafetyFieldErrors
+) {
+  return details?.fieldErrors?.[fieldName]?.[0];
+}
+
 export function SafetyPage() {
   const [searchParams] = useSearchParams();
   const [candidates, setCandidates] = useState<MatchCandidate[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [targetUserId, setTargetUserId] = useState<string>(searchParams.get("target") ?? "");
   const [conversationId, setConversationId] = useState<string>(
     searchParams.get("conversation") ?? ""
@@ -21,56 +67,136 @@ export function SafetyPage() {
   const [categories, setCategories] = useState<string[]>(["harassment"]);
   const [description, setDescription] = useState("");
   const [blockUser, setBlockUser] = useState(true);
-  const [status, setStatus] = useState("Report and block flow ready.");
+  const [status, setStatus] = useState(
+    "Choose the person, explain what happened, and submit when ready."
+  );
+  const [fieldErrors, setFieldErrors] = useState<SafetyFieldErrors>({});
 
   useEffect(() => {
-    fetchMatchCandidates(viewerUserId)
-      .then((result) => {
-        setCandidates(result.candidates);
-        setTargetUserId((current) => current || result.candidates[0]?.candidateUserId || "");
-      })
-      .catch(() => {
-        setCandidates([]);
-      });
+    Promise.all([
+      fetchMatchCandidates(viewerUserId).catch(() => ({ candidates: [] })),
+      fetchConversations(viewerUserId).catch(() => ({ conversations: [] }))
+    ]).then(([matchResult, conversationResult]) => {
+      setCandidates(matchResult.candidates);
+      setConversations(conversationResult.conversations);
+    });
   }, []);
+
+  const reportTargets = useMemo(() => {
+    const targetMap = new Map<string, ReportTarget>();
+
+    conversations.forEach((conversation) => {
+      const participant = conversation.participants.find(
+        (entry) => entry.userId !== viewerUserId
+      );
+
+      if (!participant) {
+        return;
+      }
+
+      targetMap.set(participant.userId, {
+        id: participant.userId,
+        label: participant.displayName,
+        conversationId: conversation.id,
+        source: "conversation"
+      });
+    });
+
+    candidates.forEach((candidate) => {
+      if (targetMap.has(candidate.candidateUserId)) {
+        return;
+      }
+
+      targetMap.set(candidate.candidateUserId, {
+        id: candidate.candidateUserId,
+        label: candidateName(candidate),
+        source: "match"
+      });
+    });
+
+    return Array.from(targetMap.values());
+  }, [candidates, conversations]);
+
+  useEffect(() => {
+    if (targetUserId || reportTargets.length === 0) {
+      return;
+    }
+
+    setTargetUserId(reportTargets[0]?.id ?? "");
+    setConversationId((current) => current || reportTargets[0]?.conversationId || "");
+  }, [reportTargets, targetUserId]);
 
   const candidateOptions = useMemo(
     () =>
-      candidates.map((candidate) => ({
-        id: candidate.candidateUserId,
-        label: candidateName(candidate)
+      reportTargets.map((target) => ({
+        id: target.id,
+        label: target.label,
+        source: target.source
       })),
-    [candidates]
+    [reportTargets]
   );
 
-  const selectedCandidate = useMemo(
-    () => candidateOptions.find((candidate) => candidate.id === targetUserId),
-    [candidateOptions, targetUserId]
+  const selectedTarget = useMemo(
+    () => reportTargets.find((target) => target.id === targetUserId),
+    [reportTargets, targetUserId]
   );
 
   const targetLabel = useMemo(
-    () =>
-      selectedCandidate?.label ??
-      (targetUserId ? `user ${targetUserId}` : "this user"),
-    [selectedCandidate, targetUserId]
+    () => selectedTarget?.label ?? (targetUserId ? `user ${targetUserId}` : "this person"),
+    [selectedTarget, targetUserId]
   );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("Saving report...");
+
+    const nextFieldErrors = buildValidationErrors({
+      targetUserId,
+      categories,
+      description
+    });
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      setStatus("Please check the highlighted fields and try again.");
+      return;
+    }
+
+    setFieldErrors({});
+    setStatus("Submitting report...");
 
     try {
       await createReport({
         reporterUserId: viewerUserId,
-        targetUserId,
-        conversationId: conversationId || undefined,
-        categories: categories as Array<(typeof reportCategories)[number]["value"]>,
-        description,
+        targetUserId: targetUserId.trim(),
+        conversationId: conversationId.trim() || undefined,
+        categories: [...new Set(categories)] as Array<(typeof reportCategories)[number]["value"]>,
+        description: description.trim(),
         blockUser
       });
       setDescription("");
-      setStatus("Report saved locally. Block state now affects matches and conversations.");
+      setStatus(
+        blockUser
+          ? "Report submitted. This person will be kept out of your normal flow."
+          : "Report submitted. The record has been saved for review."
+      );
     } catch (error) {
+      if (error instanceof ApiError) {
+        const nextErrors: SafetyFieldErrors = {
+          targetUserId: firstFieldError(error.details, "targetUserId"),
+          conversationId: firstFieldError(error.details, "conversationId"),
+          categories: firstFieldError(error.details, "categories"),
+          description: firstFieldError(error.details, "description")
+        };
+
+        setFieldErrors(nextErrors);
+        setStatus(
+          Object.values(nextErrors).some(Boolean)
+            ? "Please correct the highlighted fields and submit again."
+            : error.message
+        );
+        return;
+      }
+
       setStatus(error instanceof Error ? error.message : "Could not save report.");
     }
   }
@@ -80,10 +206,10 @@ export function SafetyPage() {
       <header className="page-header">
         <div className="page-header-copy">
           <p className="eyebrow">Safety basics</p>
-          <h2>Report behavior and block fast, without turning moderation into theater.</h2>
+          <h2>Report behavior clearly and block when you need distance.</h2>
           <p className="lead">
-          Reports here are structured safety records. They are not diagnoses, and automated
-          moderation is only a bounded assist.
+            Reports here are structured safety records. They are not diagnoses, and automated
+            moderation is only a bounded assist.
           </p>
         </div>
         <div className="page-header-meta">
@@ -94,16 +220,33 @@ export function SafetyPage() {
 
       <div className="field-grid onboarding-layout">
         <form className="panel stack" onSubmit={handleSubmit}>
+          {reportTargets.length === 0 && !targetUserId ? (
+            <div className="helper-callout">
+              <strong>No recent match or chat found yet.</strong> You can still submit a report by
+              entering the user ID if you have it.
+            </div>
+          ) : null}
+
           <div className="field-grid two-columns">
             <label className="field">
               <span>Reported user</span>
               {candidateOptions.length > 0 ? (
                 <select
-                  className="input"
+                  aria-invalid={Boolean(fieldErrors.targetUserId)}
+                  className={fieldErrors.targetUserId ? "input input-invalid" : "input"}
                   value={targetUserId}
-                  onChange={(event) => setTargetUserId(event.target.value)}
+                  onChange={(event) => {
+                    const nextTargetUserId = event.target.value;
+                    const suggestedConversation = reportTargets.find(
+                      (target) => target.id === nextTargetUserId
+                    )?.conversationId;
+
+                    setTargetUserId(nextTargetUserId);
+                    setConversationId((current) => current || suggestedConversation || "");
+                    setFieldErrors((current) => ({ ...current, targetUserId: undefined }));
+                  }}
                 >
-                  {targetUserId && !selectedCandidate ? (
+                  {targetUserId && !selectedTarget ? (
                     <option value={targetUserId}>{targetLabel}</option>
                   ) : null}
                   {candidateOptions.map((candidate) => (
@@ -114,26 +257,56 @@ export function SafetyPage() {
                 </select>
               ) : (
                 <input
-                  className="input"
-                  onChange={(event) => setTargetUserId(event.target.value)}
-                  placeholder="Enter a user ID"
+                  aria-invalid={Boolean(fieldErrors.targetUserId)}
+                  className={fieldErrors.targetUserId ? "input input-invalid" : "input"}
+                  onChange={(event) => {
+                    setTargetUserId(event.target.value);
+                    setFieldErrors((current) => ({ ...current, targetUserId: undefined }));
+                  }}
+                  placeholder="Enter a user ID if you know it"
                   value={targetUserId}
                 />
+              )}
+              {fieldErrors.targetUserId ? (
+                <span className="field-error-text">{fieldErrors.targetUserId}</span>
+              ) : (
+                <span className="field-hint">
+                  {selectedTarget
+                    ? `${targetLabel}${selectedTarget.source === "conversation" ? " appears in a recent conversation." : " appears in your current match list."}`
+                    : "Choose the person you want to report."}
+                </span>
               )}
             </label>
 
             <label className="field">
               <span>Conversation ID</span>
               <input
-                className="input"
+                aria-invalid={Boolean(fieldErrors.conversationId)}
+                className={fieldErrors.conversationId ? "input input-invalid" : "input"}
                 value={conversationId}
-                onChange={(event) => setConversationId(event.target.value)}
+                onChange={(event) => {
+                  setConversationId(event.target.value);
+                  setFieldErrors((current) => ({ ...current, conversationId: undefined }));
+                }}
                 placeholder="Optional"
               />
+              {fieldErrors.conversationId ? (
+                <span className="field-error-text">{fieldErrors.conversationId}</span>
+              ) : (
+                <span className="field-hint">
+                  Leave this blank if the issue was not tied to a specific thread.
+                </span>
+              )}
             </label>
           </div>
 
-          <div className="section-card section-card-muted stack">
+          <div
+            className={
+              fieldErrors.categories
+                ? "section-card section-card-muted stack input-invalid-block"
+                : "section-card section-card-muted stack"
+            }
+          >
             <div className="stack-small">
               <p className="eyebrow">Categories</p>
               <h3>Select what best fits the issue</h3>
@@ -147,6 +320,7 @@ export function SafetyPage() {
                     onChange={() =>
                       setCategories((current) => {
                         const next = toggleArrayValue(current, category.value);
+                        setFieldErrors((existing) => ({ ...existing, categories: undefined }));
                         return next.length > 0 ? next : current;
                       })
                     }
@@ -158,18 +332,32 @@ export function SafetyPage() {
                 </label>
               ))}
             </div>
+            {fieldErrors.categories ? (
+              <span className="field-error-text">{fieldErrors.categories}</span>
+            ) : null}
           </div>
 
           <label className="field">
             <span>What happened with {targetLabel}?</span>
             <textarea
-              className="textarea"
+              aria-invalid={Boolean(fieldErrors.description)}
+              className={fieldErrors.description ? "textarea input-invalid" : "textarea"}
               rows={6}
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => {
+                setDescription(event.target.value);
+                setFieldErrors((current) => ({ ...current, description: undefined }));
+              }}
               placeholder="Describe the behavior, message, or pressure that crossed a line."
               required
             />
+            {fieldErrors.description ? (
+              <span className="field-error-text">{fieldErrors.description}</span>
+            ) : (
+              <span className="field-hint">
+                Include enough detail that someone else could understand the issue without guessing.
+              </span>
+            )}
           </label>
 
           <label className="checkbox-pill">
@@ -194,8 +382,8 @@ export function SafetyPage() {
             <p className="eyebrow">Immediate effect</p>
             <h3>What happens after submit</h3>
             <p className="muted">
-              The report is stored locally, moderation metadata is attached to the target user,
-              and optional blocking removes them from normal matching and conversation flow.
+              The report is recorded, moderation metadata is attached to the target user, and
+              optional blocking removes them from your normal matching and conversation flow.
             </p>
           </article>
 

@@ -164,7 +164,7 @@ function renderStep(draft: ProfileInput, setDraft: (next: ProfileInput) => void,
                     locationLabel: event.target.value || undefined
                   })
                 }
-                placeholder="Optional, but helpful for local matching"
+                placeholder="Optional, but helpful for planning around Berlin"
               />
             </label>
           </div>
@@ -452,8 +452,8 @@ export function OnboardingPage() {
         setAnalysisSummary(result.analysis.summary);
         setStatus(
           result.exists
-            ? "Loaded your saved draft from the local store."
-            : "Starting a new onboarding draft."
+            ? "Your saved answers are ready to continue."
+            : "Start with the essentials, then add detail only where it helps."
         );
       })
       .catch((error) =>
@@ -476,7 +476,7 @@ export function OnboardingPage() {
     }
 
     setStepIndex((current) => Math.min(current + 1, steps.length - 1));
-    setStatus("Progress saved in the form. Submit on the final step to persist it.");
+    setStatus("That section looks good. Continue when you're ready.");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -501,7 +501,7 @@ export function OnboardingPage() {
       const result = await submitOnboarding(viewerUserId, draft);
       setDraft(profileToInput(result.profile));
       setAnalysisSummary(result.analysis.summary);
-      setStatus("Onboarding saved. Your profile is now persisted locally.");
+      setStatus("Your onboarding is saved. You can review the profile or move into matches.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save onboarding.");
     }
@@ -621,8 +621,8 @@ export function OnboardingPage() {
           <article className="panel stack-small">
             <p className="eyebrow">What gets saved</p>
             <p className="muted">
-              This onboarding persists to the local backend and becomes the structured profile
-              used for matching, chat prompts, and reporting context.
+              These answers shape how your profile reads, how matches are explained, and what
+              context is available if you ever need to report or block someone.
             </p>
           </article>
         </div>
