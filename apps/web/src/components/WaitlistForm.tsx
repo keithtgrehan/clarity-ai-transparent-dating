@@ -17,16 +17,18 @@ const defaultDraft: CreateWaitlistLeadInput = {
 
 export function WaitlistForm() {
   const [draft, setDraft] = useState<CreateWaitlistLeadInput>(defaultDraft);
-  const [status, setStatus] = useState("Join the Berlin waitlist for future pilot access.");
+  const [status, setStatus] = useState(
+    "Join the Berlin list for early access and small feedback sessions."
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("Saving waitlist lead...");
+    setStatus("Saving your details...");
 
     try {
       await createWaitlistLead(draft);
       setDraft(defaultDraft);
-      setStatus("Saved locally. This waitlist lead is now in the runtime store.");
+      setStatus("You're on the list. We'll reach out when the next Berlin group opens.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save waitlist lead.");
     }
@@ -36,10 +38,10 @@ export function WaitlistForm() {
     <form className="panel stack" onSubmit={handleSubmit}>
       <div className="stack-small">
         <p className="eyebrow">Waitlist</p>
-        <h3>Join the Berlin pilot list</h3>
+        <h3>Join the Berlin early access list</h3>
         <p className="muted">
-          This stays lightweight on purpose: enough signal for interviews and pilot follow-up,
-          without pretending the product is fully open.
+          Keep it light. We only ask for enough context to invite the right people into small
+          feedback rounds and early walkthroughs.
         </p>
       </div>
 
@@ -48,10 +50,10 @@ export function WaitlistForm() {
           <div className="stack-small">
             <h4>Core contact details</h4>
             <p className="field-hint">
-              Keep this concise. The goal is pilot follow-up, not a second onboarding funnel.
+              This is not a second onboarding funnel. It is just enough to follow up well.
             </p>
           </div>
-          <span className="status-chip">Berlin pilot</span>
+          <span className="status-chip">Berlin early access</span>
         </div>
 
         <div className="field-grid two-columns">
@@ -133,7 +135,7 @@ export function WaitlistForm() {
       </div>
 
       <label className="field">
-        <span>What would make dating feel clearer for you?</span>
+        <span>What would make dating feel easier to trust?</span>
         <textarea
           className="textarea"
           rows={4}

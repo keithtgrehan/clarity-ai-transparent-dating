@@ -52,7 +52,11 @@ export function MatchesPage() {
 
         setCanMatch(profileResult.profile.onboardingCompleted);
         setCandidates(matchResult.candidates);
-        setStatus(`${matchResult.candidates.length} seeded candidates available.`);
+        setStatus(
+          matchResult.candidates.length > 0
+            ? `${matchResult.candidates.length} people look worth a closer read.`
+            : "No strong fits yet."
+        );
       } catch (error) {
         setStatus(error instanceof Error ? error.message : "Could not load matches.");
       }
@@ -84,33 +88,32 @@ export function MatchesPage() {
       <header className="page-header">
         <div className="page-header-copy">
           <p className="eyebrow">Explainable matching</p>
-          <h2>Why it could work, where friction may show up, and how much signal exists.</h2>
+          <h2>See who feels promising, where friction may show up, and what to ask next.</h2>
           <p className="lead">
-            No swipe deck, no percentages, and no fake certainty. Just structured candidates
-            with readable reasoning.
+            Each suggestion is broken into shared signal, likely friction, and a sensible next
+            step in plain language.
           </p>
         </div>
         <div className="page-header-meta">
           <span className="info-pill">{visibleCandidates.length} visible candidates</span>
-          <span className="info-pill">{savedIds.length} saved locally</span>
+          <span className="info-pill">{savedIds.length} saved</span>
           <span className="status-text">{status}</span>
         </div>
       </header>
 
       {!canMatch ? (
         <article className="panel stack-small">
-          <h3>Complete onboarding to unlock match explanations</h3>
+          <h3>Finish the core profile first</h3>
           <p className="muted">
-            Matching only runs once the core structured fields are filled in. That keeps the
-            explanations honest instead of pretending sparse data is enough.
+            Match explanations only become useful once the basics are in place. Finish onboarding
+            and the fit notes will start to read like something you can actually use.
           </p>
         </article>
       ) : null}
 
       {dismissedIds.length > 0 ? (
         <div className="helper-callout">
-          <strong>Local review state:</strong> saved and dismissed actions are stored on this
-          device only for now.
+          <strong>Review state:</strong> dismissed matches are only hidden here for now.
           <div className="action-row">
             <button className="button button-ghost" onClick={() => setDismissedIds([])} type="button">
               Restore dismissed matches
@@ -127,103 +130,107 @@ export function MatchesPage() {
             candidate.potentialFriction[0] ?? "No major friction is obvious from the current signal.";
 
           return (
-          <article className="panel match-card" key={candidate.candidateUserId}>
-            <div className="match-summary">
-              <div className="match-header">
+            <article className="panel match-card" key={candidate.candidateUserId}>
+              <div className="match-summary">
                 <div className="stack-small">
-                  <div className="title-row">
-                    <h3>
-                      {candidateName(candidate)}
-                      {candidate.profile.age ? `, ${candidate.profile.age}` : ""}
-                    </h3>
-                    <span className={confidenceClass(candidate.confidence)}>
-                      {humanizeEnum(candidate.confidence)} confidence
-                    </span>
+                  <p className="eyebrow">Summary</p>
+                  <div className="match-header">
+                    <div className="stack-small">
+                      <div className="title-row">
+                        <h3>
+                          {candidateName(candidate)}
+                          {candidate.profile.age ? `, ${candidate.profile.age}` : ""}
+                        </h3>
+                        <span className={confidenceClass(candidate.confidence)}>
+                          {humanizeEnum(candidate.confidence)} confidence
+                        </span>
+                      </div>
+                      <p className="meta-line">
+                        {candidate.profile.locationLabel || candidate.profile.city} •{" "}
+                        {humanizeEnum(candidate.profile.identity)} •{" "}
+                        {humanizeEnum(candidate.profile.relationshipIntent)} •{" "}
+                        {humanizeEnum(candidate.profile.communicationStyle)}
+                      </p>
+                      <p className="match-caption">{summaryReason}</p>
+                    </div>
                   </div>
-                  <p className="meta-line">
-                    {candidate.profile.locationLabel || candidate.profile.city} •{" "}
-                    {humanizeEnum(candidate.profile.identity)} •{" "}
-                    {humanizeEnum(candidate.profile.relationshipIntent)} •{" "}
-                    {humanizeEnum(candidate.profile.communicationStyle)}
-                  </p>
-                  <p className="match-caption">{summaryReason}</p>
+                </div>
+
+                <div className="pill-row">
+                  {candidate.sharedSignals.map((signal) => (
+                    <span className="info-pill" key={signal}>
+                      {signal}
+                    </span>
+                  ))}
+                  {saved ? <span className="status-chip">Saved</span> : null}
                 </div>
               </div>
 
-              <div className="pill-row">
-                {candidate.sharedSignals.map((signal) => (
-                  <span className="info-pill" key={signal}>
-                    {signal}
-                  </span>
-                ))}
-                {saved ? <span className="status-chip">Saved on this device</span> : null}
-              </div>
-            </div>
+              <div className="match-rationale-grid">
+                <div className="section-card section-card-muted stack-small">
+                  <p className="eyebrow">Why it could work</p>
+                  <ul className="simple-list">
+                    {candidate.whyItCouldWork.map((reason) => (
+                      <li key={reason}>{reason}</li>
+                    ))}
+                  </ul>
+                </div>
 
-            <div className="match-rationale-grid">
-              <div className="section-card section-card-muted stack-small">
-                <p className="eyebrow">Why it could work</p>
-                <ul className="simple-list">
-                  {candidate.whyItCouldWork.map((reason) => (
-                    <li key={reason}>{reason}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="section-card stack-small">
-                <p className="eyebrow">Potential friction</p>
-                <p className="muted">{frictionPreview}</p>
-                <ul className="simple-list">
-                  {candidate.potentialFriction.length > 0 ? (
-                    candidate.potentialFriction.map((item) => <li key={item}>{item}</li>)
-                  ) : (
-                    <li>No major friction is obvious from the current signal.</li>
-                  )}
-                </ul>
-              </div>
-            </div>
-
-            <div className="match-actions">
-              <div className="stack-small">
-                <strong>Next step</strong>
-                <p className="muted">
-                  {candidate.firstMessagePrompt
-                    ? `Start with a concrete opener based on shared traits.`
-                    : "Review the structured profile and open a conversation when the fit feels worth testing."}
-                </p>
+                <div className="section-card stack-small">
+                  <p className="eyebrow">Potential friction</p>
+                  <p className="muted">{frictionPreview}</p>
+                  <ul className="simple-list">
+                    {candidate.potentialFriction.length > 0 ? (
+                      candidate.potentialFriction.map((item) => <li key={item}>{item}</li>)
+                    ) : (
+                      <li>No major friction is obvious from the current signal.</li>
+                    )}
+                  </ul>
+                </div>
               </div>
 
-              <div className="action-row">
-                <button
-                  className="button"
-                  onClick={() => navigate(`/chat?candidate=${candidate.candidateUserId}`)}
-                  type="button"
-                >
-                  Open chat
-                </button>
-                <button
-                  className="button button-secondary"
-                  onClick={() => toggleSaved(candidate.candidateUserId)}
-                  type="button"
-                >
-                  {saved ? "Unsave" : "Save for later"}
-                </button>
-                <button
-                  className="button button-ghost"
-                  onClick={() => dismissCandidate(candidate.candidateUserId)}
-                  type="button"
-                >
-                  Dismiss
-                </button>
-              </div>
-            </div>
+              <div className="match-actions">
+                <div className="stack-small">
+                  <p className="eyebrow">Action</p>
+                  <strong>Next step</strong>
+                  <p className="muted">
+                    {candidate.firstMessagePrompt
+                      ? "Start with a concrete opener based on what already looks shared."
+                      : "Review the structured profile and open a conversation when the fit feels worth testing."}
+                  </p>
+                </div>
 
-            {candidate.firstMessagePrompt ? (
-              <div className="helper-callout">
-                <strong>First message helper:</strong> {candidate.firstMessagePrompt}
+                <div className="action-row">
+                  <button
+                    className="button"
+                    onClick={() => navigate(`/chat?candidate=${candidate.candidateUserId}`)}
+                    type="button"
+                  >
+                    Open chat
+                  </button>
+                  <button
+                    className="button button-secondary"
+                    onClick={() => toggleSaved(candidate.candidateUserId)}
+                    type="button"
+                  >
+                    {saved ? "Unsave" : "Save for later"}
+                  </button>
+                  <button
+                    className="button button-ghost"
+                    onClick={() => dismissCandidate(candidate.candidateUserId)}
+                    type="button"
+                  >
+                    Dismiss
+                  </button>
+                </div>
               </div>
-            ) : null}
-          </article>
+
+              {candidate.firstMessagePrompt ? (
+                <div className="helper-callout">
+                  <strong>First message helper:</strong> {candidate.firstMessagePrompt}
+                </div>
+              ) : null}
+            </article>
           );
         })}
 

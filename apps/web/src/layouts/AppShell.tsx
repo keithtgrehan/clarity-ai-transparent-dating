@@ -2,11 +2,11 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const navItems = [
   { to: "/", label: "Overview", hint: "Product position and waitlist" },
-  { to: "/onboarding", label: "Onboarding", hint: "Structured entry flow" },
-  { to: "/profile", label: "Profile", hint: "Signals, summary, and edits" },
-  { to: "/matches", label: "Matches", hint: "Explainable fit, not swipes" },
-  { to: "/chat", label: "Chat", hint: "Low-pressure conversation flow" },
-  { to: "/safety", label: "Safety", hint: "Report and block basics" }
+  { to: "/onboarding", label: "Onboarding", hint: "Build a clear starting point" },
+  { to: "/profile", label: "Profile", hint: "Review what others will read" },
+  { to: "/matches", label: "Matches", hint: "See fit, friction, and next steps" },
+  { to: "/chat", label: "Chat", hint: "Keep first conversations grounded" },
+  { to: "/safety", label: "Safety", hint: "Report and block clearly" }
 ];
 
 export function AppShell() {
@@ -17,8 +17,8 @@ export function AppShell() {
           <p className="eyebrow">Clarity-first dating</p>
           <h1>Clarity.ai</h1>
           <p className="sidebar-lead">
-            A quieter dating environment for structured onboarding, readable profiles, and
-            explainable matching.
+            A quieter way to meet people when ambiguity, pressure, and shallow matching have
+            started to feel expensive.
           </p>
         </div>
 
@@ -38,17 +38,16 @@ export function AppShell() {
         </nav>
 
         <div className="sidebar-note stack-small">
-          <p className="sidebar-note-title">Current MVP slice</p>
+          <p className="sidebar-note-title">What you get</p>
           <p className="muted">
-            Calm onboarding, profile editing, explainable matching, grounded chat, and
-            basic safety tooling.
+            Structured profiles, explainable matches, grounded chat, and a serious safety path.
           </p>
         </div>
 
         <div className="sidebar-note stack-small sidebar-note-muted">
           <p className="sidebar-note-title">What this is not</p>
           <p className="muted">
-            No swipe deck, no streaks, no fake percentages, and no pressure loops.
+            No swipes, no streaks, no pressure loops, and no pretending chemistry can be solved by a score.
           </p>
         </div>
       </aside>
