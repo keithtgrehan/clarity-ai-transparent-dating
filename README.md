@@ -1,263 +1,125 @@
 # Clarity AI Transparent Dating
 
-Clarity is a **communication-first dating product** designed to make matching more honest, structured, and useful than traditional swipe apps.
+Clarity is a communication-first dating MVP built around explainable compatibility logic rather than swipe mechanics or vague "AI chemistry" claims.
 
-Most dating apps optimize for:
-- looks
-- swipes
-- addictive engagement loops
-- vague chemistry claims
+The repo is strongest as a portfolio example of product framing, rules-first matching, and honest AI boundaries. It is not a diagnostic app, not a therapy tool, and not a black-box ranking system.
 
-Clarity is being built to optimize for:
-- communication compatibility
-- predictability and follow-through
-- reduced ambiguity
-- explicit friction awareness
-- better first interactions
-- a safer and more transparent matching experience
+## What It Is
+- A calm, transparency-oriented dating concept for people who want lower ambiguity and better communication fit.
+- A rules-first compatibility model that explains why two people match and where friction is likely.
+- A local-first monorepo for reviewing the product shape across web, API, shared contracts, and matching logic.
+- An MVP concept that treats explicit preferences, pacing, and communication style as first-class inputs.
 
----
+## Why It Exists
+Most dating products optimize for speed, attraction, and engagement loops. Clarity takes a narrower approach:
+- communication compatibility over vague chemistry
+- explicit intent over performance
+- friction visibility over hidden scoring
+- understandable product behavior over hype
 
-## Current Product Direction
+The core thesis is simple: compatibility is not only about who people are, but also about how they interact.
 
-Clarity is not being positioned as “AI that knows your soul” or a diagnostic tool.
+## Current Product Boundary
+Clarity is currently positioned as a rules-first, explainable compatibility system.
 
-It is being built as a **rules-first, explainable compatibility system** that helps people understand:
+It is meant to help users understand:
 - why they were matched
 - where they align
 - where friction is likely
-- how to start the conversation well
+- how to start from shared expectations instead of guesswork
 
-This is especially relevant for people who are exhausted by:
-- mixed signals
-- unclear intent
-- inconsistent communication
-- shallow matching
-- dating apps that reward performance over fit
+It should not be presented as:
+- AI that "understands" the user
+- diagnosis-aware ranking
+- hidden psychological inference
+- a finished production dating platform
 
----
-
-## Core Product Thesis
-
-**We do not just match people. We match how people interact.**
-
-That means the product should score and explain compatibility across dimensions like:
-- relationship intent
-- communication style
-- social rhythm
-- reliability / predictability
-- interest depth
-- values alignment
-
-And just as importantly, it should surface likely friction such as:
-- response pace mismatch
-- direct vs indirect communication mismatch
-- structure vs spontaneity mismatch
-- reassurance mismatch
-- conflict-style mismatch
-
----
-
-## Progress So Far
-
-### 1. Matching Engine Strategy Defined
-A full matching-engine plan has been designed around:
+## How Matching Works
+The current concept combines:
 - structured user traits
 - weighted compatibility scoring
 - friction detection
 - confidence scoring
 - human-readable explanations
-- future NLP-assisted refinement
 
-This is intentionally **rules-first and explainable** rather than black-box from day one.
-
-### 2. Core Matching Dimensions Defined
-The current scoring model is centered around six domains:
-
-1. **Intent Alignment**  
-2. **Communication Compatibility**  
-3. **Social Rhythm**  
-4. **Reliability / Predictability**  
-5. **Interest Bonding**  
-6. **Values Alignment**
-
-### 3. Friction Engine Defined
-A core differentiator of Clarity is that it should not hide mismatch.
-
-Instead, it should explicitly identify likely friction, for example:
-- one person needs faster replies
-- one prefers clear plans while the other is spontaneous
-- one needs more reassurance
-- one is much less tolerant of ambiguity
-
-### 4. Architecture + Data Flow Planned
-A system architecture has been mapped covering:
-- onboarding / trait collection
-- profile storage
-- matching engine
-- conversation signal analysis
-- future refinement loop
-- explainable match output
-
-### 5. Python Reference Scoring Engine Created
-A real **rules-first reference implementation** has been created to prove the matching logic with:
-- sub-scores
-- friction flags
-- confidence scoring
-- explanations
-- sample profiles and output
-
-### 6. Matching Data Model Specified
-The core entities planned include:
-- `users`
-- `user_traits`
-- `user_interests`
-- `match_scores`
-- `conversation_signals`
-
-### 7. Positioning Clarified
-The product direction is now much sharper:
-
-Instead of:
-- “AI dating app”
-- “smart compatibility”
-- “better matches through AI”
-
-The stronger positioning is:
-- communication-aware matching
-- transparent compatibility logic
-- reduced ambiguity
-- interaction-first dating
-
----
-
-## Why This Matters
-
-Dating products often fail because they focus too much on attraction and too little on **interaction fit**.
-
-A match can look good on paper and still fail immediately because of:
-- incompatible communication pace
-- totally different expectations
-- mismatch in directness
-- mismatch in structure or emotional processing
-
-Clarity is being built to solve that layer.
-
----
-
-## Research-Informed Direction
-
-The product direction has been shaped by reviewing research on:
-- ADHD and romantic relationships
-- autistic adults and relationship preferences
-- online dating for autistic adults
-- neurodivergent friendship and social connection
-- communication mismatch and “double empathy” dynamics
-
-The strongest product takeaways from that work:
-- people want clarity more than performance
-- directness and explicit expectations matter
-- ambiguity causes avoidable breakdown
-- shared communication style is often more important than generic similarity
-- friendship / safety / trust are often stronger predictors of real connection than dating theatrics
-
-This research is not being used to diagnose users.  
-It is being used to design a better matching and interaction system.
-
----
-
-## Matching Engine Direction
-
-### Final Score Concept
-The working model uses:
+The working score shape is:
 
 `Final Score = Base Compatibility - Friction Penalty + Confidence Adjustment`
 
-### Weighted Compatibility Domains
-Current working weights:
+Current compatibility domains:
+- Intent Alignment
+- Communication Compatibility
+- Social Rhythm
+- Reliability / Predictability
+- Interest Bonding
+- Values Alignment
 
-- **Intent Alignment** — 25%
-- **Communication Compatibility** — 25%
-- **Social Rhythm** — 15%
-- **Reliability / Predictability** — 15%
-- **Interest Bonding** — 10%
-- **Values Alignment** — 10%
+The friction layer is a feature, not a bug. It is supposed to surface likely mismatches such as pace, reassurance, directness, or structure differences early.
 
-### Example Structured Traits
-The planned trait model includes signals such as:
+## AI Boundary
+AI is optional and tightly bounded in this repo.
 
-**Communication**
-- directness
-- literalness
-- reply speed preference
-- reply consistency importance
-- clarity need
-- ambiguity tolerance
-- small talk tolerance
-- deep topic preference
-- planned vs spontaneous
+Allowed direction:
+- summarization
+- bounded signal extraction
+- contradiction or low-signal checks
+- moderation support
 
-**Social Rhythm**
-- social battery
-- interaction frequency preference
-- one-to-one preference
-- alone-time need
-- sensory sensitivity
-- routine need
-- last-minute change tolerance
+Disallowed direction:
+- diagnosis inference
+- hidden compatibility truth claims
+- motive inference
+- clinical language
+- compulsion or engagement optimization
 
-**Reliability**
-- punctuality importance
-- reminder friendliness
-- dependability preference
-- rescheduling tolerance
-- repair speed after miscommunication
+The safest public framing is: rules-first matching now, optional assistive AI later only where it stays explainable and easy to ignore.
 
-**Values / Needs**
-- honesty / directness importance
-- reassurance need
-- independence vs closeness
-- novelty preference
-- affection expression
+## Current Repo Reality
+Built in-repo now:
+- TypeScript monorepo with `apps/web`, `apps/api`, and `packages/shared`
+- local-first architecture and file-backed persistence
+- documented MVP scope, matching model, safety principles, and AI boundaries
+- a reference scoring direction strong enough to explain the product honestly
 
----
+Still intentionally out of scope or incomplete:
+- mobile apps
+- payments or subscriptions
+- deployment infrastructure
+- real auth and production persistence
+- opaque ranking tuned on live behavioral data
 
-## Product Principles
+## How To Review The Repo
+For the fastest high-signal walkthrough:
+- [PRODUCT_BRIEF.md](PRODUCT_BRIEF.md) for user/problem framing
+- [MVP_SCOPE.md](MVP_SCOPE.md) for what is deliberately in and out of scope
+- [MATCHING_MODEL.md](MATCHING_MODEL.md) for the rules-first compatibility direction
+- [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for the monorepo and data-flow shape
+- [AI_BOUNDARIES.md](AI_BOUNDARIES.md) for non-diagnostic and non-hype limits
+- [DECISIONS.md](DECISIONS.md) for product and technical tradeoffs
 
-### 1. Explainability over hype
-Users should understand:
-- why they matched
-- what the likely strengths are
-- what the likely tension points are
+## Running The Repo
+Bootstrap and dev:
 
-### 2. Structured compatibility over vague chemistry
-Clarity should rank based on how people are likely to function together, not just how appealing they appear.
+```bash
+npm run setup
+npm run dev
+```
 
-### 3. Editable inference, not hidden judgments
-Any future NLP-assisted trait extraction should produce **suggestions** the user can edit, not secret labels.
+Useful checks:
 
-### 4. Friction visibility is a feature
-Showing likely mismatch early is part of the value.
+```bash
+npm run verify:mvp
+npm run quality
+```
 
-### 5. Rules-first before ML
-The product should earn trust with transparent logic before introducing heavier ranking models.
+## Why This Matters
+For portfolio, recruiter, and interview conversations, Clarity shows:
+- product thinking with a clear user/problem definition
+- explainable workflow design instead of black-box claims
+- explicit safety and AI boundaries
+- a narrow MVP scope that is easy to reason about
 
----
-
-## Planned System Components
-
-### Onboarding / Trait Capture
-Users complete structured questions around:
-- intent
-- communication preferences
-- planning style
-- social energy
-- reliability
-- interests
-- values
-
-### Match Computation
-The system computes:
+It is best read as a thoughtful, explainable MVP concept with real system structure behind it, not as a promise that the full product is already live.
 - compatibility score
 - friction score
 - confidence score
@@ -429,4 +291,3 @@ That is the core of the repo direction.
 Or more directly:
 
 **Most dating apps reward performance. Clarity is built for how you actually operate.**
-
