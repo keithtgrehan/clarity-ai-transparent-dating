@@ -1,0 +1,110 @@
+{
+  "user_a": {
+    "relationship_intention": "long_term",
+    "relationship_structure": "monogamous",
+    "conflict_style": "collaborative",
+    "directness": 0.9,
+    "literalness": 0.78,
+    "reply_speed_preference": 0.8,
+    "reply_consistency_importance": 0.88,
+    "planned_vs_spontaneous": 0.85,
+    "small_talk_tolerance": 0.22,
+    "deep_topic_preference": 0.92,
+    "clarity_need": 0.94,
+    "ambiguity_tolerance": 0.18,
+    "social_battery": 0.35,
+    "interaction_frequency_preference": 0.62,
+    "one_to_one_preference": 0.9,
+    "alone_time_need": 0.72,
+    "sensory_sensitivity": 0.74,
+    "routine_need": 0.82,
+    "last_minute_change_tolerance": 0.2,
+    "punctuality_importance": 0.9,
+    "reminder_friendliness": 0.85,
+    "dependability_preference": 0.88,
+    "rescheduling_tolerance": 0.35,
+    "repair_speed_after_miscommunication": 0.58,
+    "honesty_directness_importance": 0.94,
+    "independence_vs_closeness": 0.55,
+    "reassurance_need": 0.62,
+    "novelty_preference": 0.36,
+    "affection_expression": 0.45,
+    "profile_completeness": 0.95,
+    "behavioral_depth": 0.88,
+    "observed_signal_strength": 0.2,
+    "interests": [
+      {
+        "category": "music",
+        "name": "deep house",
+        "intensity": 0.92,
+        "wants_shared": true
+      },
+      {
+        "category": "nature",
+        "name": "forest walks",
+        "intensity": 0.8,
+        "wants_shared": true
+      },
+      {
+        "category": "books",
+        "name": "psychology",
+        "intensity": 0.68,
+        "wants_shared": false
+      }
+    ]
+  },
+  "user_b": {
+    "relationship_intention": "long_term",
+    "relationship_structure": "monogamous",
+    "conflict_style": "reflective",
+    "directness": 0.82,
+    "literalness": 0.73,
+    "reply_speed_preference": 0.42,
+    "reply_consistency_importance": 0.72,
+    "planned_vs_spontaneous": 0.74,
+    "small_talk_tolerance": 0.28,
+    "deep_topic_preference": 0.88,
+    "clarity_need": 0.86,
+    "ambiguity_tolerance": 0.3,
+    "social_battery": 0.42,
+    "interaction_frequency_preference": 0.55,
+    "one_to_one_preference": 0.83,
+    "alone_time_need": 0.66,
+    "sensory_sensitivity": 0.61,
+    "routine_need": 0.65,
+    "last_minute_change_tolerance": 0.34,
+    "punctuality_importance": 0.82,
+    "reminder_friendliness": 0.7,
+    "dependability_preference": 0.79,
+    "rescheduling_tolerance": 0.48,
+    "repair_speed_after_miscommunication": 0.49,
+    "honesty_directness_importance": 0.88,
+    "independence_vs_closeness": 0.58,
+    "reassurance_need": 0.4,
+    "novelty_preference": 0.48,
+    "affection_expression": 0.54,
+    "profile_completeness": 0.91,
+    "behavioral_depth": 0.82,
+    "observed_signal_strength": 0.1,
+    "interests": [
+      {
+        "category": "music",
+        "name": "deep house",
+        "intensity": 0.86,
+        "wants_shared": true
+      },
+      {
+        "category": "nature",
+        "name": "forest walks",
+        "intensity": 0.72,
+        "wants_shared": true
+      },
+      {
+        "category": "food",
+        "name": "coffee",
+        "intensity": 0.66,
+        "wants_shared": true
+      }
+    ]
+  }
+}

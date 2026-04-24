@@ -1,0 +1,21 @@
+{
+  "final_score": 96.8,
+  "compatibility_score": 90.8,
+  "friction_score": 0.0,
+  "confidence_score": 74.6,
+  "sub_scores": {
+    "intent_alignment": 100.0,
+    "communication_compatibility": 87.9,
+    "social_rhythm": 89.7,
+    "reliability_predictability": 89.6,
+    "interest_bonding": 84.4,
+    "values_alignment": 85.1
+  },
+  "friction_flags": [],
+  "reason_codes": [
+    "strong_intent_alignment",
+    "strong_social_rhythm",
+    "strong_reliability_predictability"
+  ],
+  "explanation": "Strong fit in intent alignment, social rhythm, reliability predictability with no major friction flags."
+}
