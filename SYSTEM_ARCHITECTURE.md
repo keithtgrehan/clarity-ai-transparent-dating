@@ -1,87 +1,22 @@
-# System Architecture
+# System architecture
 
-## Architecture Summary
-Clarity.ai - transparent dating uses a local-first TypeScript monorepo:
-- `apps/web`: React + Vite + TypeScript frontend
-- `apps/api`: Fastify + TypeScript API
-- `packages/shared`: shared Zod schemas, domain types, and API contracts
+## Current local architecture
 
-This stack was chosen to minimize language switching, keep contracts shared, and make solo-founder iteration faster than a split TypeScript/Python stack at this phase.
+Clarity is a TypeScript npm workspace:
 
-## Why Fastify Instead Of FastAPI
-FastAPI is strong, but for this repo run the better tradeoff is a TypeScript backend because:
-- shared contracts matter immediately
-- frontend and backend can use the same types and validation language
-- solo-founder velocity benefits from one language and one toolchain
-- the early NLP features are bounded scaffolds, not GPU-heavy model serving
+- `apps/web`: React 18 and Vite UI.
+- `apps/api`: Fastify API, deterministic services, seed tooling, and JSON persistence.
+- `packages/shared`: Zod contracts and inferred types.
 
-Python may still become useful later for heavier evaluation or ML pipelines, but it is not required for this first-pass foundation.
+The web calls the API, the API validates shared contracts, the store reads/writes one JSON document, and deterministic services create profile and candidate outputs. This design is for synthetic local review only. It has no authenticated trust boundary, transactional persistence, encryption, audit trail, or background worker.
 
-## High-Level Flow
-1. web app renders calm route-based UI
-2. web submits forms to local API
-3. API validates input with shared Zod schemas
-4. API persists to a local JSON store under `data/runtime`
-5. matching and AI-support services compute bounded outputs
-6. web renders profile, candidate, conversation, and safety states
+## Approved evolution
 
-## Package Responsibilities
+- Keep TypeScript for product runtime.
+- Introduce breaking contracts under `/api/v2` while v1 remains local-only.
+- Add matching, privacy, safety, and evidence packages only when Phase 2 implementation starts.
+- Replace JSON with an authenticated, encrypted, auditable production data layer only after the production architecture decision package.
+- Permit Python only in a later offline research workspace after source-rights, consent, label-quality, and evaluation gates.
+- Do not introduce a production Python service without a separate recorded decision.
 
-### `apps/web`
-- landing and waitlist
-- onboarding flow
-- profile editing UI
-- candidate list UI
-- conversations UI
-- settings and safety flows
-
-### `apps/api`
-- route handlers
-- local persistence
-- seed loading
-- matching orchestration
-- AI-support skeleton functions
-- moderation scaffolding
-
-### `packages/shared`
-- domain schemas
-- API request and response contracts
-- enums and constants
-- derived types for frontend and backend reuse
-
-## Persistence Strategy For This Stage
-Use file-backed JSON persistence for speed and transparency:
-- seed data lives in `data/seeds`
-- deterministic fixtures live in `data/fixtures`
-- mutable local runtime store lives in `data/runtime/local-db.json`
-
-This is intentionally not production storage. It is a reviewable scaffold for local product iteration.
-
-## Security And Privacy Notes
-- authentication is not implemented in this pass
-- secrets should stay in local environment variables only
-- data minimization and retention rules need later legal review
-- export/deletion flows are documented as TODOs, not implemented
-
-## Key Technical Boundaries
-- no deployment infrastructure
-- no background jobs
-- no payments
-- no mobile app
-- no real-time websocket layer yet
-
-## Planned Evolution Path
-Phase 1:
-- local JSON store
-- manual moderation review
-- deterministic scoring
-
-Phase 2:
-- real auth
-- proper database
-- audit logs and admin tools
-
-Phase 3:
-- richer messaging and moderation tooling
-- calibrated AI eval loop
-- explicit consent and deletion workflows
+Detailed component responsibilities and staged paths are in `docs/architecture/system_architecture.md` and `docs/architecture/repository_structure.md`.

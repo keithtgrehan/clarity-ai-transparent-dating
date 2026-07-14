@@ -1,86 +1,37 @@
-# Clarity.ai - transparent dating Product Brief
+# Clarity product brief
 
-## Working Thesis
-Clarity.ai - transparent dating is a Berlin-first dating product for people with ADHD, Autism, and AuDHD who want a calmer, clearer, less socially punishing way to meet compatible people. The product is not a mental health app, not a diagnostic tool, and not a gamified swipe machine. It is a structured dating environment built around explicit communication, lower ambiguity, and better alignment before users invest emotional energy.
+## Thesis
 
-## Problem Definition
-Mainstream dating products create avoidable strain for neurodivergent users:
-- profiles reward vague charm over clarity
-- intent is often hidden, unstable, or performative
-- messaging norms are undefined and easy to misread
-- sensory, communication, and routine needs are not visible early enough
-- safety tooling is usually generic and reactive rather than expectation-setting
-- engagement mechanics reward compulsion, not informed consent
+Clarity explores whether neuroinclusive adults in Berlin benefit from dating, friendship, and event experiences that make communication, intent, access needs, pacing, and boundaries more explicit without requiring diagnosis or rewarding compulsive use.
 
-For Berlin in particular, the problem is amplified by:
-- multilingual social contexts and mixed communication norms
-- dense but fragmented communities
-- high app fatigue among creative, tech, and international populations
-- a strong preference for authenticity, but weak product support for explicitness
+## Audience and boundary
 
-## Product Promise
-Help neurodivergent adults in Berlin meet people with less ambiguity and less performative dating friction by making compatibility legible early through structured profile inputs, explicit preferences, and calm communication tools.
+- Berlin-only learning scope.
+- Adults aged 18 or older; the current MVP does not yet implement a policy-versioned age gate.
+- Neuroinclusive: users own their self-description and may decline to disclose it.
+- No diagnosis proof, inference, authenticity assessment, or service gate.
+- Invite-only is a future operating model, not current functionality.
 
-## Core User Outcomes
-Users should be able to:
-- say what kind of connection they want without sounding overly formal
-- signal communication style, sensory needs, pacing, and boundaries up front
-- filter out clearly incompatible people before messaging
-- start conversations from shared structure rather than cold improvisation
-- report unsafe or manipulative behavior in a way that feels taken seriously
+## Intended outcomes
 
-## Launch Audience
-Primary:
-- ADHD
-- Autism
-- AuDHD
+Participants should be able to express connection mode, communication preferences, sensory and access needs, logistics, boundaries, and uncertainty in plain language; understand why another profile was shown; control which fields affect matching; and access report, block, human review, and appeal paths.
 
-Secondary, optional context only:
-- anxiety
-- depression
+## Current MVP reality
 
-Explicit non-goal for launch:
-- designing around broad “mental health dating” framing
-- centering generalized wellness, therapy, or diagnosis validation
+The repository currently implements a dating-oriented local demo with waitlist, onboarding, profiles, deterministic match candidates, messages, reports, blocks, and synthetic fixtures. It lacks authentication, participant-safe storage, first-class friendship/events, production moderation, and consent/lifecycle models. Current matching and diagnosis behavior are migration debt, not approved product policy.
 
-## Product Shape For MVP
-The first pass should feel like a calm, structured dating product with:
-- a Berlin-first waitlist and early demand capture flow
-- a guided onboarding sequence with explicit labels
-- profiles that combine structured answers with short free text
-- simple compatibility and match candidate retrieval
-- basic conversations and message storage
-- safety reporting and block scaffolds
-- bounded AI support for summarization and moderation assistance
+## Product principles
 
-## What Makes This Product Different
-- compatibility considers communication, sensory comfort, and pacing, not just hobbies
-- users can be explicit without being penalized by a “low effort” aesthetic norm
-- there is no infinite swipe mechanic
-- the interface prefers predictability over stimulation
-- the product treats clarity as a feature, not a buzzkill
+- Finite discovery instead of infinite swipe.
+- Declared preferences instead of hidden behavioral inference.
+- Differences and unknowns shown without relationship verdicts.
+- User control over visibility and matching use.
+- Quiet, predictable notifications and no streaks or urgency manipulation.
+- Human accountability for moderation.
+- Accessibility and participatory vocabulary validation before beta.
 
-## Founder Constraints
-- solo or near-solo founder build at roughly 30 hours/week
-- Berlin-first launch means narrow initial geography and hand-curated learning loops
-- local-first development and honest scaffolding are more valuable than premature infra
-- every system should be easy to understand and extend tomorrow morning
+## Success criteria by stage
 
-## Success Criteria For This First Pass
-By the end of this run, the repository should contain:
-- product and launch docs strong enough to guide the next 6 to 12 weeks
-- a working monorepo scaffold with web, API, and shared contracts
-- first-pass domain models aligned to the product thesis
-- placeholder but bounded matching, messaging, and moderation flows
-- realistic seed data for Berlin-first testing
-- explicit notes on legal, privacy, moderation, and deletion work still required
+The governed-foundation stage succeeds when repository claims match code, synthetic flows are reproducibly tested, high dependency advisories are resolved, source rights are validated, and privacy/safety/research/migration decisions are documented. Participant outcomes are not claimed until approved Berlin research produces evidence.
 
-## Risks To Watch Early
-- overfitting to one neurotype and accidentally excluding adjacent needs
-- making onboarding too long in the name of clarity
-- letting AI drift from summarization into pseudo-interpretation
-- collecting sensitive data without a strong reason or deletion story
-- confusing “structured” with “rigid”
-
-## MVP Tone
-Calm, direct, respectful, explicit, unembarrassed, non-clinical.
+Authoritative scope and gates live in `docs/control_room`.

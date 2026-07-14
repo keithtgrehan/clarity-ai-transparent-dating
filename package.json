@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0 <23"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -13,11 +16,25 @@
     "dev:web": "npm --workspace apps/web run dev",
     "dev:api": "npm --workspace apps/api run dev",
     "dev:shared": "npm --workspace packages/shared run dev",
-    "build": "npm --workspace packages/shared run build && npm --workspace apps/api run build && npm --workspace apps/web run build",
+    "build": "node scripts/quality/run-with-timeout.mjs 120000 npm run build:raw",
+    "build:raw": "npm --workspace packages/shared run build && npm --workspace apps/api run build && npm --workspace apps/web run build",
     "start": "npm --workspace apps/api run start",
-    "typecheck": "npm --workspace packages/shared run typecheck && npm --workspace apps/api run typecheck && npm --workspace apps/web run typecheck",
+    "test": "node scripts/quality/run-with-timeout.mjs 60000 npm run test:raw",
+    "test:raw": "npm --workspace apps/api run test",
+    "typecheck": "node scripts/quality/run-with-timeout.mjs 120000 npm run typecheck:raw",
+    "typecheck:raw": "npm --workspace packages/shared run typecheck && npm --workspace apps/api run typecheck && npm --workspace apps/web run typecheck",
     "quality": "./scripts/quality/verify.sh",
     "seed": "npm --workspace apps/api run seed",
-    "verify:mvp": "npm --workspace apps/api run verify:mvp"
+    "verify:mvp": "node scripts/quality/run-with-timeout.mjs 30000 npm --workspace apps/api run verify:mvp:raw",
+    "verify:static": "node scripts/quality/run-with-timeout.mjs 30000 npm --workspace apps/api run verify:static:raw",
+    "validate:resource-registry": "node scripts/governance/validate-resource-registry.mjs",
+    "validate:donor-provenance": "node scripts/governance/validate-donor-provenance.mjs --donor-root ..",
+    "validate:claims": "node scripts/governance/validate-claims.mjs",
+    "check:restricted-artifacts": "node scripts/governance/check-restricted-artifacts.mjs",
+    "check:no-raw-content": "node scripts/governance/check-no-raw-content.mjs",
+    "check:public-copy": "node scripts/governance/check-public-copy.mjs"
+  },
+  "devDependencies": {
+    "yaml": "^2.9.0"
   }
 }

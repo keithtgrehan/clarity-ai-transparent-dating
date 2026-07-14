@@ -1,0 +1,165 @@
+schemaVersion: 1
+owner: Keith Grehan
+lastReviewedAt: "2026-07-14"
+policy: >-
+  Registration is not permission. Copying or translation requires exact committed
+  source paths and blobs, an approved use status, embedded-material review, target
+  attribution, and a reviewer. Real participant data and unreviewed datasets are prohibited.
+inventoryClasses:
+  donorCandidates: [donor-vibe-signal, donor-signal-engine, donor-nlp-engine-trainer-limitless]
+  externalPriorArt: [prior-duolicious, prior-alovoa, prior-presidio, prior-argilla, prior-snorkel, prior-cleanlab, prior-setfit, prior-sentence-transformers, prior-recbole]
+  externalLicenceDependencies:
+    - { name: yaml, version: 2.9.0, licence: ISC, source: package-lock.json }
+    - { name: react, version: 18.3.1, licence: MIT, source: package-lock.json }
+    - { name: react-dom, version: 18.3.1, licence: MIT, source: package-lock.json }
+    - { name: react-router-dom, version: 6.30.4, licence: MIT, source: package-lock.json }
+    - { name: "@vitejs/plugin-react", version: 6.0.3, licence: MIT, source: package-lock.json }
+    - { name: vite, version: 8.1.4, licence: MIT, source: package-lock.json }
+    - { name: fastify, version: 5.10.0, licence: MIT, source: package-lock.json }
+    - { name: "@fastify/cors", version: 10.1.0, licence: MIT, source: package-lock.json }
+    - { name: "@fastify/static", version: 10.1.0, licence: MIT, source: package-lock.json }
+    - { name: dotenv, version: 16.6.1, licence: BSD-2-Clause, source: package-lock.json }
+    - { name: zod, version: 3.25.76, licence: MIT, source: package-lock.json }
+    - { name: tsup, version: 8.5.1, licence: MIT, source: package-lock.json }
+    - { name: tsx, version: 4.21.0, licence: MIT, source: package-lock.json }
+    - { name: typescript, version: 5.9.3, licence: Apache-2.0, source: package-lock.json }
+    - { name: "@types/node", version: 22.19.17, licence: MIT, source: package-lock.json }
+    - { name: "@types/react", version: 18.3.28, licence: MIT, source: package-lock.json }
+    - { name: "@types/react-dom", version: 18.3.7, licence: MIT, source: package-lock.json }
+  copiedImplementationCode: []
+resources:
+  - id: donor-vibe-signal
+    name: Vibe Signal donor candidates
+    kind: code_and_documentation
+    repository: https://github.com/keithtgrehan/vibe-signal.git
+    branch: main
+    revision: 000ba0685f961e253b0d34c0b02539ac897356e9
+    rightsStatus: NOASSERTION
+    useStatus: planned_reference_only
+    authorizationBasis: Keith Grehan owner authorization recorded 2026-07-14
+    reviewedAt: "2026-07-14"
+    targetPath: multiple future targets; see docs/architecture/reuse_map.md
+    notes: No tracked licence text or licence metadata. Canonical source for duplicated Vibe assets.
+    prohibitedUses: [direct_copy_without_approval, raw_private_content, diagnosis_inference, scalar_relationship_fit, autonomous_sanctions, provider_upload]
+    sourcePaths:
+      - { path: src/vibesignal_ai/features/cue_taxonomy.py, blob: 7f611349ca49e6be9df8bf982dbc3a507cb763a3 }
+      - { path: configs/vibe_cue_taxonomy.yml, blob: 6bb54d71f0586f9c0ccad862455b0ff7b4821dcf }
+      - { path: src/vibesignal_ai/evidence/objects.py, blob: 9dbb2ba5e34404d5c29514b0a3e6003d2f3586a0 }
+      - { path: schemas/vibe_evidence_object.schema.json, blob: 8e3e75a47968a617598b9fc48c7242d6f5d7aa38 }
+      - { path: src/vibesignal_ai/safety/validator.py, blob: 4f60c056f8e26709dc4efae4209c8748866311d4 }
+      - { path: src/vibesignal_ai/safety/redline_output_blocker.py, blob: 451bc0d30b5a11dcd6da8294fac693e39aea03fc }
+      - { path: src/vibesignal_ai/safety/redline_policy.json, blob: a7eb50ec7b6bd98cd3aa1595335008892c4de560 }
+      - { path: src/vibesignal_ai/matching/explain.py, blob: 212a4d01b9649fb3192d2e05b8c89d9236a24464 }
+      - { path: src/vibesignal_ai/features/neuro_support.py, blob: 3b69daf1264ded624e8afcd2dc9600d5b3974774 }
+      - { path: scripts/check_public_copy_safety.py, blob: e0eda1a1865077e407168f6fcfeac68a30bec442 }
+      - { path: scripts/check_no_raw_content_leaks.py, blob: c87e4842e1c02d6d9ff85e98526e13554d9065de }
+      - { path: scripts/check_vibe_restricted_artifacts.py, blob: 457406bf85dda3bdaa0ffd8221f996f8a54ac67e }
+      - { path: scripts/generate_synthetic_vibe_match_pairs.py, blob: 3f1d6b5db1e329e097ea8cbb9d5f930ba6be8bc6 }
+      - { path: backend/routes/feedback.py, blob: d2810b85d3e7987a4e77bad037589c0fc105f581 }
+      - { path: backend/monitoring.py, blob: 8603145fd8676012207768d4ddd3e36ac9ba1e52 }
+      - { path: docs/monitoring_no_raw_logs.md, blob: 9194304480751ad302937af6998fb277aa153478 }
+      - { path: scripts/smoke_test_production_analyze.py, blob: e12ef2185a1ccc9fa45bd103498b57bdef14518c }
+      - { path: ops/n8n/README.md, blob: 2c12e8e94a9a9619a8c291b692b77d37d8b4ce3a }
+      - { path: ops/n8n/docs/interview_demo_script.md, blob: 7dac38843dc7eb51c4ecf3fa4b3f77bc4a5e0999 }
+      - { path: ops/n8n/docs/n8n_beta_ops_runbook.md, blob: e81e3c315d91a4c7ef6a7066ae676557eb63a645 }
+      - { path: ops/n8n/payloads/backend_failure.json, blob: 53bd551016737eefa4d310ca4aa973a085bb3b70 }
+      - { path: ops/n8n/payloads/feedback_safe.json, blob: 28f2ae36167ca63d8a3b67f8c33b6d74cdb81b07 }
+      - { path: ops/n8n/payloads/feedback_unsafe_wording.json, blob: 2a0145bf64ba03a34c0ee458cdf37621dedd8e5e }
+      - { path: ops/n8n/scripts/post_feedback_event.js, blob: fdb4fbd8bde5cbc4f595b830ca787bbe531a93a2 }
+      - { path: ops/n8n/scripts/validate_n8n_payloads.js, blob: 9ca7e47c01b780244d6024b71426a2669b4c840f }
+      - { path: ops/n8n/vibe_signal_beta_ops.workflow.json, blob: c6c890c6ecccb956436fa7a56938a3836fde1034 }
+
+  - id: donor-signal-engine
+    name: Earnings Call Signal Engine donor candidates
+    kind: code_and_documentation
+    repository: https://github.com/keithtgrehan/earnings-call-signal-engine.git
+    branch: ai/llm-control-room-integration
+    revision: 74256cd93d68828c04ee553141f95aa8b0abe6f4
+    rightsStatus: metadata_declared_review_required
+    useStatus: planned_reference_only
+    authorizationBasis: Keith Grehan owner authorization recorded 2026-07-14
+    reviewedAt: "2026-07-14"
+    targetPath: multiple future targets; see docs/architecture/reuse_map.md
+    notes: >-
+      Working tree was dirty at audit. Read future sources with git show at the pinned commit.
+      pyproject metadata says MIT but there is no tracked licence text; legal/source review remains required.
+    prohibitedUses: [working_tree_copy, finance_semantics, direct_copy_without_approval, unreviewed_labels, raw_private_content]
+    sourcePaths:
+      - { path: configs/resource_registry.example.yml, blob: 339de56cb3dd8ac53c7e6c816560a95fb776979e }
+      - { path: schemas/resource_registry.schema.json, blob: 68fceb4d91912adec27f736d442cbf764aa740c7 }
+      - { path: schemas/source_license_record.schema.json, blob: 48b5caeb6d8dbf3b29a87d49cf23655d00bf5e9e }
+      - { path: scripts/resource_registry_common.py, blob: ce815f63b5f9324eb31462308e9c083c268401c4 }
+      - { path: scripts/validate_resource_registry.py, blob: 844ece9d18580dcd16e79947d0890088d8ed7eb3 }
+      - { path: scripts/check_restricted_artifacts.py, blob: b480650419361e1b78fa9e91a83ce26aff93a7b5 }
+      - { path: schemas/agent1_evidence_span.schema.json, blob: 5bc55896450cfe93b9f4eb331296ade83f81fde2 }
+      - { path: schemas/retrieval_object.schema.json, blob: e3bb3f145de5733ae729a8ac06c9d95cb41acdee }
+      - { path: configs/claims_matrix.example.yml, blob: cd1f230a7ad689b6dc3f94b43bb3ffcbc2f31db8 }
+      - { path: scripts/validate_claims_matrix.py, blob: da6afec8ebb18261dff2da0a5c9950292a5d8261 }
+      - { path: docs/evaluation_claims_matrix.md, blob: fcf73ab88991909926851fda3c8725e8ead8f65d }
+      - { path: scripts/build_label_review_packet.py, blob: 9a1954cef1492e4c7df49186dc45128361c63841 }
+      - { path: docs/argilla_setup.md, blob: 9748ee89924622664d7ac2f73a99d3d06b57a707 }
+      - { path: docs/review/reviewer_rubric.md, blob: 00693c3b244a63f42454923c1628b45d12d4621d }
+      - { path: src/earnings_call_sentiment/pipeline/report.py, blob: 6e2946751ac7e21e698b00d0b251bbdefa84093d }
+      - { path: scripts/build_gold_review_queue.py, blob: 87b164f62c8b2d6bf9cd451217cb1d185a913562 }
+      - { path: scripts/validate_gold_labels.py, blob: e1d23703edfe0f318619e7286d2b6c0d2a36d72e }
+      - { path: scripts/audit_gold_labels.py, blob: b5b0aa087d6393abd350a0837e5d388ce4c929ca }
+      - { path: scripts/review/bootstrap_argilla.py, blob: 1f8dece46091e7bc26c1e5f184784584f2d75631 }
+      - { path: scripts/review/build_review_queue.py, blob: 466078f71882bebae1a5b6dbdfb65670b8f28db9 }
+      - { path: scripts/review/export_gold_labels.py, blob: 55f4404b2faa326e8cc929f6c74320c7641bebc9 }
+      - { path: src/review/review_queue.py, blob: c98feab7a78fc9ce9272836f65f11297cf797ef7 }
+
+  - id: donor-nlp-engine-trainer-limitless
+    name: NLP Engine Trainer Limitless donor candidates
+    kind: code_documentation_and_synthetic_fixtures
+    repository: https://github.com/keithtgrehan/NLP-ENGINE-TRAINER-LIMITLESS.git
+    branch: codex/add-conversation-pipeline
+    revision: c09944a4061011044b461be2512b955e3b1af981
+    rightsStatus: NOASSERTION
+    useStatus: planned_reference_only
+    authorizationBasis: Keith Grehan owner authorization recorded 2026-07-14
+    reviewedAt: "2026-07-14"
+    targetPath: future research documentation and offline tooling only
+    notes: >-
+      No tracked licence text. Several files duplicate vibe-signal byte-for-byte; Vibe Signal is canonical
+      for those assets. Synthetic assertions require owner attestation and content review before reuse.
+    prohibitedUses: [dataset_download, model_training, provider_upload, direct_fixture_copy, unreviewed_labels, direct_copy_without_approval]
+    sourcePaths:
+      - { path: docs/vibe_training_rights_gates.md, blob: 72e6923166807ffc6e3d2e185d4906102bfe6d64 }
+      - { path: schemas/vibe_training_sources.schema.json, blob: 8c9960a1eedf8236f3e5390c425fb109c1942c33 }
+      - { path: scripts/validate_vibe_training_sources.py, blob: 0c63f405bd60fadff43ade9db8454adc15851c54 }
+      - { path: scripts/generate_synthetic_vibe_match_pairs.py, blob: 3f1d6b5db1e329e097ea8cbb9d5f930ba6be8bc6 }
+      - { path: docs/research/model_training_plan/01_privacy_license_dataset_gate.md, blob: 8de7bd4e0d339b17a687a8e6d913682d8a2bc976 }
+      - { path: docs/research/model_training_plan/03_modeling_approaches.md, blob: 84f0bd09289a3835b1cc0459c4b0025c9d902070 }
+      - { path: docs/research/model_training_plan/05_evaluation_benchmark_plan.md, blob: 9464302ad5243703add5bf643c26266ecab0c4bd }
+      - { path: docs/research/model_training_plan/06_synthetic_data_plan.md, blob: 2433ccc991fe035794bdc9621fe91bee9a8c5832 }
+      - { path: docs/research/model_training_plan/07_tooling_mlops_plan.md, blob: cc5da4d11f12268b2152d154a11dfb82d0349417 }
+      - { path: docs/research/model_training_plan/08_product_safety_explainability.md, blob: c60e19b24c21be663167cf94d6daa4c48ceae9c5 }
+      - { path: docs/research/model_training_plan/10_recommended_implementation_sequence.md, blob: 2d0bcad8f7563faee43e83f14b552892eed096c3 }
+      - { path: scripts/train_research_vibe_baseline.py, blob: 60381c7d4d1df9b39c0d914c137439243538d4e9 }
+      - { path: src/vibesignal_ai/config/provider_flags.py, blob: 30b48b2fea1aa12c1bb2d7e139237b65afd42a3e }
+      - { path: backend/monitoring.py, blob: 8603145fd8676012207768d4ddd3e36ac9ba1e52 }
+      - { path: docs/model_card_vibe_matching_v0.md, blob: 2225c78da93be5d7f51c285a8ce0ba1cfa84a34d }
+      - { path: docs/labeling/label_governance.md, blob: 0f743a9ce7121b8d6ce0f238f2211334c5278ccf }
+      - { path: scripts/build_vibe_label_governance_state.py, blob: e2214c6a818035cea72d8f88b1d3213d14eb3140 }
+      - { path: scripts/vibe_label_governance.sh, blob: 44c431f0ba1f7adc25621a84c45744c9832b8d69 }
+      - { path: tools/vibe_label_governance.py, blob: f94dd5ece273c3b5fd5bd7acdd621ac0e78352a2 }
+      - { path: scripts/validate_vibe_gold_labels.py, blob: 929fddcd56076e7f972f33c642526ed942ee352a }
+      - { path: data/synthetic/README.md, blob: d044d1640f9f81e2ff89f42970d8ce43338dae26 }
+      - { path: data/synthetic/closed_beta_qa/closed_beta_qa_fixtures.json, blob: 56af32a851e6981e5b6d68b74f153927c1681cc5 }
+      - { path: data/synthetic/whatsapp/README.md, blob: 7e6cb153df4c5154b8ffadcef11ce7bdfe6db642 }
+      - { path: data/synthetic/whatsapp/conversations.jsonl, blob: 83d6a0b5320ea9b3378ff6ddb9d285daaaeb48e9 }
+      - { path: data/synthetic/whatsapp/dev/conversations.jsonl, blob: 8ffd3ea16975f98f98f389ca8f6b9659d571ad2c }
+      - { path: data/synthetic/whatsapp/fixture_manifest.json, blob: ec9be12914efdafcff0046240947856856952a44 }
+      - { path: data/synthetic/whatsapp/hard_negative/conversations.jsonl, blob: f2ad3a2c39b8d1d581f721fecf871cbf70476014 }
+      - { path: data/synthetic/whatsapp/heldout/conversations.jsonl, blob: 3f83af259eb976b725fab8cde00ff2a8223757ed }
+      - { path: data/synthetic/whatsapp/red_team/conversations.jsonl, blob: 70c2a5968f37e16508c5427a7e515744bd12a3e1 }
+
+  - { id: prior-duolicious, name: Duolicious, kind: architecture_reference, repository: https://github.com/duolicious/duolicious, revision: observed-2026-07-14, rightsStatus: copyleft, useStatus: blocked, reviewedAt: "2026-07-14", prohibitedUses: [code_copy, dependency_import] }
+  - { id: prior-alovoa, name: Alovoa, kind: architecture_reference, repository: https://github.com/Alovoa/alovoa, revision: observed-2026-07-14, rightsStatus: copyleft, useStatus: blocked, reviewedAt: "2026-07-14", prohibitedUses: [code_copy, dependency_import] }
+  - { id: prior-presidio, name: Microsoft Presidio, kind: future_evaluation_reference, repository: https://github.com/data-privacy-stack/presidio, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [automatic_privacy_guarantee, participant_runtime_without_review] }
+  - { id: prior-argilla, name: Argilla, kind: future_annotation_reference, repository: https://github.com/argilla-io/argilla, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [production_runtime, unconsented_annotation] }
+  - { id: prior-snorkel, name: Snorkel, kind: future_label_research, repository: https://github.com/snorkel-team/snorkel, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [automatic_truth_labels, unreviewed_training] }
+  - { id: prior-cleanlab, name: Cleanlab, kind: future_label_research, repository: https://github.com/cleanlab/cleanlab, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [automatic_truth_labels, unreviewed_training] }
+  - { id: prior-setfit, name: SetFit, kind: future_offline_model_research, repository: https://github.com/huggingface/setfit, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [model_use_without_model_card_and_terms, production_serving] }
+  - { id: prior-sentence-transformers, name: Sentence Transformers, kind: future_offline_model_research, repository: https://github.com/huggingface/sentence-transformers, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [model_use_without_model_card_and_terms, production_serving] }
+  - { id: prior-recbole, name: RecBole, kind: evaluation_architecture_reference, repository: https://github.com/RUCAIBox/RecBole, revision: observed-2026-07-14, rightsStatus: permissive, useStatus: planned_reference_only, reviewedAt: "2026-07-14", prohibitedUses: [engagement_ranking, popularity_ranking, direct_runtime_import] }

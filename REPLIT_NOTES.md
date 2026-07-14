@@ -1,6 +1,8 @@
 # Replit Notes
 
-- The production-safe entrypoint is `APP_ENV=production SERVE_WEB=true PORT=$PORT npm run start`.
+> Archived packaging reference. The current repository is not approved for Replit or any other deployment; see `DEPLOY.md` and Gate G5.
+
+- The historical single-process entrypoint was `APP_ENV=production SERVE_WEB=true PORT=$PORT npm run start`; it is not participant-safe.
 - The React app and Fastify API intentionally share one port in production.
 - API requests are namespaced under `/api`; frontend routes remain `/`, `/onboarding`, `/profile`, `/matches`, `/chat`, and `/safety`.
 - For local development, keep `VITE_API_BASE_URL` pointed at `http://localhost:4000/api`.

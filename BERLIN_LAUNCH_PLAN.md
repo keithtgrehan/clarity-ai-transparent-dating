@@ -1,5 +1,7 @@
 # Berlin Launch Plan
 
+> Historical discovery draft, not an authorization to recruit, collect data, or launch. `docs/control_room/MASTER_PLAN.md`, `docs/research/research_protocol.md`, and Gates G4–G5 supersede its dates, cohort sizes, metrics, and readiness checklist.
+
 ## Launch Goal
 Validate whether a Berlin-first neurodivergent dating product can attract enough high-intent early users to support a safe, structured pilot rather than a passive waitlist.
 

@@ -1,0 +1,32 @@
+name: quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run verify:static
+      - run: npm run verify:mvp
+      - run: npm run validate:resource-registry
+      - run: npm run validate:claims
+      - run: npm run check:restricted-artifacts -- --all-tracked
+      - run: npm run check:no-raw-content
+      - run: npm run check:public-copy
+      - run: npm audit --audit-level=high

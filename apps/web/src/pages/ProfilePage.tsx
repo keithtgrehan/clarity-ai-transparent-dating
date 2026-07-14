@@ -204,7 +204,7 @@ export function ProfilePage() {
           <h2>Edit the details people will actually use to understand you</h2>
           <p className="lead">
             Keep the profile concrete, readable, and true to daily life. The goal is not to sound
-            impressive. It is to make the right kind of fit easier to recognize.
+            impressive. It is to make declared preferences easier to inspect.
           </p>
         </div>
         <div className="page-header-meta">
@@ -355,7 +355,7 @@ export function ProfilePage() {
 
           <div className="section-card stack">
             <div className="stack-small">
-              <p className="eyebrow">Rhythm and compatibility</p>
+              <p className="eyebrow">Declared rhythm preferences</p>
               <h3>How you like dating to feel in practice</h3>
             </div>
 

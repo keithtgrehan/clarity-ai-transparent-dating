@@ -18,17 +18,23 @@ const defaultDraft: CreateWaitlistLeadInput = {
 export function WaitlistForm() {
   const [draft, setDraft] = useState<CreateWaitlistLeadInput>(defaultDraft);
   const [status, setStatus] = useState(
-    "Join the Berlin list for early access and small feedback sessions."
+    "Synthetic demo only. Use a reserved .test email address; no one will contact you."
   );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!draft.email.toLowerCase().endsWith(".test")) {
+      setStatus("Real contact details are not accepted. Use a reserved address such as person@example.test.");
+      return;
+    }
+
     setStatus("Saving your details...");
 
     try {
       await createWaitlistLead(draft);
       setDraft(defaultDraft);
-      setStatus("You're on the list. We'll reach out when the next Berlin group opens.");
+      setStatus("Synthetic entry saved to the disposable local demo store.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save waitlist lead.");
     }
@@ -37,11 +43,11 @@ export function WaitlistForm() {
   return (
     <form className="panel stack" onSubmit={handleSubmit}>
       <div className="stack-small">
-        <p className="eyebrow">Waitlist</p>
-        <h3>Join the Berlin early access list</h3>
+        <p className="eyebrow">Synthetic waitlist demo</p>
+        <h3>Exercise the local-only form</h3>
         <p className="muted">
-          Keep it light. We only ask for enough context to invite the right people into small
-          feedback rounds and early walkthroughs.
+          Do not enter real personal data. This preserved MVP flow accepts only reserved
+          <code> .test</code> email addresses and does not recruit participants or send outreach.
         </p>
       </div>
 
@@ -50,10 +56,10 @@ export function WaitlistForm() {
           <div className="stack-small">
             <h4>Core contact details</h4>
             <p className="field-hint">
-              This is not a second onboarding funnel. It is just enough to follow up well.
+              Values are stored only in the disposable local JSON demo store.
             </p>
           </div>
-          <span className="status-chip">Berlin early access</span>
+          <span className="status-chip">Synthetic only</span>
         </div>
 
         <div className="field-grid two-columns">
@@ -63,7 +69,7 @@ export function WaitlistForm() {
               className="input"
               value={draft.firstName}
               onChange={(event) => setDraft({ ...draft, firstName: event.target.value })}
-              placeholder="Riley"
+              placeholder="Synthetic"
               required
             />
           </label>
@@ -75,7 +81,7 @@ export function WaitlistForm() {
               type="email"
               value={draft.email}
               onChange={(event) => setDraft({ ...draft, email: event.target.value })}
-              placeholder="you@example.com"
+              placeholder="person@example.test"
               required
             />
           </label>
@@ -135,19 +141,19 @@ export function WaitlistForm() {
       </div>
 
       <label className="field">
-        <span>What would make dating feel easier to trust?</span>
+        <span>Synthetic demonstration note</span>
         <textarea
           className="textarea"
           rows={4}
           value={draft.note ?? ""}
           onChange={(event) => setDraft({ ...draft, note: event.target.value })}
-          placeholder="For example: direct communication, lower-noise date options, clearer relationship intent..."
+          placeholder="Synthetic text only; do not enter private or participant information."
         />
       </label>
 
       <div className="action-row">
         <button className="button" type="submit">
-          Join waitlist
+          Save synthetic entry
         </button>
         <span className="status-text">{status}</span>
       </div>

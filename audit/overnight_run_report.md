@@ -1,5 +1,7 @@
 # Overnight Run Report
 
+Historical artifact from the initial scaffold. It contains obsolete paths, counts, route claims, commands, and verification output and must not be used as current evidence. Use `README.md`, `docs/control_room/EVIDENCE_INDEX.md`, and the Phase 0/1 validation report instead.
+
 ## Exact Summary Of What Was Created
 
 ### Product and strategy docs

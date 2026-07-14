@@ -1,54 +1,23 @@
-# AI Boundaries
+# AI and automated-assistance boundaries
 
-## Role Of AI In Clarity.ai - transparent dating
-AI is allowed to help with clarity, summarization, bounded signal extraction, and moderation support. AI is not allowed to act as a therapist, diagnostician, truth engine, or hidden ranking oracle.
+Current “AI” modules are deterministic rules and text templates. Public and internal documentation must not imply that a model understands a person or that these checks establish psychological truth.
 
-## Allowed AI Uses
-- summarize a profile into a short, user-editable overview
-- extract communication-style tags from explicit text
-- detect low-signal profiles for review
-- identify when relationship intent appears unclear
-- flag contradictions between profile text and structured answers
-- assist moderation review by organizing evidence and category suggestions
+## Allowed direction
 
-## Allowed Only With Human Oversight
-- moderation enforcement recommendations
-- copy rewrites that may affect perceived tone or consent framing
-- analytics summarization used to make product decisions
+- User-editable summaries tied to explicit inputs.
+- Bounded communication cues with evidence, uncertainty, versioned rules, and safe rendering.
+- Low-signal and contradiction prompts that invite user review.
+- Moderation evidence organization and category suggestions for human reviewers.
+- Aggregate, content-free evaluation metadata under approved consent and retention rules.
 
-## Disallowed AI Uses
-- inferring whether someone is genuinely neurodivergent
-- inferring diagnosis authenticity
-- inferring mental health severity
-- inferring trauma, attachment style, or hidden motives
-- generating clinical advice
-- presenting compatibility as psychological truth
-- using opaque engagement optimization to maximize compulsion
+## Prohibited
 
-## Product Copy Rules
-- never say AI “understands” the user
-- never imply profile summaries are objective truth
-- never present moderation AI as final authority
-- always allow users to edit or disregard AI-generated summaries
+- Diagnosis, authenticity, severity, trauma, attachment, motive, deception, attraction, desirability, compatibility truth, or hidden mental-state inference.
+- Popularity, activity, response-time, streak, or engagement optimization.
+- Provider upload or training reuse without source rights, data minimization, separate purpose consent, withdrawal handling, and release approval.
+- Autonomous moderation decisions or sanctions.
+- Raw private content in logs, match responses, analytics, CI, or public artifacts.
 
-## Model Output Rules
-- outputs must be short, legible, and bounded to source inputs
-- outputs should prefer “possible mismatch” over “this person is X”
-- outputs should include uncertainty where appropriate
-- outputs should degrade safely to TODO or “needs review” states
+## Output standard
 
-## Data Handling Rules
-- do not send more user text than necessary for the task
-- redact or minimize sensitive information in prompts where possible
-- retain prompts and outputs only as long as necessary for product operations
-- document every AI touchpoint in code and docs
-
-## Evaluation Priorities
-- false confidence risk
-- moderation false positives
-- profile-summary usefulness
-- contradiction detection precision
-- user perception of clarity vs. creepiness
-
-## Launch Standard
-If an AI feature cannot be explained in plain language, bounded to explicit inputs, and safely ignored by the user, it should not ship.
+Outputs must cite allowed evidence, separate observation from interpretation, use `supported`, `low`, or `insufficient` confidence, disclose missing information, remain editable/ignorable where user-facing, and avoid relationship verdicts. If an output cannot be explained, safely omitted, and independently evaluated, it does not ship.

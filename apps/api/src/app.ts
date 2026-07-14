@@ -7,9 +7,9 @@ import { resolveRepoPath } from "./lib/paths.js";
 import { ensureStoreFile } from "./lib/store.js";
 import { registerRoutes } from "./routes/index.js";
 
-export async function buildApp() {
+export async function buildApp(options: { logger?: boolean } = {}) {
   const app = Fastify({
-    logger: true
+    logger: options.logger ?? true
   });
   const allowedOrigins = process.env.API_ALLOWED_ORIGIN
     ? process.env.API_ALLOWED_ORIGIN.split(",").map((origin) => origin.trim())

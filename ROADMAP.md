@@ -1,5 +1,7 @@
 # Roadmap
 
+> Historical roadmap retained for context. The authoritative dependency-ordered roadmap and release conditions are `docs/control_room/MASTER_PLAN.md`, `BACKLOG.md`, and `RELEASE_GATES.md`.
+
 ## Horizon
 This roadmap assumes a founder build cadence of roughly 30 hours per week.
 

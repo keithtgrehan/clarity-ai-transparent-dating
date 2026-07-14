@@ -1,5 +1,7 @@
 # Portfolio Update Summary
 
+> Historical change report. Branch, validation, and repository-status statements below describe an earlier run and must not be treated as current evidence. Use `docs/control_room/EVIDENCE_INDEX.md` and fresh command output.
+
 - Repo path: `/Users/keith/Documents/New project/Clarity.ai - transparent dating`
 - Starting branch: `main`
 - Ending branch: `main`

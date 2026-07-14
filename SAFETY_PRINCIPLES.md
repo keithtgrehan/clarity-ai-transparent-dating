@@ -42,10 +42,8 @@ Deletion, retention, data export, age-gating, and legal language must receive re
 - hate, bigotry, or demeaning language
 
 ## Moderation Posture For MVP
-- manual review remains primary
-- AI can assist triage, summarization, and categorization only
-- no automated permanent enforcement without human review path
-- logs should preserve enough context for founder review
+
+Historical design note, superseded by `docs/safety/moderation_policy.md`: v1 has no operational review queue. Any future system requires authorized human decisions and appeal; bounded assistance may not trigger autonomous sanctions; logs must be content-free; and any raw evidence requires separate least-privilege access and retention controls.
 
 ## Product-Level Safety Design Choices
 - no infinite swipe loop

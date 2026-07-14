@@ -1,6 +1,8 @@
 # Deploy
 
-## Replit setup
+> **Historical packaging notes only. Deployment is not authorized.** The current API has no authentication or participant-safe storage, CORS is permissive when unconfigured, and the destructive seed route is not privileged. Use only synthetic local data. Production work is blocked by Gate G5 in `docs/control_room/RELEASE_GATES.md`.
+
+## Historical Replit packaging setup
 1. Import the GitHub repo into Replit from the `replit-ui-polish` branch or from `main` after merge.
 2. Set the Replit root to the repository root.
 3. Run the install/setup command once:
@@ -32,7 +34,7 @@
   - `API_PORT=4000`
   - `WEB_PORT=5173`
   - `VITE_API_BASE_URL=http://localhost:4000/api`
-- Recommended for Replit production:
+- Historical single-process packaging values (not approved for deployment):
   - `APP_ENV=production`
   - `SERVE_WEB=true`
   - `PORT=$PORT`
