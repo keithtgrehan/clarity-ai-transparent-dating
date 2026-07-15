@@ -18,15 +18,33 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - run: npm ci
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install --require-hashes -r services/signal-engine/requirements-dev.lock
+      - run: PIP_NO_INDEX=1 .venv/bin/python -m pip install --no-build-isolation --no-deps -e services/signal-engine
+      - run: .venv/bin/python -m pip check
+      - name: Audit locked Python dependencies
+        run: |
+          python -m venv "${RUNNER_TEMP}/signal-audit"
+          "${RUNNER_TEMP}/signal-audit/bin/python" -m pip install pip-audit==2.10.1
+          "${RUNNER_TEMP}/signal-audit/bin/pip-audit" -r services/signal-engine/requirements-dev.lock --progress-spinner off
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
       - run: npm run verify:static
       - run: npm run verify:mvp
       - run: npm run validate:resource-registry
+      - run: npm run validate:signal-registries
+      - run: npm run validate:training-source-registry
+      - run: npm run validate:python-lock
       - run: npm run validate:claims
       - run: npm run check:restricted-artifacts -- --all-tracked
       - run: npm run check:no-raw-content
+      - run: npm run check:signal-safety-language
+      - run: npm run check:signal-domain-residue
+      - run: npm run check:secrets
       - run: npm run check:public-copy
       - run: npm audit --audit-level=high

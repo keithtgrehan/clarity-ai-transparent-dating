@@ -1,4 +1,6 @@
 import type {
+  CommunicationAnalysisRequest,
+  CommunicationAnalysisResponse,
   Conversation,
   ConversationListResponse,
   ConversationMessagesResponse,
@@ -12,6 +14,7 @@ import type {
   Report,
   WaitlistLead
 } from "@clarity/shared";
+import { CommunicationAnalysisResponseSchema } from "@clarity/shared";
 
 export type ApiErrorDetails = {
   formErrors?: string[];
@@ -128,4 +131,23 @@ export async function createReport(input: CreateReportInput) {
     method: "POST",
     body: JSON.stringify(input)
   });
+}
+
+export async function analyzeSyntheticCommunicationFixture(
+  input: CommunicationAnalysisRequest,
+  signal?: AbortSignal
+): Promise<CommunicationAnalysisResponse> {
+  const response = await request<unknown>("/v2/communication-analysis/text", {
+    method: "POST",
+    cache: "no-store",
+    credentials: "omit",
+    referrerPolicy: "no-referrer",
+    signal,
+    body: JSON.stringify(input)
+  });
+  const parsed = CommunicationAnalysisResponseSchema.safeParse(response);
+  if (!parsed.success) {
+    throw new ApiError("Synthetic analysis returned an invalid response.", 502);
+  }
+  return parsed.data;
 }

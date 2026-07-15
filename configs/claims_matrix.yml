@@ -1,6 +1,6 @@
 schemaVersion: 1
 owner: Keith Grehan
-lastReviewedAt: "2026-07-14"
+lastReviewedAt: "2026-07-15"
 claims:
   - id: local-typescript-mvp
     claim: Clarity is a local TypeScript MVP with React/Vite, Fastify and shared Zod schemas.
@@ -20,6 +20,12 @@ claims:
     publicCopyRule: allowed
     owner: Engineering
     evidence: [apps/api/src/services, AI_BOUNDARIES.md]
+  - id: local-synthetic-signal-review
+    claim: The Berlin review branch contains a disabled-by-default, fictional-fixture-only Clarity client for a loopback communication wording and structure service.
+    status: supported
+    publicCopyRule: allowed_with_local_and_synthetic_qualifier
+    owner: Engineering
+    evidence: [services/signal-engine/README.md, docs/architecture/CLARITY_SIGNAL_ENGINE_BOUNDARY.md, docs/control_room/SIGNAL_ENGINE_GATES.md]
   - id: benefit-hypothesis-only
     claim: Lower-ambiguity participant benefit is a product hypothesis, not an established outcome of the synthetic MVP.
     status: supported
@@ -67,6 +73,24 @@ claims:
     status: unsupported
     publicCopyRule: forbidden
     owner: Accessibility
+    evidence: []
+  - id: signal-model-validated
+    claim: The communication engine is a peer-reviewed, clinically validated, dialect-validated, or production-benchmarked model.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Model risk
+    evidence: []
+  - id: identifier-removal-guarantee
+    claim: Identifier minimisation removes every identifier, makes input anonymous, or guarantees GDPR compliance.
+    status: prohibited
+    publicCopyRule: forbidden
+    owner: Privacy
+    evidence: []
+  - id: audio-enabled
+    claim: Clarity currently accepts audio or derives emotion, cognition, confidence, attraction, or neurotype from acoustic measurements.
+    status: prohibited
+    publicCopyRule: forbidden
+    owner: Product
     evidence: []
   - id: legal-compliance
     claim: The repository or its documents establish GDPR, DSA, or other legal compliance.

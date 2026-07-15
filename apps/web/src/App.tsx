@@ -6,8 +6,15 @@ import { MatchesPage } from "./pages/MatchesPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SafetyPage } from "./pages/SafetyPage";
+import { SignalReviewPage } from "./pages/SignalReviewPage";
+import { isSignalEngineUiEnabled } from "./pages/signalReviewModel";
 
 export default function App() {
+  const signalEngineEnabled = isSignalEngineUiEnabled(
+    import.meta.env.VITE_SIGNAL_ENGINE_ENABLED,
+    import.meta.env.DEV
+  );
+
   return (
     <Routes>
       <Route element={<AppShell />}>
@@ -17,6 +24,9 @@ export default function App() {
         <Route path="/matches" element={<MatchesPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/safety" element={<SafetyPage />} />
+        {signalEngineEnabled ? (
+          <Route path="/signal-review" element={<SignalReviewPage />} />
+        ) : null}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

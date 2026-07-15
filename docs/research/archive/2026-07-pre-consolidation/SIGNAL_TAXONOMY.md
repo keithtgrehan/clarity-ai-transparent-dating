@@ -1,3 +1,13 @@
+# Archived profile signal taxonomy
+
+Archived: 2026-07-15
+
+Original path: `ai/profile_signals/SIGNAL_TAXONOMY.md`
+
+Reason: superseded by the canonical cue registry and the evidence boundaries in `docs/research/CANONICAL_RESEARCH_STATUS.md`. The original text follows unchanged.
+
+---
+
 # Profile Signal Taxonomy
 
 ## High-Signal Traits

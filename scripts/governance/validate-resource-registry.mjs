@@ -47,10 +47,6 @@ for (const [index, dependency] of (registry?.inventoryClasses?.externalLicenceDe
   }
 }
 
-if ((registry?.inventoryClasses?.copiedImplementationCode ?? []).length !== 0) {
-  errors.push("copiedImplementationCode must remain empty for the Phase 0/1 cutline.");
-}
-
 if (!Array.isArray(registry?.resources) || registry.resources.length === 0) {
   errors.push("resources must be a non-empty array.");
 } else {
@@ -97,8 +93,11 @@ if (!Array.isArray(registry?.resources) || registry.resources.length === 0) {
           errors.push(`${prefix}.${key} is required for used or approved material.`);
         }
       }
-      if (!Array.isArray(resource.sourcePaths) || resource.sourcePaths.length === 0) {
-        errors.push(`${prefix}.sourcePaths must pin adapted material.`);
+      if (
+        (!Array.isArray(resource.sourcePaths) || resource.sourcePaths.length === 0) &&
+        (!Array.isArray(resource.sourceSnapshots) || resource.sourceSnapshots.length === 0)
+      ) {
+        errors.push(`${prefix} must pin adapted material with sourcePaths or sourceSnapshots.`);
       }
     }
 
@@ -108,6 +107,25 @@ if (!Array.isArray(registry?.resources) || registry.resources.length === 0) {
       }
       if (!/^[0-9a-f]{40}$/i.test(source?.blob ?? "")) {
         errors.push(`${prefix}.sourcePaths[${pathIndex}].blob must be a 40-character git blob hash.`);
+      }
+    }
+
+    for (const [snapshotIndex, snapshot] of (resource.sourceSnapshots ?? []).entries()) {
+      const snapshotPrefix = `${prefix}.sourceSnapshots[${snapshotIndex}]`;
+      if (!isObject(snapshot) || !nonEmptyString(snapshot.path)) {
+        errors.push(`${snapshotPrefix}.path is required.`);
+      }
+      if (!/^[0-9a-f]{40}$/i.test(snapshot?.baseRevision ?? "")) {
+        errors.push(`${snapshotPrefix}.baseRevision must be a 40-character commit hash.`);
+      }
+      if (!/^[0-9a-f]{40}$/i.test(snapshot?.gitBlob ?? "")) {
+        errors.push(`${snapshotPrefix}.gitBlob must be a 40-character Git blob hash.`);
+      }
+      if (!/^[0-9a-f]{64}$/i.test(snapshot?.sha256 ?? "")) {
+        errors.push(`${snapshotPrefix}.sha256 must be a 64-character SHA-256.`);
+      }
+      if (!new Set(["modified", "untracked"]).has(snapshot?.dirtyStatus)) {
+        errors.push(`${snapshotPrefix}.dirtyStatus must be modified or untracked.`);
       }
     }
 
@@ -122,7 +140,10 @@ if (!Array.isArray(registry?.resources) || registry.resources.length === 0) {
     if (
       resource.rightsStatus === "NOASSERTION" &&
       ["approved_adaptation", "in_use"].includes(resource.useStatus) &&
-      resource.authorizationBasis !== "Keith Grehan owner authorization recorded 2026-07-14"
+      !new Set([
+        "Keith Grehan owner authorization recorded 2026-07-14",
+        "Keith Grehan owner instruction recorded 2026-07-15 in D018"
+      ]).has(resource.authorizationBasis)
     ) {
       errors.push(`${prefix} uses NOASSERTION material without the recorded owner authorization.`);
     }
@@ -139,6 +160,16 @@ if (!Array.isArray(registry?.resources) || registry.resources.length === 0) {
   for (const className of ["donorCandidates", "externalPriorArt"]) {
     for (const id of registry?.inventoryClasses?.[className] ?? []) {
       if (!registeredIds.has(id)) errors.push(`inventoryClasses.${className} references unknown resource ${id}.`);
+    }
+  }
+  for (const id of registry?.inventoryClasses?.copiedImplementationCode ?? []) {
+    if (!registeredIds.has(id)) {
+      errors.push(`inventoryClasses.copiedImplementationCode references unknown resource ${id}.`);
+      continue;
+    }
+    const resource = registry.resources.find((item) => item?.id === id);
+    if (!resource || !["approved_adaptation", "in_use"].includes(resource.useStatus)) {
+      errors.push(`copiedImplementationCode resource ${id} must be approved_adaptation or in_use.`);
     }
   }
 }

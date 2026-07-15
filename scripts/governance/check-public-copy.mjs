@@ -14,8 +14,11 @@ if (!isObject(registry) || !Array.isArray(registry.resources)) {
     if (!copied) {
       continue;
     }
-    if (!Array.isArray(resource.sourcePaths) || resource.sourcePaths.length === 0) {
-      errors.push(`${resource.id}: copied/adapted material has no source-path pins.`);
+    if (
+      (!Array.isArray(resource.sourcePaths) || resource.sourcePaths.length === 0) &&
+      (!Array.isArray(resource.sourceSnapshots) || resource.sourceSnapshots.length === 0)
+    ) {
+      errors.push(`${resource.id}: copied/adapted material has no immutable source pins.`);
     }
     if (!resource.targetPath) {
       errors.push(`${resource.id}: copied/adapted material has no targetPath.`);
@@ -35,6 +38,12 @@ if (!isObject(registry) || !Array.isArray(registry.resources)) {
     }
     if (resource.rightsStatus === "NOASSERTION" && !resource.authorizationBasis) {
       errors.push(`${resource.id}: NOASSERTION copying lacks explicit authorization.`);
+    }
+    if (
+      resource.kind === "untracked_worktree_snapshot" &&
+      (!resource.disclosureBasis || !resource.sourceSnapshots?.every((snapshot) => snapshot.sha256 && snapshot.gitBlob))
+    ) {
+      errors.push(`${resource.id}: public worktree-snapshot disclosure lacks D019 authority or byte pins.`);
     }
     if (
       resource.rightsStatus === "metadata_declared_review_required" &&

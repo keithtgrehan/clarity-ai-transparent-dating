@@ -1,3 +1,13 @@
+# Archived dataset and model radar
+
+Archived: 2026-07-15
+
+Original path: `docs/research/dataset_and_model_radar.md`
+
+Reason: superseded by `docs/research/CANONICAL_RESEARCH_STATUS.md`, `docs/research/RESEARCH_INDEX.md`, and `configs/training_source_registry.yml`. The original text follows unchanged.
+
+---
+
 # Dataset and model radar
 
 Status: research horizon only. No dataset download, model download, annotation, training, provider upload, or production inference is approved.

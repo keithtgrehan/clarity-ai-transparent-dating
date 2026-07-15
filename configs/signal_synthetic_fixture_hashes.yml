@@ -1,0 +1,20 @@
+schema_version: "1.0.0"
+content_class: synthetic_only
+copied_external_text: false
+fixtures:
+  wording_us_direct:
+    sha256_utf8: 867f38da20f6783e2c49186d2a0bb8f4271c8135cc7a2f22528919859d9aafe1
+    allowed_tasks: [draft_review]
+    language_tag: en-US
+  wording_gb_repair:
+    sha256_utf8: efda7e14c6854c8208bbe9e8db127119967ab690b1f3ff941b443fa308be4f89
+    allowed_tasks: [message_excerpt_review]
+    language_tag: en-GB
+  structure_eu_transition:
+    sha256_utf8: 7036a4895fc20cbb229d752e7b8e8bd597de66ac0c09593b850d26983534aa1e
+    allowed_tasks: [draft_review]
+    language_tag: en-EU
+  low_signal_greeting:
+    sha256_utf8: 23ea498e82f4435b1c135324eedef4ba64061600897077bf76082a50b41a9c13
+    allowed_tasks: [draft_review]
+    language_tag: en-EU

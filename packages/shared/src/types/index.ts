@@ -15,6 +15,8 @@ import {
 import {
   ConversationMessagesResponseSchema,
   ConversationListResponseSchema,
+  CommunicationAnalysisRequestSchema,
+  CommunicationAnalysisResponseSchema,
   CreateConversationInputSchema,
   CreateReportInputSchema,
   CreateWaitlistLeadInputSchema,
@@ -49,3 +51,5 @@ export type ProfileResponse = z.infer<typeof ProfileResponseSchema>;
 export type MatchCandidateListResponse = z.infer<typeof MatchCandidateListResponseSchema>;
 export type ConversationListResponse = z.infer<typeof ConversationListResponseSchema>;
 export type ConversationMessagesResponse = z.infer<typeof ConversationMessagesResponseSchema>;
+export type CommunicationAnalysisRequest = z.infer<typeof CommunicationAnalysisRequestSchema>;
+export type CommunicationAnalysisResponse = z.infer<typeof CommunicationAnalysisResponseSchema>;
