@@ -64,6 +64,7 @@ class CueDefinition:
     repair_action: str
     language_support: tuple[str, ...]
     tests: tuple[str, ...]
+    multi_turn_context_required: bool
     status: str
 
 
@@ -106,7 +107,7 @@ def validate_registry(payload: Any) -> CueRegistry:
         required = {
             "canonical_id", "aliases", "profiles", "priority", "preconditions",
             "deterministic_rule", "safe_observation", "limits", "repair_action",
-            "language_support", "tests", "status",
+            "language_support", "tests", "multi_turn_context_required", "status",
         }
         if set(raw) != required:
             raise RegistryError("Cue definition fields are not closed")
@@ -143,6 +144,8 @@ def validate_registry(payload: Any) -> CueRegistry:
         tests = raw["tests"]
         if not isinstance(tests, list) or not tests or not all(isinstance(item, str) and item for item in tests):
             raise RegistryError("Cue tests must name synthetic cases")
+        if raw["multi_turn_context_required"] is not False:
+            raise RegistryError("Registry v1 cues cannot require multi-turn context")
         try:
             profiles = tuple(ProfileId(value) for value in raw["profiles"])
         except (TypeError, ValueError) as exc:
@@ -173,6 +176,7 @@ def validate_registry(payload: Any) -> CueRegistry:
             repair_action=repair,
             language_support=tuple(languages),
             tests=tuple(tests),
+            multi_turn_context_required=False,
             status=status,
         )
 

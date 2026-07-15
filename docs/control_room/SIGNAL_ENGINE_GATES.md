@@ -10,21 +10,23 @@ Flags are necessary controls, not release evidence. A path is allowed only when 
 | Flag | Default | Local synthetic review | Current decision |
 |---|---:|---:|---|
 | `SIGNAL_ENGINE_ENABLED` | `false` | explicitly `true` in test/local launcher only | Local synthetic route only |
-| `SIGNAL_ENGINE_SYNTHETIC_ONLY` | `false` | must be `true` when engine is enabled | Required |
+| `SIGNAL_ENGINE_SYNTHETIC_ONLY` | `true` | must remain `true` | Required |
+| `SIGNAL_ENGINE_T1_PROTOCOL_ENABLED` | `false` | test injection only | Readiness code closed |
 | `SIGNAL_ENGINE_USER_AUTHORED_TEXT` | `false` | `false` | Closed |
 | `SIGNAL_ENGINE_RECEIVED_EXCERPTS` | `false` | `false` | Closed |
 | `SIGNAL_ENGINE_AUDIO` | `false` | `false` | Closed |
+| `SIGNAL_ENGINE_MODEL_TRAINING` | `false` | `false` | Closed aggregate kill switch |
 | `SIGNAL_ENGINE_SYNTHETIC_TRAINING` | `false` | `false` | Closed |
 | `SIGNAL_ENGINE_REAL_DATA_TRAINING` | `false` | `false` | Closed |
 | `SIGNAL_ENGINE_PRODUCTION` | `false` | `false` | Closed |
 
-`SIGNAL_ENGINE_ENABLED=true` is invalid unless `SIGNAL_ENGINE_SYNTHETIC_ONLY=true` and every unsafe flag is false. Synthetic-only mode is not a beta or participant-authentication boundary.
+`SIGNAL_ENGINE_ENABLED=true` is invalid unless `SIGNAL_ENGINE_SYNTHETIC_ONLY=true` and every unsafe flag is false. `SIGNAL_ENGINE_T1_PROTOCOL_ENABLED` does not permit `SIGNAL_ENGINE_USER_AUTHORED_TEXT`; executable protocol tests require injected test-only dependencies and an explicit test environment. Synthetic-only mode is not a beta or participant-authentication boundary.
 
 ## Later gates
 
 ### SG1 — user-authored text
 
-Requires G2/G3/G5 evidence, real authentication and authorization, Article 9/lawful-basis and DPIA review, purpose-specific consent/authority, retention/deletion/export controls, identifier-minimisation evaluation, incident drills, accessibility review, abuse controls and a recorded owner decision. Until then there is no free-text client control or API field.
+Requires G2/G3/G5 evidence, real authentication and authorization, Article 9/lawful-basis and DPIA review, purpose-specific consent/authority, retention/deletion/export controls, identifier-minimisation evaluation, incident drills, accessibility review, abuse controls and a recorded owner decision. Until then no free-text client control or API field is reachable outside explicitly injected fictional protocol tests.
 
 ### SG2 — received-message analysis
 
@@ -50,4 +52,6 @@ Requires SG1–SG5 as applicable and G2–G9, real auth, encrypted production st
 
 **GO:** local synthetic review branch with fictional fixtures and the loopback service explicitly enabled for development/tests.
 
-**NO GO:** private beta, public traffic, real user-authored or received messages, any audio route, synthetic or real-data training, shadow use, production deployment or launch.
+**GO for D020 readiness only:** local synthetic T1 protocol and security review with test-only identity, consent and privacy dependencies.
+
+**NO GO:** private beta, public traffic, real user-authored or received messages, any audio route, model download, synthetic or real-data training, shadow use, payment, production deployment or launch.

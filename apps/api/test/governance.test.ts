@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -31,6 +31,7 @@ test("governance validators reject malformed or unsupported records", { timeout:
     const rawFile = join(directory, "raw.txt");
     const rawFiles = join(directory, "raw-files.txt");
     const publicCopyFile = join(directory, "public-copy.yml");
+    const incompleteDependencyRegistry = join(directory, "incomplete-dependencies.yml");
     await writeFile(resourceFile, "schemaVersion: 1\nowner: Test\nlastReviewedAt: '2026-07-14'\nresources: [{}]\n");
     await writeFile(
       claimsFile,
@@ -46,6 +47,13 @@ test("governance validators reject malformed or unsupported records", { timeout:
       publicCopyFile,
       "schemaVersion: 1\nowner: Test\nlastReviewedAt: '2026-07-14'\nresources:\n  - id: blocked-copy\n    name: Blocked\n    kind: code\n    repository: https://example.test/repo\n    revision: abc\n    rightsStatus: copyleft\n    useStatus: in_use\n    reviewedAt: '2026-07-14'\n    targetPath: src/copied.ts\n    authorizationBasis: none\n    prohibitedUses: [code_copy]\n    sourcePaths:\n      - { path: src/source.ts, blob: 0000000000000000000000000000000000000000 }\n"
     );
+    const currentRegistry = await readFile(resolveRepoPath("configs/resource_registry.yml"), "utf8");
+    const withoutJsdom = currentRegistry.replace(
+      /^\s*- \{ name: jsdom,.*\n/m,
+      ""
+    );
+    assert.notEqual(withoutJsdom, currentRegistry);
+    await writeFile(incompleteDependencyRegistry, withoutJsdom);
 
     assert.notEqual(
       run("scripts/governance/validate-resource-registry.mjs", ["--file", resourceFile]).status,
@@ -68,6 +76,12 @@ test("governance validators reject malformed or unsupported records", { timeout:
       run("scripts/governance/check-public-copy.mjs", ["--file", publicCopyFile]).status,
       0
     );
+    const dependencyCoverage = run("scripts/governance/validate-resource-registry.mjs", [
+      "--file",
+      incompleteDependencyRegistry
+    ]);
+    assert.notEqual(dependencyCoverage.status, 0);
+    assert.match(dependencyCoverage.stderr, /Direct external package jsdom is not registered/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

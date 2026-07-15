@@ -24,6 +24,7 @@ These controls are already represented in release gates and the backlog even tho
 - Policy-versioned adult eligibility and underage escalation: R11, G2/G5, Issues 16 and 25.
 - Consent-bound contact collection or complete waitlist removal: the preserved API still accepts a syntactically valid email, while the local UI refuses non-`.test` addresses. Direct API use with real contact data is prohibited and blocks recruitment/beta until D010/G4/G5 controls exist.
 - The communication route accepts fictional fixture IDs only. Real self-authored text remains blocked until SG1; received content, audio, training and production each have separate closed gates in `SIGNAL_ENGINE_GATES.md`.
+- D020 may add a separate T1 authentication interface, test-only provider, purpose-consent interface and transient token protocol. Those controls apply only to synthetic protocol tests and do not close SEC-001 for legacy routes or prove a production identity/consent provider.
 - The required NER artifact is inventoried but not locally approved or installed. The exact fictional route runs pattern checks only; any real or unattested text path refuses. Installing a package by name is not approval; a managed, hash-verified provisioning design and evaluation are still required.
 - Acoustic code is isolated research code with no HTTP/UI route. Its descriptive measurements and intake-path unlink operation are not emotion/neurotype inference, biometric clearance or storage-erasure evidence.
 

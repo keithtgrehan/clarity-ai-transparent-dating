@@ -12,6 +12,10 @@ import {
   type SignalFetch
 } from "./routes/v2-signal-analysis.js";
 import {
+  registerT1UserDraftAnalysisRoutes,
+  type T1UserDraftRouteOptions
+} from "./routes/v2-user-draft-analysis.js";
+import {
   readSignalEngineSettings,
   type SignalEngineSettings
 } from "./services/signal/settings.js";
@@ -20,6 +24,7 @@ export type BuildAppOptions = {
   logger?: FastifyServerOptions["logger"];
   signalEngine?: SignalEngineSettings;
   signalFetch?: SignalFetch;
+  t1UserDraft?: Omit<T1UserDraftRouteOptions, "settings" | "fetchImpl">;
 };
 
 export async function buildApp(options: BuildAppOptions = {}) {
@@ -64,6 +69,12 @@ export async function buildApp(options: BuildAppOptions = {}) {
     prefix: "/api/v2",
     settings: options.signalEngine ?? readSignalEngineSettings(),
     fetchImpl: options.signalFetch
+  });
+  await app.register(registerT1UserDraftAnalysisRoutes, {
+    prefix: "/api/v2",
+    settings: options.signalEngine ?? readSignalEngineSettings(),
+    fetchImpl: options.signalFetch,
+    ...options.t1UserDraft
   });
 
   if (shouldServeWeb && existsSync(webDistPath)) {

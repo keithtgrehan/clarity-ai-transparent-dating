@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import socket
 from collections.abc import Sequence
 
 import pytest
@@ -13,6 +14,20 @@ from communication_signal_engine.contracts import (
     TaskId,
 )
 from communication_signal_engine.privacy.redaction import EntitySpan
+
+
+@pytest.fixture(autouse=True)
+def block_outbound_network(monkeypatch):
+    """All signal-engine tests are local and fail if code opens a socket."""
+
+    def refused(*_args, **_kwargs):
+        raise AssertionError("Outbound network access is prohibited in signal-engine tests")
+
+    monkeypatch.setenv("HF_HUB_OFFLINE", "1")
+    monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
+    monkeypatch.setenv("HF_HUB_DISABLE_TELEMETRY", "1")
+    monkeypatch.setattr(socket, "create_connection", refused)
+    monkeypatch.setattr(socket.socket, "connect", refused)
 
 
 FIXTURES = {

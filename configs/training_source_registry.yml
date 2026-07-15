@@ -82,8 +82,8 @@ reviewGates:
 sources:
   - sourceId: clarity_authored_synthetic_fixtures
     sourceClass: authored_synthetic
-    provenance: Clarity repository fixtures with owner attestation and content review
-    rightsStatus: owner_authored_review_required
+    provenance: Clarity repository fixtures created under D020 owner authorization with independent content review; human owner review is required before merge
+    rightsStatus: owner_authorized_synthetic_review_required
     personalDataRisk: none_expected_but_scan_required
     specialCategoryRisk: none_expected_but_scan_required
     currentDecision: allowed_bounded_use
@@ -94,7 +94,8 @@ sources:
     rawStorageAllowed: true
     commitAllowed: true
     conditions:
-      - every_fixture_is_fictional_and_human_reviewed
+      - every_fixture_is_fictional_and_independently_reviewed_before_commit
+      - human_owner_review_is_required_before_merge
       - no_realistic_contact_location_or_health_details
       - no_private_or_public_source_paraphrase
       - hard_negatives_and_low_signal_cases_are_preserved

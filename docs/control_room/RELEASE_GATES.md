@@ -4,7 +4,7 @@ No gate is satisfied by documentation alone when executable or operational evide
 
 Before merging this foundation, configure `main` branch protection to require the `quality / validate` check, at least one independent approval, resolved review conversations, and no force pushes or branch deletion. Repository-host settings are not changed by this implementation.
 
-Current status: G0 and G1 passed on 2026-07-14 for the governed repository and isolated synthetic local MVP only. The Berlin branch adds a local synthetic communication-engine review path and three D018 snapshot pins; it does not advance G2 or G3. G2–G9 remain unpassed; no research, participant beta, production, model-validity or legal-compliance readiness is implied.
+Current status: G0 and G1 passed on 2026-07-14 for the governed repository and isolated synthetic local MVP only. The Berlin T0 communication-engine path merged at `f0c1b293c6e89117d60d4ff163390bee4fdf03c7`. D020 permits a separate disabled T1 technical-readiness branch using fictional tests only; it does not pass G2, G3 or G5. G2–G9 remain unpassed; no research, real-text, participant beta, production, model-validity or legal-compliance readiness is implied.
 
 | Gate | Pass evidence | No-go conditions |
 |---|---|---|

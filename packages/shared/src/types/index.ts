@@ -17,6 +17,11 @@ import {
   ConversationListResponseSchema,
   CommunicationAnalysisRequestSchema,
   CommunicationAnalysisResponseSchema,
+  T1UserDraftClearRequestSchema,
+  T1UserDraftContinueRequestSchema,
+  T1UserDraftPrepareRequestSchema,
+  T1UserDraftPrepareResponseSchema,
+  T1UserDraftAnalysisResponseSchema,
   CreateConversationInputSchema,
   CreateReportInputSchema,
   CreateWaitlistLeadInputSchema,
@@ -53,3 +58,8 @@ export type ConversationListResponse = z.infer<typeof ConversationListResponseSc
 export type ConversationMessagesResponse = z.infer<typeof ConversationMessagesResponseSchema>;
 export type CommunicationAnalysisRequest = z.infer<typeof CommunicationAnalysisRequestSchema>;
 export type CommunicationAnalysisResponse = z.infer<typeof CommunicationAnalysisResponseSchema>;
+export type T1UserDraftPrepareRequest = z.infer<typeof T1UserDraftPrepareRequestSchema>;
+export type T1UserDraftPrepareResponse = z.infer<typeof T1UserDraftPrepareResponseSchema>;
+export type T1UserDraftContinueRequest = z.infer<typeof T1UserDraftContinueRequestSchema>;
+export type T1UserDraftClearRequest = z.infer<typeof T1UserDraftClearRequestSchema>;
+export type T1UserDraftAnalysisResponse = z.infer<typeof T1UserDraftAnalysisResponseSchema>;

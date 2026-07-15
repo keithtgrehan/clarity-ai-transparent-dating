@@ -6,6 +6,9 @@ profiles:
 deprecated_aliases:
   cognitive_load: structure.multi_request_load
   cognitive_load_proxy: structure.multi_request_load
+  cognitive_overload: structure.multi_request_load
+  potential_overload: structure.multi_request_load
+  overloaded_message: structure.multi_request_load
   request_stacking: structure.multi_request_load
   pressure_language: communication.pressure
   repair_attempt: communication.repair
@@ -24,6 +27,7 @@ cues:
     repair_action: "Keep one concrete preference and one answerable next step."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_us_direct_preference]
+    multi_turn_context_required: false
     status: active
   - canonical_id: communication.ambiguity
     aliases: [ambiguity]
@@ -36,6 +40,7 @@ cues:
     repair_action: "If you know your preference, state it before the uncertainty marker."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_gb_ambiguity_and_repair]
+    multi_turn_context_required: false
     status: active
   - canonical_id: communication.pressure
     aliases: [pressure]
@@ -48,6 +53,7 @@ cues:
     repair_action: "Replace the demand with a request and leave an explicit choice or response window."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_euro_pressure_wording]
+    multi_turn_context_required: false
     status: active
   - canonical_id: communication.reassurance_request
     aliases: [reassurance]
@@ -60,6 +66,7 @@ cues:
     repair_action: "Ask one answerable question about the specific situation."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_reassurance_repetition]
+    multi_turn_context_required: false
     status: active
   - canonical_id: communication.reassurance_repetition
     aliases: [reassurance_repetition]
@@ -72,6 +79,7 @@ cues:
     repair_action: "Keep the single reassurance question that is easiest to answer."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_reassurance_repetition]
+    multi_turn_context_required: false
     status: active
   - canonical_id: communication.repair
     aliases: [repair]
@@ -84,6 +92,7 @@ cues:
     repair_action: "Put the corrected meaning in one sentence after the repair marker."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [confidence_gb_ambiguity_and_repair, confidence_repair_opening]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.explicit_transition
     aliases: [explicit_transition]
@@ -96,6 +105,7 @@ cues:
     repair_action: "Keep the transition and name the topic that follows it."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [clarity_explicit_topic_navigation]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.high_lexical_density
     aliases: [high_lexical_density]
@@ -108,6 +118,7 @@ cues:
     repair_action: "Add a short summary sentence before the detail."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [clarity_dense_information_run]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.long_information_run
     aliases: [long_information_run]
@@ -120,6 +131,7 @@ cues:
     repair_action: "Move the main point to the first sentence and offer the rest as optional detail."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [clarity_dense_information_run]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.processing_request
     aliases: [processing_request]
@@ -132,6 +144,7 @@ cues:
     repair_action: "Keep the time request and add a realistic return window if you can."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_processing_with_return_window, support_processing_missing_return_window]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.response_window_present
     aliases: [response_window_present]
@@ -144,6 +157,7 @@ cues:
     repair_action: "Keep the return window specific enough to be useful and easy to revise."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_processing_with_return_window]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.response_window_missing
     aliases: [response_window_missing]
@@ -156,6 +170,7 @@ cues:
     repair_action: "If possible, add when you will next update them—even if the answer is not ready."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_processing_missing_return_window]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.thinking_aloud
     aliases: [thinking_aloud]
@@ -168,6 +183,7 @@ cues:
     repair_action: "Separate the thinking-aloud section from your current position."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_thinking_aloud_to_final_position]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.final_position
     aliases: [final_position]
@@ -180,6 +196,7 @@ cues:
     repair_action: "Keep the current answer in one sentence and label what remains open."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_thinking_aloud_to_final_position]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.reciprocity_offer
     aliases: [reciprocity_offer]
@@ -192,6 +209,7 @@ cues:
     repair_action: "Keep the choice concrete: short version, full context, or another time."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_context_reciprocity_offer]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.channel_switch_offer
     aliases: [channel_switch_offer]
@@ -204,6 +222,7 @@ cues:
     repair_action: "Offer no more than two channel or timing options."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_channel_switch_offer]
+    multi_turn_context_required: false
     status: active
   - canonical_id: structure.multi_request_load
     aliases: [multi_request_load]
@@ -216,4 +235,5 @@ cues:
     repair_action: "Lead with the one question that needs an answer first."
     language_support: [en-US, en-GB, en-EU, mixed]
     tests: [support_multi_request_load]
+    multi_turn_context_required: false
     status: active

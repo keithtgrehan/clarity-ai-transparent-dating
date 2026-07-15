@@ -22,13 +22,14 @@ Issues are dependency ordered. Issues 1–13 form the current cutline.
 18. [Blocked by Issue 17] Implement unknown-safe lexicographic ordering and provenance.
 19. [Blocked by Issue 18] Add finite discovery and exposure-fairness accounting.
 20. [Blocked by Issues 14–19] Migrate onboarding/profile/discovery/settings UI with WCAG verification.
-21. [Local synthetic slice in review 2026-07-15; participant use still blocked by G2/G3] Adapt the D018-pinned Vibe communication engine into canonical bounded cues, private fixture contracts and safe output. This slice does not complete the future participant evidence/moderation package.
+21. [Merged through PR #3 at `f0c1b293` on 2026-07-15; participant use still blocked by G2/G3] Adapt the D018-pinned Vibe communication engine into canonical bounded cues, private fixture contracts and safe output. This slice does not complete the future participant evidence/moderation package.
 22. [Blocked by G2/G3] Implement moderator cases, access-controlled evidence, human decisions and appeals.
 23. [Blocked by consent/research approval] Implement research feedback, reviewed-gold promotion and administration.
 24. [Blocked by G4] Conduct approved Berlin participatory research and event prototypes.
 25. [Blocked by prior gates] Produce production auth/store/encryption/deletion/hosting and beta go/no-go package.
-26. [Current Berlin review cutline] Validate and independently review the local synthetic communication service, Clarity adapter, canonical registries, research consolidation and disabled later gates.
-27. [Blocked by SG1 and G2–G5] Design consented, authenticated self-authored-draft analysis with lifecycle, privacy, accessibility and incident evidence.
+26. [Complete and merged through PR #3 on 2026-07-15] Validate and independently review the local synthetic communication service, Clarity adapter, canonical registries, research consolidation and disabled later gates.
+27. [Technical-readiness scaffold authorized by D020; SG1 and G2–G5 remain closed] Add separate disabled T1 contracts, test-only authentication/consent boundaries, ephemeral protocol controls, model admission refusal, fictional PII benchmark and inaccessible-by-default UI. Real text and participant use remain blocked.
 28. [Blocked by SG2] Evaluate third-party received-message authority; do not reuse the self-authored-text decision.
 29. [Blocked by SG3] Decide whether audio should remain permanently out of product scope after biometric, decoder, validity and accessibility review.
 30. [Blocked by G6/G7 and SG4/SG5] Create any synthetic or real-data training protocol; service use never implies training permission.
+31. [P3 dependency migration; not a T1 gate blocker] Replace the deprecated Starlette `TestClient`/`httpx` integration with `httpx2` before a future dependency-line upgrade; the current FastAPI 0.139.0 locked suite and lifespan-close check pass.

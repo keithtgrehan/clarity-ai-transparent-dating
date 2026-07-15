@@ -1,0 +1,51 @@
+schemaVersion: 1
+owner: Keith Grehan
+lastReviewedAt: "2026-07-15"
+purpose: evidence_index_and_product_limitations_only
+policy: >-
+  Research sources support bounded design hypotheses and limitations. They do not authorize
+  collection, participant processing, training, copied examples, person-level inference or
+  effectiveness claims. Source-level detail remains in docs/research/RESEARCH_INDEX.md.
+defaults:
+  collectionAllowed: false
+  rawStorageAllowed: false
+  quotingAllowed: false
+  trainingAllowed: false
+  benchmarkRowsAllowed: false
+sourceClasses:
+  - id: peer_reviewed_publication
+    evidenceDisposition: design_input_or_context_only
+    canonicalIndex: docs/research/RESEARCH_INDEX.md
+    allowedUses: [bibliographic_citation, aggregate_finding_synthesis, limitation_mapping]
+    prohibitedUses: [full_text_corpus, participant_quote, supplementary_data, training, benchmark_rows]
+    specialCategoryRisk: high
+  - id: official_law_regulation_or_guidance
+    evidenceDisposition: governance_input_not_legal_approval
+    canonicalIndex: docs/research/RESEARCH_INDEX.md
+    allowedUses: [primary_source_citation, control_question_mapping]
+    prohibitedUses: [compliance_claim, automatic_lawful_basis, training]
+    specialCategoryRisk: contextual
+  - id: technical_standard_or_platform_terms
+    evidenceDisposition: control_or_rights_input
+    canonicalIndex: docs/research/RESEARCH_INDEX.md
+    allowedUses: [requirement_mapping, source_risk_review]
+    prohibitedUses: [collection_authorization, content_copy, training]
+    specialCategoryRisk: contextual
+  - id: support_resource_or_community_source_class
+    evidenceDisposition: unvalidated_aggregate_hypothesis_only
+    canonicalIndex: docs/research/RESEARCH_INDEX.md
+    allowedUses: [resource_landscape_mapping]
+    prohibitedUses: [page_copy, member_content, username, quote, diagnosis, post, comment, thread, scrape, label, corpus, training, benchmark]
+    specialCategoryRisk: very_high
+  - id: donor_or_internal_method_reference
+    evidenceDisposition: supporting_method_only
+    canonicalIndex: docs/research/RESEARCH_INDEX.md
+    allowedUses: [method_review, governance_pattern_review]
+    prohibitedUses: [source_prose_copy, private_derived_example, data_row, model_artifact, training]
+    specialCategoryRisk: high
+currentDecision:
+  participantResearchAllowed: false
+  publicContentCollectionAllowed: false
+  privateContentAllowed: false
+  modelTrainingAllowed: false
+  effectivenessClaimAllowed: false

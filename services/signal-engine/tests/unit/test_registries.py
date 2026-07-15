@@ -25,9 +25,13 @@ from communication_signal_engine.semantic.model_loader import (
 def test_canonical_registry_loads_and_deprecated_aliases_resolve() -> None:
     registry = load_registry()
     assert registry.definition("cognitive_load").canonical_id == "structure.multi_request_load"
+    assert registry.definition("cognitive_overload").canonical_id == "structure.multi_request_load"
+    assert registry.definition("potential_overload").canonical_id == "structure.multi_request_load"
+    assert registry.definition("overloaded_message").canonical_id == "structure.multi_request_load"
     assert registry.definition("pressure_language").canonical_id == "communication.pressure"
     assert registry.definition("repair_attempt").canonical_id == "communication.repair"
     assert len(registry.cues) == 17
+    assert all(not definition.multi_turn_context_required for definition in registry.cues.values())
 
 
 def test_registry_metadata_is_executable_and_referenced_by_governed_cases() -> None:
@@ -93,6 +97,12 @@ def test_model_inventory_selects_exact_required_and_optional_entries() -> None:
     assert inventory.semantic.fail_behavior == "abstain_without_semantic_cues"
     assert inventory.privacy_ner.local_path is None
     assert inventory.semantic.local_path is None
+    assert inventory.privacy_ner.review_status == "candidate_not_approved"
+    assert inventory.privacy_ner.resource_registry_id is None
+    assert inventory.privacy_ner.pretrained_source_registry_id is None
+    assert inventory.privacy_ner.memory_limit_enforced is False
+    assert inventory.privacy_ner.timeout_enforced is False
+    assert inventory.privacy_ner.approved_environments == ()
 
 
 @pytest.mark.parametrize("field", ["memory_limit_mb", "timeout_seconds", "fail_behavior"])
@@ -180,5 +190,23 @@ def test_local_verified_inventory_state_is_rejected_until_a_later_schema(tmp_pat
     )
     path = tmp_path / "inventory.yml"
     path.write_text(yaml.safe_dump(payload), encoding="utf-8")
-    with pytest.raises(RegistryError, match="schema v1 prohibits"):
+    with pytest.raises(RegistryError, match="keeps local model execution closed"):
+        load_model_inventory(path)
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "licence_url", "artifact_files", "reviewed_dialect_limitations", "blocked_uses",
+        "resource_registry_id", "pretrained_source_registry_id", "review_status",
+        "memory_limit_enforced", "timeout_enforced", "approved_environments",
+        "preload_required",
+    ],
+)
+def test_privacy_inventory_admission_metadata_is_required(tmp_path, field: str) -> None:
+    payload = yaml.safe_load(DEFAULT_INVENTORY_PATH.read_text(encoding="utf-8"))
+    del payload["models"][0][field]
+    path = tmp_path / "inventory.yml"
+    path.write_text(yaml.safe_dump(payload), encoding="utf-8")
+    with pytest.raises(RegistryError):
         load_model_inventory(path)

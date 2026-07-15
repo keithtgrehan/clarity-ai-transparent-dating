@@ -39,6 +39,7 @@ jobs:
       - run: npm run validate:resource-registry
       - run: npm run validate:signal-registries
       - run: npm run validate:training-source-registry
+      - run: npm run validate:research-source-registry
       - run: npm run validate:python-lock
       - run: npm run validate:claims
       - run: npm run check:restricted-artifacts -- --all-tracked
@@ -47,4 +48,5 @@ jobs:
       - run: npm run check:signal-domain-residue
       - run: npm run check:secrets
       - run: npm run check:public-copy
+      - run: npm run check:t1-production-bundle
       - run: npm audit --audit-level=high

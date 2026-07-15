@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "content_class": "wholly_fictional_t1_pii_benchmark",
+  "cases": [
+    {
+      "case_id": "fictional_en_us_contacts",
+      "language_tag": "en-US",
+      "text": "My name is Rowan Example. Email rowan@example.test or call +1 202 555 0147 about the imaginary picnic.",
+      "expected": [
+        {"surface": "Rowan Example", "category": "PERSON", "direct": true},
+        {"surface": "rowan@example.test", "category": "EMAIL", "direct": true},
+        {"surface": "+1 202 555 0147", "category": "PHONE", "direct": true}
+      ]
+    },
+    {
+      "case_id": "fictional_en_gb_address_handle_url",
+      "language_tag": "en-GB",
+      "text": "The fictional return address is 17 Fictional Lane. Use @rowan_example or https://example.test/rowan.",
+      "expected": [
+        {"surface": "17 Fictional Lane", "category": "ADDRESS", "direct": true},
+        {"surface": "@rowan_example", "category": "HANDLE", "direct": true},
+        {"surface": "https://example.test/rowan.", "category": "URL", "direct": true}
+      ]
+    },
+    {
+      "case_id": "fictional_en_eu_city_context",
+      "language_tag": "en-EU",
+      "text": "I am based in Example Quarter and work at Northstar Studio beside the invented Blue Lantern kiosk; I studied at Example University.",
+      "expected": [
+        {"surface": "Example Quarter", "category": "LOCATION", "direct": true},
+        {"surface": "Northstar Studio", "category": "ORGANIZATION", "direct": true},
+        {"surface": "Example University", "category": "ORGANIZATION", "direct": true},
+        {"surface": "invented Blue Lantern kiosk", "category": "CONTEXTUAL_IDENTIFIER", "direct": false}
+      ]
+    },
+    {
+      "case_id": "fictional_mixed_english_german",
+      "language_tag": "mixed",
+      "text": "[en-EU] Call me Mina Example. [de-DE] Schreib an mina@example.test und wir treffen uns nahe Testplatz.",
+      "expected": [
+        {"surface": "Mina Example", "category": "PERSON", "direct": true},
+        {"surface": "mina@example.test", "category": "EMAIL", "direct": true},
+        {"surface": "Testplatz", "category": "LOCATION", "direct": true}
+      ]
+    },
+    {
+      "case_id": "fictional_date_workplace",
+      "language_tag": "en-EU",
+      "text": "On 14 October 2035, I will visit the fictional Northstar Workshop after my Example University class.",
+      "expected": [
+        {"surface": "14 October 2035", "category": "DATE_TIME", "direct": true},
+        {"surface": "Northstar Workshop", "category": "ORGANIZATION", "direct": true},
+        {"surface": "Example University", "category": "ORGANIZATION", "direct": true}
+      ]
+    },
+    {
+      "case_id": "fictional_quoted_contact",
+      "language_tag": "en-GB",
+      "text": "The wholly fictional quote says, “Message @quoted_example before the pretend exhibition.”",
+      "expected": [
+        {"surface": "@quoted_example", "category": "HANDLE", "direct": true}
+      ]
+    },
+    {
+      "case_id": "fictional_indirect_context",
+      "language_tag": "en-US",
+      "text": "I am the only left-handed clock restorer in the imaginary night class beside the purple observatory.",
+      "expected": [
+        {"surface": "only left-handed clock restorer in the imaginary night class beside the purple observatory", "category": "CONTEXTUAL_IDENTIFIER", "direct": false}
+      ]
+    },
+    {
+      "case_id": "fictional_hard_negative",
+      "language_tag": "en-EU",
+      "text": "Maybe Saturday afternoon works, and another quiet public place would also be fine.",
+      "expected": []
+    }
+  ]
+}

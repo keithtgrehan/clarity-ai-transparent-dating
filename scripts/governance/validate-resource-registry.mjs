@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import {
   argumentValue,
   failIfErrors,
   isObject,
   nonEmptyString,
-  readYaml
+  readYaml,
+  repoRoot
 } from "./lib.mjs";
 
 const registryPath = argumentValue("--file", "configs/resource_registry.yml");
@@ -39,11 +42,62 @@ for (const className of [
   }
 }
 
-for (const [index, dependency] of (registry?.inventoryClasses?.externalLicenceDependencies ?? []).entries()) {
+const registeredDependencies = registry?.inventoryClasses?.externalLicenceDependencies ?? [];
+const dependencyNames = new Set();
+for (const [index, dependency] of registeredDependencies.entries()) {
   for (const key of ["name", "version", "licence", "source"]) {
     if (!nonEmptyString(dependency?.[key])) {
       errors.push(`inventoryClasses.externalLicenceDependencies[${index}].${key} is required.`);
     }
+  }
+  if (dependencyNames.has(dependency?.name)) {
+    errors.push(`inventoryClasses.externalLicenceDependencies duplicates ${dependency.name}.`);
+  }
+  dependencyNames.add(dependency?.name);
+}
+
+const manifestPaths = [
+  "package.json",
+  "apps/api/package.json",
+  "apps/web/package.json",
+  "packages/shared/package.json"
+];
+const directExternalDependencies = new Set();
+for (const manifestPath of manifestPaths) {
+  const manifest = JSON.parse(await readFile(resolve(repoRoot, manifestPath), "utf8"));
+  for (const field of ["dependencies", "devDependencies", "optionalDependencies"]) {
+    for (const name of Object.keys(manifest[field] ?? {})) {
+      if (!name.startsWith("@clarity/")) directExternalDependencies.add(name);
+    }
+  }
+}
+for (const name of directExternalDependencies) {
+  if (!dependencyNames.has(name)) {
+    errors.push(`Direct external package ${name} is not registered in externalLicenceDependencies.`);
+  }
+}
+
+const packageLock = JSON.parse(await readFile(resolve(repoRoot, "package-lock.json"), "utf8"));
+for (const dependency of registeredDependencies.filter((item) => item?.source === "package-lock.json")) {
+  const packageSuffix = `node_modules/${dependency.name}`;
+  const candidates = Object.entries(packageLock.packages ?? {})
+    .filter(([path]) => path === packageSuffix || path.endsWith(`/${packageSuffix}`))
+    .map(([, metadata]) => metadata);
+  const locked = candidates.find((item) => item?.version === String(dependency.version));
+  if (candidates.length === 0) {
+    errors.push(`Registered package ${dependency.name} is absent from package-lock.json.`);
+    continue;
+  }
+  if (!locked) {
+    errors.push(
+      `Registered package ${dependency.name} version ${dependency.version} does not match any lock entry.`
+    );
+    continue;
+  }
+  if (locked.license !== dependency.licence) {
+    errors.push(
+      `Registered package ${dependency.name} licence ${dependency.licence} does not match lock ${locked.license}.`
+    );
   }
 }
 

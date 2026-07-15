@@ -7,11 +7,13 @@ cd "$ROOT_DIR"
 npm test
 npm run typecheck
 npm run build
+npm run check:t1-production-bundle
 npm run verify:static
 npm run verify:mvp
 npm run validate:resource-registry
 npm run validate:signal-registries
 npm run validate:training-source-registry
+npm run validate:research-source-registry
 npm run validate:python-lock
 npm run validate:claims
 npm run check:restricted-artifacts -- --all-tracked

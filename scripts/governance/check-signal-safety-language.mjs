@@ -14,7 +14,11 @@ const prohibited = [
   { pattern: /guaranteed deletion/i, reason: "deletion guarantee" },
   { pattern: /\bAudioSanitizer\b/, reason: "misleading audio sanitizer name" },
   { pattern: /\b(?:NEURO_DIVERGENT|CLARITY_AI|VIBE_SIGNAL|CONFIDENCE_VISUALIZER)\b/, reason: "product or diagnosis-adjacent mode ID" },
-  { pattern: /\b(?:info-dump(?:ing)?|hyperfixation|monotonic|emotional valence)\b/i, reason: "prohibited person-level inference framing" }
+  { pattern: /\b(?:info-dump(?:ing)?|hyperfixation|emotional valence)\b/i, reason: "prohibited person-level inference framing" },
+  {
+    pattern: /\b(?:monotonic|monotone)\s+(?:speech|voice|tone|pitch|speaker|person|affect)\b|\b(?:speech|voice|tone|pitch|speaker|person|affect)\s+(?:is\s+)?(?:monotonic|monotone)\b/i,
+    reason: "prohibited person-level inference framing"
+  }
 ];
 
 const errors = [];

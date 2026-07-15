@@ -30,7 +30,7 @@ class SemanticAnalyzer:
             return SemanticResult("abstain_disabled_by_policy")
         if not self.loader.available:
             return SemanticResult("abstain_model_not_local")
-        # Schema v1 never authorizes a model call. Even a matching file must
+        # Schema v1.1 never authorizes a model call. Even a matching file must
         # abstain until a later schema adds a verified bundle plus enforced
         # subprocess timeout and memory isolation.
         return SemanticResult("abstain_disabled_by_policy")

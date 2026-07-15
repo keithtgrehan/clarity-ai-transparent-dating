@@ -377,6 +377,26 @@ export const CommunicationAnalysisCueCopy = {
   }
 } as const;
 
+const CommunicationAnalysisCueRuleId = {
+  "communication.directness": "first_person_preference_or_explicit_request",
+  "communication.ambiguity": "ambiguity_marker_count",
+  "communication.pressure": "second_person_obligation_or_urgency",
+  "communication.reassurance_request": "reassurance_question",
+  "communication.reassurance_repetition": "repeated_reassurance_question",
+  "communication.repair": "explicit_repair_marker",
+  "structure.explicit_transition": "transition_marker",
+  "structure.high_lexical_density": "lexical_density_threshold",
+  "structure.long_information_run": "long_comma_separated_run",
+  "structure.processing_request": "processing_time_phrase",
+  "structure.response_window_present": "processing_request_with_time_window",
+  "structure.response_window_missing": "processing_request_without_time_window",
+  "structure.thinking_aloud": "thinking_aloud_marker",
+  "structure.final_position": "final_position_marker",
+  "structure.reciprocity_offer": "short_version_offer",
+  "structure.channel_switch_offer": "channel_choice_phrase",
+  "structure.multi_request_load": "question_count_threshold"
+} as const;
+
 export const CommunicationAnalysisLimitations = [
   "Deterministic wording checks are not peer-reviewed inference models.",
   "Results do not infer diagnosis, emotion, attraction, intent, compatibility, or outcomes.",
@@ -568,3 +588,258 @@ export const CommunicationAnalysisResponseSchema = z
       });
     }
   });
+
+/**
+ * T1 technical-readiness contracts. These contracts are deliberately separate
+ * from the synthetic v1 fixture route. Their presence does not authorize real
+ * user text: route registration, trusted authentication, purpose consent and a
+ * reviewed local privacy detector are independent default-deny gates.
+ */
+export const T1UserDraftTaskSchema = z.literal("draft_review");
+export const T1UserDraftSourceClassSchema = z.literal("self_authored_draft");
+export const T1UserDraftLanguageTagSchema = z.enum(["en-US", "en-GB", "en-EU", "mixed"]);
+
+export const T1UserDraftPrepareRequestSchema = z
+  .object({
+    task: T1UserDraftTaskSchema,
+    sourceClass: T1UserDraftSourceClassSchema,
+    profileId: CommunicationAnalysisProfileIdSchema,
+    languageTag: T1UserDraftLanguageTagSchema,
+    draft: z.string().min(1).max(4_000)
+  })
+  .strict();
+
+export const T1PotentialIdentifierCountsSchema = z
+  .object({
+    person_name: z.number().int().nonnegative().max(10_000),
+    location: z.number().int().nonnegative().max(10_000),
+    contact: z.number().int().nonnegative().max(10_000),
+    online_handle: z.number().int().nonnegative().max(10_000),
+    identifier: z.number().int().nonnegative().max(10_000),
+    other: z.number().int().nonnegative().max(10_000)
+  })
+  .strict();
+
+export const T1PrivacyReviewLimitation =
+  "Potential identifiers detected by this tool were masked. Indirect or contextual identifiers may remain." as const;
+
+export const T1UserDraftPrepareResponseSchema = z
+  .object({
+    schemaVersion: z.literal("2.0.0"),
+    reviewToken: z.string().regex(/^rt_[A-Za-z0-9_-]{43}$/),
+    expiresAt: z.string().datetime({ offset: true }),
+    redactedPreview: z.string().max(16_000),
+    potentialIdentifierCounts: T1PotentialIdentifierCountsSchema,
+    detectorVersion: z.string().regex(/^dv_[0-9a-f]{64}$/),
+    previewHash: z.string().regex(/^ph_[0-9a-f]{64}$/),
+    limitation: z.literal(T1PrivacyReviewLimitation)
+  })
+  .strict();
+
+export const T1UserDraftContinueRequestSchema = z
+  .object({
+    reviewToken: z.string().regex(/^rt_[A-Za-z0-9_-]{43}$/),
+    confirmed: z.literal(true)
+  })
+  .strict();
+
+export const T1UserDraftClearRequestSchema = z
+  .object({
+    reviewToken: z.string().regex(/^rt_[A-Za-z0-9_-]{43}$/)
+  })
+  .strict();
+
+export const T1UserDraftCueSchema = CommunicationAnalysisCueSchema.extend({
+  rule_id: z.string().regex(/^[a-z][a-z0-9_]{2,79}$/)
+}).strict();
+
+export const T1UserDraftAnalysisResponseSchema = z
+  .object({
+    schema_version: z.literal("2.0.0"),
+    analysis_id: z.string().regex(/^an_[0-9a-f]{24}$/),
+    low_signal: z.boolean(),
+    privacy_receipt: z
+      .object({
+        potential_identifier_counts: T1PotentialIdentifierCountsSchema,
+        redaction_total: z.number().int().nonnegative().max(10_000),
+        detector_status: z.enum(["LOCAL_SPACY_APPLIED", "SYNTHETIC_TEST_DOUBLE_APPLIED"]),
+        text_released: z.literal(false),
+        text_persisted: z.literal(false),
+        limitation: z.literal(T1PrivacyReviewLimitation)
+      })
+      .strict(),
+    cues: z.array(T1UserDraftCueSchema).max(3),
+    repair_action: z
+      .object({
+        title: z.string().trim().min(1).max(80),
+        editable_text: z.string().trim().min(1).max(240),
+        rationale: z.string().trim().min(1).max(240)
+      })
+      .strict()
+      .nullable(),
+    limitations: z.array(z.string().trim().min(1).max(400)).min(1).max(6),
+    provenance: z
+      .object({
+        engine_version: z.literal("0.1.0"),
+        ruleset_version: z.literal("2026-07-15.1"),
+        cue_registry_version: z.literal("1.0.0"),
+        privacy_detector_id: z.enum([
+          "explosion/spacy-models:xx_ent_wiki_sm-3.8.0",
+          "synthetic-test-double"
+        ]),
+        privacy_detector_revision: z.enum([
+          "374ece89b2099818244f5a65ef466b89c0c392ae",
+          "fixture-only"
+        ]),
+        privacy_detector_status: z.enum([
+          "LOCAL_SPACY_APPLIED",
+          "SYNTHETIC_TEST_DOUBLE_APPLIED"
+        ]),
+        privacy_admission_fingerprint: z.string().regex(/^pa_[0-9a-f]{64}$/),
+        semantic_model_id: z.literal("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"),
+        semantic_model_revision: z.literal("e8f8c211226b894fcb81acc59f3b34ba3efd5f42"),
+        semantic_status: z.enum(["abstain_model_not_local", "abstain_disabled_by_policy"])
+      })
+      .strict()
+  })
+  .strict()
+  .superRefine((analysis, context) => {
+    const privacyDetectorPolicy =
+      analysis.provenance.privacy_detector_id === "synthetic-test-double"
+        ? {
+            revision: "fixture-only",
+            status: "SYNTHETIC_TEST_DOUBLE_APPLIED"
+          }
+        : {
+            revision: "374ece89b2099818244f5a65ef466b89c0c392ae",
+            status: "LOCAL_SPACY_APPLIED"
+          };
+    if (
+      analysis.provenance.privacy_detector_revision !== privacyDetectorPolicy.revision ||
+      analysis.provenance.privacy_detector_status !== privacyDetectorPolicy.status ||
+      analysis.privacy_receipt.detector_status !== privacyDetectorPolicy.status
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Privacy detector identity, revision and status must use one admitted policy.",
+        path: ["provenance"]
+      });
+    }
+
+    const countedTotal = Object.values(analysis.privacy_receipt.potential_identifier_counts).reduce(
+      (total, count) => total + count,
+      0
+    );
+    if (countedTotal !== analysis.privacy_receipt.redaction_total) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Redaction total must equal the fixed category counts.",
+        path: ["privacy_receipt", "redaction_total"]
+      });
+    }
+
+    if (new Set(analysis.cues.map((cue) => cue.canonical_id)).size !== analysis.cues.length) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Cue identifiers must be unique within a result.",
+        path: ["cues"]
+      });
+    }
+
+    for (const [index, cue] of analysis.cues.entries()) {
+      const copy = CommunicationAnalysisCueCopy[cue.canonical_id];
+      if (
+        cue.observation !== copy.observation ||
+        cue.limitation !== copy.limitation ||
+        cue.rule_id !== CommunicationAnalysisCueRuleId[cue.canonical_id]
+      ) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Cue copy and rule ID must match the reviewed canonical registry.",
+          path: ["cues", index]
+        });
+      }
+    }
+
+    if (
+      analysis.limitations.length !== CommunicationAnalysisLimitations.length ||
+      analysis.limitations.some((value, index) => value !== CommunicationAnalysisLimitations[index])
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Analysis limitations must use the reviewed fixed copy.",
+        path: ["limitations"]
+      });
+    }
+
+    if (analysis.low_signal && (analysis.cues.length !== 0 || analysis.repair_action !== null)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Low-signal results cannot include cues or a repair action.",
+        path: ["low_signal"]
+      });
+    }
+    if (analysis.cues.length === 0 && analysis.repair_action !== null) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "A result without cues cannot include a repair action.",
+        path: ["repair_action"]
+      });
+    }
+    if (analysis.cues.length > 0) {
+      const expected = CommunicationAnalysisCueCopy[analysis.cues[0].canonical_id].repair_action;
+      if (
+        analysis.repair_action === null ||
+        analysis.repair_action.title !== expected.title ||
+        analysis.repair_action.editable_text !== expected.editable_text ||
+        analysis.repair_action.rationale !== expected.rationale
+      ) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "A cue-bearing result requires exactly one reviewed repair action.",
+          path: ["repair_action"]
+        });
+      }
+    }
+  });
+
+export const T1InternalPrepareRequestSchema = z
+  .object({
+    schema_version: z.literal("2.0.0"),
+    task: T1UserDraftTaskSchema,
+    profile_id: CommunicationAnalysisProfileIdSchema,
+    language_tag: T1UserDraftLanguageTagSchema,
+    text: z.string().min(1).max(4_000),
+    authority: z.object({ source_class: T1UserDraftSourceClassSchema }).strict()
+  })
+  .strict();
+
+export const T1InternalPrepareResponseSchema = z
+  .object({
+    schema_version: z.literal("2.0.0"),
+    internal_nonce: z.string().regex(/^sn_[0-9a-f]{64}$/),
+    expires_at: z.string().datetime({ offset: true }),
+    redacted_preview: z.string().max(16_000),
+    potential_identifier_counts: T1PotentialIdentifierCountsSchema,
+    detector_version: z.string().regex(/^dv_[0-9a-f]{64}$/),
+    sanitized_text_bytes: z.number().int().min(1).max(32_000),
+    admission_snapshot: z.string().regex(/^pa_[0-9a-f]{64}$/),
+    limitation: z.literal(T1PrivacyReviewLimitation)
+  })
+  .strict();
+
+export const T1InternalContinueRequestSchema = z
+  .object({
+    schema_version: z.literal("2.0.0"),
+    internal_nonce: z.string().regex(/^sn_[0-9a-f]{64}$/),
+    confirmation: z.literal(true),
+    admission_snapshot: z.string().regex(/^pa_[0-9a-f]{64}$/)
+  })
+  .strict();
+
+export const T1InternalClearRequestSchema = z
+  .object({
+    schema_version: z.literal("2.0.0"),
+    internal_nonce: z.string().regex(/^sn_[0-9a-f]{64}$/)
+  })
+  .strict();

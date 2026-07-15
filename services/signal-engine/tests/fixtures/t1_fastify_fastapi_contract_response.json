@@ -1,0 +1,52 @@
+{
+  "analysis_id": "an_0123456789abcdef01234567",
+  "cues": [
+    {
+      "canonical_id": "communication.ambiguity",
+      "evidence_sufficiency": "deterministic",
+      "limitation": "Uncertainty markers can be considerate or accurate; they do not reveal confidence or intent.",
+      "observation": "The wording contains one or more uncertainty markers.",
+      "rule_id": "ambiguity_marker_count",
+      "sanitized_range": { "end": 5, "start": 0 }
+    }
+  ],
+  "limitations": [
+    "Deterministic wording checks are not peer-reviewed inference models.",
+    "Results do not infer diagnosis, emotion, attraction, intent, compatibility, or outcomes.",
+    "Dialect and mixed-language behavior is not benchmarked for participant use."
+  ],
+  "low_signal": false,
+  "privacy_receipt": {
+    "detector_status": "SYNTHETIC_TEST_DOUBLE_APPLIED",
+    "limitation": "Potential identifiers detected by this tool were masked. Indirect or contextual identifiers may remain.",
+    "potential_identifier_counts": {
+      "contact": 0,
+      "identifier": 0,
+      "location": 0,
+      "online_handle": 0,
+      "other": 0,
+      "person_name": 0
+    },
+    "redaction_total": 0,
+    "text_persisted": false,
+    "text_released": false
+  },
+  "provenance": {
+    "cue_registry_version": "1.0.0",
+    "engine_version": "0.1.0",
+    "privacy_admission_fingerprint": "pa_20887e709e54b4279bd819734f2e479197744cf5eb232517f5be370334d3360c",
+    "privacy_detector_id": "synthetic-test-double",
+    "privacy_detector_revision": "fixture-only",
+    "privacy_detector_status": "SYNTHETIC_TEST_DOUBLE_APPLIED",
+    "ruleset_version": "2026-07-15.1",
+    "semantic_model_id": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "semantic_model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "semantic_status": "abstain_model_not_local"
+  },
+  "repair_action": {
+    "editable_text": "If you know your preference, state it before the uncertainty marker.",
+    "rationale": "This optional edit follows the displayed wording or structure cue.",
+    "title": "Edit one ambiguity step"
+  },
+  "schema_version": "2.0.0"
+}

@@ -867,6 +867,40 @@ img {
   gap: 1rem;
 }
 
+.signal-notice {
+  padding: 1rem 1.05rem;
+  border: 1px solid rgba(138, 107, 61, 0.32);
+  border-radius: 20px;
+  background: rgba(138, 107, 61, 0.08);
+}
+
+.signal-notice p,
+.signal-live-region p {
+  margin: 0;
+}
+
+.t1-draft-input {
+  min-height: 10rem;
+}
+
+.signal-redacted-preview {
+  max-width: 100%;
+  margin: 0;
+  padding: 1rem 1.05rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(236, 230, 218, 0.52);
+  color: var(--text);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  line-height: 1.65;
+}
+
+.signal-live-region:empty {
+  display: none;
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
