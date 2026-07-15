@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clarity-communication-signal-engine"
+version = "0.1.0"
+description = "Bounded, local-only communication wording and structure checks"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.129,<1",
+  "pydantic>=2.12,<3",
+  "PyYAML>=6,<7",
+  "uvicorn>=0.34,<1",
+]
+
+[project.optional-dependencies]
+pii_minimization = ["spacy>=3.8,<4"]
+semantic_local = ["safetensors>=0.4,<1", "torch>=2.5,<3", "transformers>=4.46,<5"]
+audio_research = ["librosa>=0.11,<1", "numpy>=1.26,<3", "scipy>=1.13,<2"]
+dev = ["editables>=0.5,<1", "hatchling>=1.27,<2", "httpx>=0.28,<1", "pytest>=8,<10", "pytest-cov>=6,<8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app", "communication_signal_engine"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "audio: optional local acoustic-research tests",
+]

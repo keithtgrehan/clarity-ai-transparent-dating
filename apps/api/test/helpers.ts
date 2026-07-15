@@ -2,10 +2,13 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { FastifyInstance } from "fastify";
-import { buildApp } from "../src/app.js";
+import { buildApp, type BuildAppOptions } from "../src/app.js";
 import { resetStoreFromSeeds } from "../src/lib/seeds.js";
 
-export async function withSyntheticApp(run: (app: FastifyInstance) => Promise<void>) {
+export async function withSyntheticApp(
+  run: (app: FastifyInstance) => Promise<void>,
+  buildOptions: BuildAppOptions = {}
+) {
   const directory = await mkdtemp(join(tmpdir(), "clarity-test-"));
   const previousStorageFile = process.env.API_STORAGE_FILE;
   process.env.API_STORAGE_FILE = join(directory, "store.json");
@@ -13,7 +16,7 @@ export async function withSyntheticApp(run: (app: FastifyInstance) => Promise<vo
 
   try {
     await resetStoreFromSeeds();
-    app = await buildApp({ logger: false });
+    app = await buildApp({ logger: false, ...buildOptions });
     await run(app);
   } finally {
     await app?.close();

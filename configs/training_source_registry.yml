@@ -1,0 +1,256 @@
+schemaVersion: 1
+owner: Keith Grehan
+lastReviewedAt: "2026-07-15"
+milestone: synthetic_local_contract_review
+policy: >-
+  Every source is blocked unless a purpose-specific row expressly permits the use. Public
+  availability, a platform search result, consent to transient analysis, a research exception,
+  de-identification, or synthetic generation is not by itself permission to collect, retain,
+  benchmark, annotate, train, publish, or deploy. This registry records product governance, not
+  legal advice or a finding of compliance.
+
+defaults:
+  decision: blocked
+  trainingAllowed: false
+  benchmarkAllowed: false
+  providerUploadAllowed: false
+  rawStorageAllowed: false
+  derivedArtifactAllowed: false
+  commitAllowed: false
+  quotingAllowed: false
+  collectionAllowed: false
+  tdmAuthorized: false
+
+currentUse:
+  allowedSourceIds: [clarity_authored_synthetic_fixtures]
+  allowedPurposes: [contract_test, deterministic_regression, safety_red_team, accessibility_demo]
+  trainingEnabled: false
+  participantResearchEnabled: false
+  publicScrapingEnabled: false
+  privateDataEnabled: false
+  audioEnabled: false
+
+globalProhibitions:
+  - diagnosis_or_neurotype_inference
+  - personality_motive_attraction_or_hidden_state_inference
+  - compatibility_or_relationship_outcome_prediction
+  - engagement_popularity_reply_delay_or_compulsion_optimization
+  - silent_service_to_training_reuse
+  - public_or_private_message_corpus_creation
+  - username_handle_quote_comment_post_thread_or_raw_transcript_storage
+  - provider_upload_without_separate_approval
+  - emotion_or_neurotype_inference_from_voice
+  - production_or_participant_claims_from_synthetic_results
+
+reviewGates:
+  legalAndRights:
+    required: true
+    checks:
+      - primary_licence_and_terms_snapshot
+      - commercial_and_research_use_scope
+      - database_and_copyright_rights
+      - platform_contract_and_api_terms
+      - attribution_and_deletion_duties
+      - no_assumed_urhg_60d_eligibility
+  privacy:
+    required: true
+    checks:
+      - controller_and_lawful_basis
+      - article_9_condition_if_applicable
+      - article_13_or_14_notice_analysis
+      - purpose_specific_consent_where_used
+      - data_minimisation_and_dpia
+      - processor_transfer_retention_and_deletion
+      - data_subject_withdrawal_export_and_erasure
+  researchEthicsAndHarm:
+    required: true
+    checks:
+      - approved_research_protocol
+      - non_coercive_recruitment_and_compensation
+      - community_participation_and_accessibility
+      - subgroup_and_false_positive_evaluation
+      - blocked_inference_and_adverse_finding_review
+  modelRisk:
+    required: true
+    checks:
+      - reviewed_gold_and_frozen_holdout
+      - deterministic_baseline_comparison
+      - evidence_span_and_abstention_evaluation
+      - dialect_code_switch_and_unknown_state_evaluation
+      - model_card_rollback_and_independent_review
+
+sources:
+  - sourceId: clarity_authored_synthetic_fixtures
+    sourceClass: authored_synthetic
+    provenance: Clarity repository fixtures with owner attestation and content review
+    rightsStatus: owner_authored_review_required
+    personalDataRisk: none_expected_but_scan_required
+    specialCategoryRisk: none_expected_but_scan_required
+    currentDecision: allowed_bounded_use
+    allowedUses: [contract_test, deterministic_regression, safety_red_team, accessibility_demo]
+    prohibitedUses: [real_world_accuracy_claim, participant_representation_claim, production_training, public_model_claim]
+    trainingAllowed: false
+    benchmarkAllowed: synthetic_behavioral_only
+    rawStorageAllowed: true
+    commitAllowed: true
+    conditions:
+      - every_fixture_is_fictional_and_human_reviewed
+      - no_realistic_contact_location_or_health_details
+      - no_private_or_public_source_paraphrase
+      - hard_negatives_and_low_signal_cases_are_preserved
+      - provenance_manifest_and_split_are_recorded
+
+  - sourceId: legacy_synthetic_method_reference
+    sourceClass: donor_documentation
+    provenance: >-
+      keithtgrehan/NLP-ENGINE-TRAINER-LIMITLESS at
+      c09944a4061011044b461be2512b955e3b1af981; exact reference paths and blobs are in
+      configs/resource_registry.yml
+    rightsStatus: NOASSERTION_reference_only
+    personalDataRisk: no_source_rows_imported
+    specialCategoryRisk: method_can_encode_sensitive_assumptions
+    currentDecision: method_reference_only
+    allowedUses: [generation_plan_design, balance_plan_design, hard_negative_method_design, split_and_manifest_design]
+    prohibitedUses: [fixture_copy, row_copy, private_derived_example_copy, model_artifact_copy, training]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    commitAllowed: false
+
+  - sourceId: peer_reviewed_literature
+    sourceClass: publications
+    provenance: DOI, publisher, PubMed, PMC, ACM, ACL Anthology, or journal landing pages in RESEARCH_INDEX.md
+    rightsStatus: bibliographic_reference_only
+    personalDataRisk: published_aggregate_or_study_data_may_still_be_sensitive
+    specialCategoryRisk: high_for_autism_adhd_relationship_and_health_research
+    currentDecision: evidence_synthesis_only
+    allowedUses: [bibliographic_citation, aggregate_finding_synthesis, limitation_and_gap_mapping]
+    prohibitedUses: [full_text_corpus, table_or_figure_copy, participant_quote, supplementary_data_download, training, benchmark_rows]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    commitAllowed: false
+    tdmAuthorized: false
+
+  - sourceId: community_support_resources
+    sourceClass: support_organization_and_community_resource
+    provenance: source-class URLs and access dates in RESEARCH_INDEX.md
+    rightsStatus: terms_and_content_rights_unverified
+    personalDataRisk: possible
+    specialCategoryRisk: high
+    currentDecision: aggregate_theme_hypothesis_only
+    allowedUses: [resource_landscape_mapping, aggregate_theme_hypothesis_for_future_participatory_review]
+    prohibitedUses: [page_copy, member_content, username, quote, diagnosis, comment, thread, scrape, corpus, label, training, benchmark]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    commitAllowed: false
+    collectionAllowed: false
+
+  - sourceId: reddit_public_content
+    sourceClass: public_platform_content
+    provenance: https://redditinc.com/policies/data-api-terms and https://support.reddithelp.com/hc/en-us/articles/26410290525844-Public-Content-Policy
+    rightsStatus: contract_and_legal_review_required
+    personalDataRisk: high
+    specialCategoryRisk: high
+    currentDecision: prohibited
+    allowedUses: [platform_policy_review, source_class_risk_mapping]
+    prohibitedUses: [api_collection, scraping, username, quote, post, comment, thread, corpus, derivative_fixture, label, training, benchmark, provider_upload]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+
+  - sourceId: youtube_comments
+    sourceClass: public_platform_content
+    provenance: https://www.youtube.com/static?template=terms and https://developers.google.com/youtube/terms/developer-policies
+    rightsStatus: contract_and_legal_review_required
+    personalDataRisk: high
+    specialCategoryRisk: high
+    currentDecision: prohibited
+    allowedUses: [platform_policy_review, source_class_risk_mapping]
+    prohibitedUses: [api_collection, scraping, channel_identifier, username, quote, comment, transcript, corpus, derivative_fixture, label, training, benchmark, provider_upload]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+
+  - sourceId: public_forums_support_groups_and_blogs
+    sourceClass: heterogeneous_public_content
+    provenance: no_source_specific_rights_approval
+    rightsStatus: unknown_or_source_specific
+    personalDataRisk: high
+    specialCategoryRisk: high
+    currentDecision: prohibited
+    allowedUses: [source_class_risk_mapping]
+    prohibitedUses: [collection, scraping, username, quote, post, comment, thread, corpus, derivative_fixture, label, training, benchmark, provider_upload]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+
+  - sourceId: consented_participant_text
+    sourceClass: participant_data
+    provenance: no_approved_protocol_or_consent_record
+    rightsStatus: purpose_specific_consent_and_legal_review_required
+    personalDataRisk: high
+    specialCategoryRisk: high
+    currentDecision: prohibited
+    allowedUses: []
+    prohibitedUses: [collection, storage, annotation, training, benchmark, provider_upload, product_runtime]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+    futureMinimumGates: [G4, G6, separate_nlp_consent, withdrawal_and_deletion, access_controls, reviewed_gold]
+
+  - sourceId: private_whatsapp_or_chat_export
+    sourceClass: private_communications
+    provenance: no_private_source_authorized
+    rightsStatus: all_participants_rights_and_purpose_review_required
+    personalDataRisk: very_high
+    specialCategoryRisk: very_high
+    currentDecision: schema_and_reviewer_process_reference_only
+    allowedUses: [abstract_schema_design, abstract_reviewer_process_design, deletion_workflow_design]
+    prohibitedUses: [collection, ingestion, redaction_experiment, row_storage, example, quote, annotation, training, benchmark, provider_upload, commit]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    derivedArtifactAllowed: false
+    collectionAllowed: false
+
+  - sourceId: external_public_datasets_and_benchmarks
+    sourceClass: external_dataset
+    provenance: candidate inventory in CANONICAL_RESEARCH_STATUS.md
+    rightsStatus: source_specific_review_not_complete
+    personalDataRisk: varies_and_not_approved
+    specialCategoryRisk: varies_and_not_approved
+    currentDecision: metadata_only
+    allowedUses: [dataset_card_and_rights_horizon_review]
+    prohibitedUses: [download, row_access, local_cache, annotation, training, benchmark_execution, fixture_derivation, provider_upload]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+
+  - sourceId: real_audio_or_voice
+    sourceClass: biometric_and_communication_media_risk
+    provenance: no_source_authorized
+    rightsStatus: consent_rights_privacy_and_biometric_review_required
+    personalDataRisk: very_high
+    specialCategoryRisk: very_high
+    currentDecision: prohibited
+    allowedUses: []
+    prohibitedUses: [collection, upload, transcription, voiceprint, speaker_identification, emotion_inference, neurotype_inference, training, benchmark, production_runtime]
+    trainingAllowed: false
+    benchmarkAllowed: false
+    rawStorageAllowed: false
+    collectionAllowed: false
+
+legalReferences:
+  - name: GDPR consolidated text
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+    note: Articles 5, 6, 9, 13, 14, 25, 28, 32 and 35 require purpose-specific review; this registry makes no compliance finding.
+  - name: UrhG Section 60d
+    url: https://www.gesetze-im-internet.de/urhg/__60d.html
+    note: Eligibility and conditions are not assumed; it is not a blanket product-training or platform-scraping authorization.

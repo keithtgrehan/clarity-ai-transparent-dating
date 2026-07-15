@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 import { argumentValue, failIfErrors, readYaml } from "./lib.mjs";
 
@@ -38,6 +40,43 @@ for (const resource of registry?.resources ?? []) {
       }
     } catch {
       errors.push(`${resource.id}:${source.path} does not resolve at ${resource.revision}.`);
+    }
+  }
+
+  for (const snapshot of resource.sourceSnapshots ?? []) {
+    const sourcePath = resolve(repoPath, snapshot.path);
+    if (!sourcePath.startsWith(`${repoPath}/`)) {
+      errors.push(`${resource.id}:${snapshot.path} resolves outside the donor repository.`);
+      continue;
+    }
+    try {
+      const head = git(repoPath, ["rev-parse", "HEAD"]);
+      const status = git(repoPath, ["status", "--porcelain=v1", "--", snapshot.path]);
+      const expectedPrefix = snapshot.dirtyStatus === "untracked" ? "??" : " M";
+      const blob = git(repoPath, ["hash-object", snapshot.path]);
+      const sha256 = createHash("sha256").update(await readFile(sourcePath)).digest("hex");
+      if (head !== snapshot.baseRevision) {
+        errors.push(`${resource.id}:${snapshot.path} donor HEAD ${head} differs from ${snapshot.baseRevision}.`);
+      }
+      if (!status.startsWith(expectedPrefix)) {
+        errors.push(`${resource.id}:${snapshot.path} dirty status does not match ${snapshot.dirtyStatus}.`);
+      }
+      if (blob !== snapshot.gitBlob) {
+        errors.push(`${resource.id}:${snapshot.path} Git blob ${blob} differs from ${snapshot.gitBlob}.`);
+      }
+      if (sha256 !== snapshot.sha256) {
+        errors.push(`${resource.id}:${snapshot.path} SHA-256 differs from the approved snapshot.`);
+      }
+      if (
+        head === snapshot.baseRevision &&
+        status.startsWith(expectedPrefix) &&
+        blob === snapshot.gitBlob &&
+        sha256 === snapshot.sha256
+      ) {
+        verified += 1;
+      }
+    } catch {
+      errors.push(`${resource.id}:${snapshot.path} working-tree snapshot could not be verified.`);
     }
   }
 }

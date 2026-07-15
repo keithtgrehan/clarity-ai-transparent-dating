@@ -1,0 +1,82 @@
+schema_version: "1.0.0"
+runtime_policy:
+  network_downloads: false
+  model_execution: false
+  local_files_only: true
+  trust_remote_code: false
+  telemetry: false
+  optional_semantic_unavailable_behavior: abstain
+  required_privacy_model_unavailable_behavior: refuse
+models:
+  - inventory_id: multilingual_spacy_ner_required_candidate
+    provider: spacy_release
+    model_id: explosion/spacy-models:xx_ent_wiki_sm-3.8.0
+    revision: 374ece89b2099818244f5a65ef466b89c0c392ae
+    release_tag: xx_ent_wiki_sm-3.8.0
+    licence: MIT
+    availability: reviewed_remote_only
+    local_path: null
+    runtime_status: blocked_refuse
+    required_for_text_analysis: true
+    fail_behavior: refuse_text_analysis
+    memory_limit_mb: 256
+    timeout_seconds: 3
+    maximum_input_characters: 4000
+    local_sha256: null
+    trust_remote_code: false
+    local_files_only: true
+    upstream_declared_languages:
+      - "Multi-language WikiNER coverage; the release does not enumerate a product-valid dialect list."
+    validated_languages: []
+    limitations:
+      - "No local artifact is approved or present, so text analysis must refuse by default."
+      - "The model exposes LOC, MISC, ORG and PER only; deterministic patterns remain necessary for contact and account identifiers."
+      - "American English, British English, Euro-English, code-switching, dialect fairness, indirect identifiers and subgroup behavior are not validated."
+      - "The upstream release reports aggregate WikiNER metrics; they are not Clarity benchmark evidence."
+      - "The memory and timeout values are future admission ceilings only; schema v1 prohibits model execution instead of claiming unenforced runtime isolation."
+    upstream_files:
+      - path: xx_ent_wiki_sm-3.8.0-py3-none-any.whl
+        bytes: 11099251
+        upstream_sha256: 6f3c4b853852ea9e9d2dc76cc950dddb10a7e4c42d813308caefe6c5e8be2f0a
+  - inventory_id: multilingual_sentence_similarity_review_candidate
+    provider: huggingface
+    model_id: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+    revision: e8f8c211226b894fcb81acc59f3b34ba3efd5f42
+    licence: Apache-2.0
+    availability: reviewed_remote_only
+    local_path: null
+    runtime_status: blocked_abstain
+    required_for_text_analysis: false
+    fail_behavior: abstain_without_semantic_cues
+    memory_limit_mb: 768
+    timeout_seconds: 8
+    local_sha256: null
+    trust_remote_code: false
+    local_files_only: true
+    maximum_sequence_length: 128
+    upstream_declared_languages: 50
+    validated_languages: []
+    limitations:
+      - "No local artifact is approved or present."
+      - "Euro-English, code-switching, dialect fairness, and subgroup behavior are not validated."
+      - "Remote metadata review is not runtime approval and these hashes are not local-file attestations."
+      - "The memory and timeout values are future admission ceilings only; schema v1 prohibits model execution instead of claiming unenforced runtime isolation."
+    upstream_files:
+      - path: model.safetensors
+        bytes: 470641600
+        upstream_sha256: eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b
+      - path: tokenizer.json
+        bytes: 9081518
+        upstream_sha256: 2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8
+      - path: config.json
+        bytes: 645
+        upstream_sha256: 6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e
+      - path: tokenizer_config.json
+        bytes: 526
+        upstream_sha256: 5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b
+      - path: special_tokens_map.json
+        bytes: 239
+        upstream_sha256: 378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d
+      - path: README.md
+        bytes: 3888
+        upstream_sha256: 1e98ea05b0de579fcaad3d625b62ea55647142ed674d5f5ebf1440e4bbbb6f23

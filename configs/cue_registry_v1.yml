@@ -1,0 +1,219 @@
+schema_version: "1.0.0"
+ruleset_version: "2026-07-15.1"
+profiles:
+  - structure_support
+  - wording_support
+deprecated_aliases:
+  cognitive_load: structure.multi_request_load
+  cognitive_load_proxy: structure.multi_request_load
+  request_stacking: structure.multi_request_load
+  pressure_language: communication.pressure
+  repair_attempt: communication.repair
+  repair_opportunity: communication.repair
+  linear_narrative_break: structure.explicit_transition
+  topic_shift: structure.explicit_transition
+cues:
+  - canonical_id: communication.directness
+    aliases: [directness]
+    profiles: [wording_support]
+    priority: 60
+    preconditions: [minimum_signal]
+    deterministic_rule: first_person_preference_or_explicit_request
+    safe_observation: "The wording contains an explicit preference or request."
+    limits: "This rule does not measure honesty, confidence, intent, or likely response."
+    repair_action: "Keep one concrete preference and one answerable next step."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_us_direct_preference]
+    status: active
+  - canonical_id: communication.ambiguity
+    aliases: [ambiguity]
+    profiles: [wording_support]
+    priority: 80
+    preconditions: [minimum_signal]
+    deterministic_rule: ambiguity_marker_count
+    safe_observation: "The wording contains one or more uncertainty markers."
+    limits: "Uncertainty markers can be considerate or accurate; they do not reveal confidence or intent."
+    repair_action: "If you know your preference, state it before the uncertainty marker."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_gb_ambiguity_and_repair]
+    status: active
+  - canonical_id: communication.pressure
+    aliases: [pressure]
+    profiles: [wording_support]
+    priority: 100
+    preconditions: [minimum_signal]
+    deterministic_rule: second_person_obligation_or_urgency
+    safe_observation: "The wording combines a second-person obligation with urgency or proof language."
+    limits: "This is a wording check, not a finding about coercion, safety, motive, or character."
+    repair_action: "Replace the demand with a request and leave an explicit choice or response window."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_euro_pressure_wording]
+    status: active
+  - canonical_id: communication.reassurance_request
+    aliases: [reassurance]
+    profiles: [wording_support]
+    priority: 65
+    preconditions: [minimum_signal]
+    deterministic_rule: reassurance_question
+    safe_observation: "The wording includes a direct request for reassurance."
+    limits: "The rule cannot identify need, attachment, distress, or relationship quality."
+    repair_action: "Ask one answerable question about the specific situation."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_reassurance_repetition]
+    status: active
+  - canonical_id: communication.reassurance_repetition
+    aliases: [reassurance_repetition]
+    profiles: [wording_support]
+    priority: 70
+    preconditions: [two_reassurance_requests]
+    deterministic_rule: repeated_reassurance_question
+    safe_observation: "More than one reassurance request appears in this message."
+    limits: "Repetition alone does not establish compulsion, anxiety, or pressure."
+    repair_action: "Keep the single reassurance question that is easiest to answer."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_reassurance_repetition]
+    status: active
+  - canonical_id: communication.repair
+    aliases: [repair]
+    profiles: [wording_support]
+    priority: 90
+    preconditions: [minimum_signal]
+    deterministic_rule: explicit_repair_marker
+    safe_observation: "The message explicitly rephrases, corrects, or acknowledges a misunderstanding."
+    limits: "A repair marker does not prove resolution or assign responsibility."
+    repair_action: "Put the corrected meaning in one sentence after the repair marker."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [confidence_gb_ambiguity_and_repair, confidence_repair_opening]
+    status: active
+  - canonical_id: structure.explicit_transition
+    aliases: [explicit_transition]
+    profiles: [structure_support]
+    priority: 85
+    preconditions: [minimum_signal]
+    deterministic_rule: transition_marker
+    safe_observation: "The message uses an explicit topic-navigation phrase."
+    limits: "This describes structure only and does not assess linearity, cognition, or neurotype."
+    repair_action: "Keep the transition and name the topic that follows it."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [clarity_explicit_topic_navigation]
+    status: active
+  - canonical_id: structure.high_lexical_density
+    aliases: [high_lexical_density]
+    profiles: [structure_support]
+    priority: 50
+    preconditions: [at_least_40_tokens]
+    deterministic_rule: lexical_density_threshold
+    safe_observation: "This message has a high proportion of content words under the configured heuristic."
+    limits: "Lexical density is length- and dialect-sensitive and does not assess communication ability or quality."
+    repair_action: "Add a short summary sentence before the detail."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [clarity_dense_information_run]
+    status: active
+  - canonical_id: structure.long_information_run
+    aliases: [long_information_run]
+    profiles: [structure_support]
+    priority: 55
+    preconditions: [at_least_45_tokens]
+    deterministic_rule: long_comma_separated_run
+    safe_observation: "A long run of details appears without a short summary break."
+    limits: "Long turns can support rapport; this rule does not assess cognition or communication quality."
+    repair_action: "Move the main point to the first sentence and offer the rest as optional detail."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [clarity_dense_information_run]
+    status: active
+  - canonical_id: structure.processing_request
+    aliases: [processing_request]
+    profiles: [structure_support]
+    priority: 95
+    preconditions: [minimum_signal]
+    deterministic_rule: processing_time_phrase
+    safe_observation: "The wording explicitly asks for time before responding."
+    limits: "This does not identify a cognitive state, disability, or reason for the pause."
+    repair_action: "Keep the time request and add a realistic return window if you can."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_processing_with_return_window, support_processing_missing_return_window]
+    status: active
+  - canonical_id: structure.response_window_present
+    aliases: [response_window_present]
+    profiles: [structure_support]
+    priority: 90
+    preconditions: [processing_request]
+    deterministic_rule: processing_request_with_time_window
+    safe_observation: "A processing-time request includes a return window."
+    limits: "The rule cannot predict whether the window will be met."
+    repair_action: "Keep the return window specific enough to be useful and easy to revise."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_processing_with_return_window]
+    status: active
+  - canonical_id: structure.response_window_missing
+    aliases: [response_window_missing]
+    profiles: [structure_support]
+    priority: 88
+    preconditions: [processing_request, no_time_window]
+    deterministic_rule: processing_request_without_time_window
+    safe_observation: "A processing-time request does not include a return window."
+    limits: "A missing window may be appropriate when timing is genuinely unknown."
+    repair_action: "If possible, add when you will next update them—even if the answer is not ready."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_processing_missing_return_window]
+    status: active
+  - canonical_id: structure.thinking_aloud
+    aliases: [thinking_aloud]
+    profiles: [structure_support]
+    priority: 70
+    preconditions: [minimum_signal]
+    deterministic_rule: thinking_aloud_marker
+    safe_observation: "The message labels part of the wording as thinking aloud."
+    limits: "This does not infer indecision or a mental process beyond the explicit words."
+    repair_action: "Separate the thinking-aloud section from your current position."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_thinking_aloud_to_final_position]
+    status: active
+  - canonical_id: structure.final_position
+    aliases: [final_position]
+    profiles: [structure_support]
+    priority: 72
+    preconditions: [minimum_signal]
+    deterministic_rule: final_position_marker
+    safe_observation: "The message explicitly labels a current answer or position."
+    limits: "The rule cannot determine certainty, permanence, or sincerity."
+    repair_action: "Keep the current answer in one sentence and label what remains open."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_thinking_aloud_to_final_position]
+    status: active
+  - canonical_id: structure.reciprocity_offer
+    aliases: [reciprocity_offer]
+    profiles: [structure_support]
+    priority: 68
+    preconditions: [minimum_signal]
+    deterministic_rule: short_version_offer
+    safe_observation: "The message offers the other person a choice about how much context to receive."
+    limits: "This does not measure reciprocity or relationship quality."
+    repair_action: "Keep the choice concrete: short version, full context, or another time."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_context_reciprocity_offer]
+    status: active
+  - canonical_id: structure.channel_switch_offer
+    aliases: [channel_switch_offer]
+    profiles: [wording_support]
+    priority: 75
+    preconditions: [minimum_signal]
+    deterministic_rule: channel_choice_phrase
+    safe_observation: "The message offers another communication channel or time."
+    limits: "A channel change is an option, not evidence that one channel is better."
+    repair_action: "Offer no more than two channel or timing options."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_channel_switch_offer]
+    status: active
+  - canonical_id: structure.multi_request_load
+    aliases: [multi_request_load]
+    profiles: [wording_support]
+    priority: 78
+    preconditions: [three_questions]
+    deterministic_rule: question_count_threshold
+    safe_observation: "The message contains three or more separate questions."
+    limits: "Question count is a message-load proxy, not a cognitive-load or pressure measurement."
+    repair_action: "Lead with the one question that needs an answer first."
+    language_support: [en-US, en-GB, en-EU, mixed]
+    tests: [support_multi_request_load]
+    status: active

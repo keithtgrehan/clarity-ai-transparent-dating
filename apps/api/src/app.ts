@@ -1,13 +1,28 @@
 import { existsSync } from "node:fs";
 import Fastify from "fastify";
+import type { FastifyServerOptions } from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import "./lib/env.js";
 import { resolveRepoPath } from "./lib/paths.js";
 import { ensureStoreFile } from "./lib/store.js";
 import { registerRoutes } from "./routes/index.js";
+import {
+  registerSignalAnalysisRoutes,
+  type SignalFetch
+} from "./routes/v2-signal-analysis.js";
+import {
+  readSignalEngineSettings,
+  type SignalEngineSettings
+} from "./services/signal/settings.js";
 
-export async function buildApp(options: { logger?: boolean } = {}) {
+export type BuildAppOptions = {
+  logger?: FastifyServerOptions["logger"];
+  signalEngine?: SignalEngineSettings;
+  signalFetch?: SignalFetch;
+};
+
+export async function buildApp(options: BuildAppOptions = {}) {
   const app = Fastify({
     logger: options.logger ?? true
   });
@@ -20,6 +35,7 @@ export async function buildApp(options: { logger?: boolean } = {}) {
   const apiPrefixes = [
     "/health",
     "/api",
+    "/api/v2",
     "/api/health",
     "/api/profiles",
     "/api/onboarding",
@@ -44,6 +60,11 @@ export async function buildApp(options: { logger?: boolean } = {}) {
   }));
 
   await app.register(registerRoutes, { prefix: "/api" });
+  await app.register(registerSignalAnalysisRoutes, {
+    prefix: "/api/v2",
+    settings: options.signalEngine ?? readSignalEngineSettings(),
+    fetchImpl: options.signalFetch
+  });
 
   if (shouldServeWeb && existsSync(webDistPath)) {
     await app.register(fastifyStatic, {

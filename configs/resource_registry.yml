@@ -1,12 +1,14 @@
 schemaVersion: 1
 owner: Keith Grehan
-lastReviewedAt: "2026-07-14"
+lastReviewedAt: "2026-07-15"
 policy: >-
-  Registration is not permission. Copying or translation requires exact committed
+  Registration is not permission. Copying or translation normally requires exact committed
   source paths and blobs, an approved use status, embedded-material review, target
-  attribution, and a reviewer. Real participant data and unreviewed datasets are prohibited.
+  attribution, and a reviewer. D018 is the sole recorded exception: it permits three immutable,
+  independently reverified working-tree snapshots and fails closed on byte or donor-state drift.
+  Real participant data and unreviewed datasets are prohibited.
 inventoryClasses:
-  donorCandidates: [donor-vibe-signal, donor-signal-engine, donor-nlp-engine-trainer-limitless]
+  donorCandidates: [donor-vibe-signal, donor-vibe-pipeline-worktree-snapshot, donor-signal-engine, donor-nlp-engine-trainer-limitless]
   externalPriorArt: [prior-duolicious, prior-alovoa, prior-presidio, prior-argilla, prior-snorkel, prior-cleanlab, prior-setfit, prior-sentence-transformers, prior-recbole]
   externalLicenceDependencies:
     - { name: yaml, version: 2.9.0, licence: ISC, source: package-lock.json }
@@ -26,7 +28,22 @@ inventoryClasses:
     - { name: "@types/node", version: 22.19.17, licence: MIT, source: package-lock.json }
     - { name: "@types/react", version: 18.3.28, licence: MIT, source: package-lock.json }
     - { name: "@types/react-dom", version: 18.3.7, licence: MIT, source: package-lock.json }
-  copiedImplementationCode: []
+    - { name: fastapi, version: ">=0.129,<1", licence: MIT, source: services/signal-engine/pyproject.toml }
+    - { name: pydantic, version: ">=2.12,<3", licence: MIT, source: services/signal-engine/pyproject.toml }
+    - { name: PyYAML, version: ">=6,<7", licence: MIT, source: services/signal-engine/pyproject.toml }
+    - { name: uvicorn, version: ">=0.34,<1", licence: BSD-3-Clause, source: services/signal-engine/pyproject.toml }
+    - { name: hatchling, version: ">=1.27,<2", licence: MIT, source: services/signal-engine/pyproject.toml }
+    - { name: spacy, version: ">=3.8,<4", licence: MIT, source: services/signal-engine/pyproject.toml#pii_minimization }
+    - { name: safetensors, version: ">=0.4,<1", licence: Apache-2.0, source: services/signal-engine/pyproject.toml#semantic_local }
+    - { name: torch, version: ">=2.5,<3", licence: BSD-3-Clause, source: services/signal-engine/pyproject.toml#semantic_local }
+    - { name: transformers, version: ">=4.46,<5", licence: Apache-2.0, source: services/signal-engine/pyproject.toml#semantic_local }
+    - { name: librosa, version: ">=0.11,<1", licence: ISC, source: services/signal-engine/pyproject.toml#audio_research }
+    - { name: numpy, version: ">=1.26,<3", licence: BSD-3-Clause, source: services/signal-engine/pyproject.toml#audio_research }
+    - { name: scipy, version: ">=1.13,<2", licence: BSD-3-Clause, source: services/signal-engine/pyproject.toml#audio_research }
+    - { name: httpx, version: ">=0.28,<1", licence: BSD-3-Clause, source: services/signal-engine/pyproject.toml#dev }
+    - { name: pytest, version: ">=8,<10", licence: MIT, source: services/signal-engine/pyproject.toml#dev }
+    - { name: pytest-cov, version: ">=6,<8", licence: MIT, source: services/signal-engine/pyproject.toml#dev }
+  copiedImplementationCode: [donor-vibe-pipeline-worktree-snapshot]
 resources:
   - id: donor-vibe-signal
     name: Vibe Signal donor candidates
@@ -68,6 +85,54 @@ resources:
       - { path: ops/n8n/scripts/post_feedback_event.js, blob: fdb4fbd8bde5cbc4f595b830ca787bbe531a93a2 }
       - { path: ops/n8n/scripts/validate_n8n_payloads.js, blob: 9ca7e47c01b780244d6024b71426a2669b4c840f }
       - { path: ops/n8n/vibe_signal_beta_ops.workflow.json, blob: c6c890c6ecccb956436fa7a56938a3836fde1034 }
+
+  - id: donor-vibe-pipeline-worktree-snapshot
+    name: Vibe Signal standalone communication pipeline working-tree snapshot
+    kind: untracked_worktree_snapshot
+    repository: https://github.com/keithtgrehan/vibe-signal.git
+    branch: main
+    revision: 000ba0685f961e253b0d34c0b02539ac897356e9
+    rightsStatus: NOASSERTION
+    rightsReviewStatus: owner_exception_only
+    useStatus: approved_adaptation
+    authorizationBasis: Keith Grehan owner instruction recorded 2026-07-15 in D018
+    disclosureBasis: Keith Grehan instruction to push this branch and open a public draft PR, recorded 2026-07-15 in D019
+    reviewedAt: "2026-07-15"
+    snapshotVerifiedAt: "2026-07-15T14:10:42+02:00"
+    targetPath: services/signal-engine/communication_signal_engine plus synthetic-only tests
+    transformationSummary: >-
+      Split the untracked monolith into bounded contracts, privacy, cue, semantic and isolated
+      audio-research modules; remove embedded runtime tests; replace guarantee wording; enforce a
+      canonical registry, offline model abstention, closed output and Clarity-only neutral profiles.
+    embeddedDependencyReview: >-
+      Python dependencies and the disabled model candidate are separately inventoried in
+      configs/model_inventory.yml and services/signal-engine/pyproject.toml. No model files,
+      participant content, third-party datasets or donor package lock are imported.
+    reviewer: Codex implementation plus named independent reviewers required before commit
+    approvalDate: "2026-07-15"
+    notes: >-
+      One-time owner-approved exception for exact untracked working-tree bytes. The base commit does
+      not contain these paths. Snapshot validation must match donor HEAD, porcelain status, Git blob
+      hash and SHA-256. The Git blob IDs identify unstored working-tree bytes, not blobs reachable
+      from the base commit. Public review disclosure is owner-authorized by D019, but no outbound
+      licence or general dirty-worktree reuse permission is created.
+    prohibitedUses: [byte_drift, unvalidated_future_copy, outbound_licence_claim, raw_private_content, diagnosis_inference, scalar_relationship_fit, public_audio, production_serving]
+    sourceSnapshots:
+      - path: src/vibesignal_ai/pipeline_engine.py
+        baseRevision: 000ba0685f961e253b0d34c0b02539ac897356e9
+        dirtyStatus: untracked
+        gitBlob: c192e82497b94a005492e595560e68ad46ab4938
+        sha256: 8688a7640b369f4ca456b29d8baad045d4690606bb5804390622c92060ec744b
+      - path: tests/test_pipeline_engine.py
+        baseRevision: 000ba0685f961e253b0d34c0b02539ac897356e9
+        dirtyStatus: untracked
+        gitBlob: 1a4a3999e64c9d0ca6242b1f0e263b51a8a512af
+        sha256: 65d5cfeed45d4bc12db560accf25ea2c1a42f716f7b7e01e08dba258f20f4437
+      - path: tests/fixtures/pipeline_engine/dating_signal_cases.json
+        baseRevision: 000ba0685f961e253b0d34c0b02539ac897356e9
+        dirtyStatus: untracked
+        gitBlob: 3249e6633afb93390dfe1d17274f831e40b21c8f
+        sha256: c7af85f4cce2b2fa9d11da894f7e93021c074caf9ce7e752847bb0ded791a5e0
 
   - id: donor-signal-engine
     name: Earnings Call Signal Engine donor candidates
@@ -135,6 +200,17 @@ resources:
       - { path: docs/research/model_training_plan/07_tooling_mlops_plan.md, blob: cc5da4d11f12268b2152d154a11dfb82d0349417 }
       - { path: docs/research/model_training_plan/08_product_safety_explainability.md, blob: c60e19b24c21be663167cf94d6daa4c48ceae9c5 }
       - { path: docs/research/model_training_plan/10_recommended_implementation_sequence.md, blob: 2d0bcad8f7563faee43e83f14b552892eed096c3 }
+      - { path: docs/data/private_whatsapp_training_plan.md, blob: 9e3c4f087f35f8e363a86a9f5538c4ce6b170a1f }
+      - { path: docs/research/synthetic_whatsapp_10k_pattern_training.md, blob: a8da0eae47f58ae5b28c0be4b20ccfee1bd8e16a }
+      - { path: docs/research/vibe_dataset_radar.md, blob: 9f9a2da9a28320a50f5962158905c9e88aebd99c }
+      - { path: docs/research/vibe_dataset_benchmark_radar.md, blob: f1c98f09509008fa6f8fc8a496501275eeb7239b }
+      - { path: docs/research/neurodivergent_dating_support_memo.md, blob: 42ce2fc4ebe6e28aa43fa88451df9a82eb292b16 }
+      - { path: docs/research/ui_ux/simple_ui_redesign_research.md, blob: 841eb66bbf86d0ba95863d770580a954e95c62c8 }
+      - { path: docs/research/ui_ux/guided_reply_redaction_evidence_research.md, blob: dea6515a835016f647a42a4976ac33520d7bcef1 }
+      - { path: docs/research/vibe_matching_dataset_rights_map.md, blob: 76424b805ec7e0cc88fa1f800ed597c3b95c6b02 }
+      - { path: docs/research/blocked_inferences_and_false_positive_risks.md, blob: 01768d3cdb0af8d758bacdc4103136f652361807 }
+      - { path: docs/research/cue_preconditions_v2.md, blob: fea98b3d33758b987d0637672086e422cb0d144f }
+      - { path: docs/research/observable_cue_taxonomy.md, blob: 9ace21612433ea1e8ce5ef5f187616e2e2a13916 }
       - { path: scripts/train_research_vibe_baseline.py, blob: 60381c7d4d1df9b39c0d914c137439243538d4e9 }
       - { path: src/vibesignal_ai/config/provider_flags.py, blob: 30b48b2fea1aa12c1bb2d7e139237b65afd42a3e }
       - { path: backend/monitoring.py, blob: 8603145fd8676012207768d4ddd3e36ac9ba1e52 }

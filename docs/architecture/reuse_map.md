@@ -1,12 +1,13 @@
 # Donor reuse map
 
-Status: provenance audit complete; all donor assets remain `planned_reference_only`. Issues 1–13 copy no donor code. The governance scripts in this repository are original Clarity implementations informed by audited control patterns.
+Status: provenance audit complete. Issues 1–13 copied no donor code. D018 authorizes one bounded adaptation from three exact Vibe working-tree snapshots for the Berlin communication-engine review branch; all other donor assets remain `planned_reference_only`.
 
-Keith Grehan authorized inbound use of Keith-authored domain-neutral material on 2026-07-14. Authorization does not license third-party content or grant outbound redistribution rights. Exact commit and blob pins for every candidate are in `configs/resource_registry.yml`.
+Keith Grehan authorized inbound use of Keith-authored domain-neutral material on 2026-07-14. D019 records the owner's explicit authorization to disclose the three D018-derived assets in this repository's public review branch and draft PR. Neither decision licenses third-party content or grants outbound redistribution rights. Exact commit and blob pins for every candidate are in `configs/resource_registry.yml`.
 
 | Donor/pin | Candidate family | Intended Clarity target | Required transformation and gate |
 |---|---|---|---|
 | Vibe Signal `000ba0685f961e253b0d34c0b02539ac897356e9` | Cue taxonomy and evidence objects | Future `packages/evidence` and shared Zod | TypeScript clean-room translation; remove raw evidence text and inference; G2/G3 review |
+| Vibe Signal untracked snapshot over base `000ba0685f961e253b0d34c0b02539ac897356e9`; exact Git blobs and SHA-256 values in `configs/resource_registry.yml` | Standalone communication pipeline, tests and fictional fixture matrix | `services/signal-engine`, private `/api/v2` adapter and synthetic-only UI | D018 one-time modular adaptation; correct guarantee wording; no raw/evidence text output; offline semantic abstention; audio isolated and unrouted; named independent review required |
 | Same | Safety validator/red-line blocker | Future `packages/safety/src/output-policy.ts` | Preserve bounded output controls; no sanctions; G3 |
 | Same | Matching explanation/neuro-support | Future user-owned draft/explanation assistance | Do not copy scalar score/band or raw evidence behavior; G2/G3 |
 | Same | Public-copy/raw/restricted checks | `scripts/governance` | Current scripts are original, not copied; donor remains design evidence |

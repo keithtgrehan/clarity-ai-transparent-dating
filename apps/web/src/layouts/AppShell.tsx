@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { isSignalEngineUiEnabled } from "../pages/signalReviewModel";
 
-const navItems = [
+const baseNavItems = [
   { to: "/", label: "Overview", hint: "Hypothesis and synthetic waitlist demo" },
   { to: "/onboarding", label: "Onboarding", hint: "Exercise the legacy form" },
   { to: "/profile", label: "Profile", hint: "Inspect synthetic fields" },
@@ -10,6 +11,20 @@ const navItems = [
 ];
 
 export function AppShell() {
+  const navItems = isSignalEngineUiEnabled(
+    import.meta.env.VITE_SIGNAL_ENGINE_ENABLED,
+    import.meta.env.DEV
+  )
+    ? [
+        ...baseNavItems,
+        {
+          to: "/signal-review",
+          label: "Signal review",
+          hint: "Review tracked fictional communication fixtures"
+        }
+      ]
+    : baseNavItems;
+
   return (
     <div className="app-shell">
       <aside className="sidebar">

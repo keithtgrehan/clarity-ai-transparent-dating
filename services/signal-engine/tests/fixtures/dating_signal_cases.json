@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": {
+    "content_class": "synthetic_only",
+    "donor_source_sha256": "c7af85f4cce2b2fa9d11da894f7e93021c074caf9ce7e752847bb0ded791a5e0",
+    "copied_external_text": false,
+    "contains_usernames_quotes_diagnoses_comments_or_threads": false,
+    "transformation": "Owner-authored donor fixtures retained; branded modes and cue aliases mapped to neutral profiles and canonical IDs; unsupported semantic inference characterized as abstention."
+  },
+  "cases": [
+    {
+      "fixture_id": "confidence_us_direct_preference",
+      "profile_id": "wording_support",
+      "language_tag": "en-US",
+      "text": "I would like to meet on Saturday afternoon. Please let me know whether two o'clock works, and I prefer a quiet café for our conversation.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.directness"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "confidence_gb_ambiguity_and_repair",
+      "profile_id": "wording_support",
+      "language_tag": "en-GB",
+      "text": "Perhaps Sunday is sort of possible, although I am not sure yet. I apologise for how I phrased that; what I meant was that I need another day to check.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.ambiguity", "communication.directness", "communication.repair"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "confidence_euro_pressure_wording",
+      "profile_id": "wording_support",
+      "language_tag": "en-EU",
+      "text": "You have to reply right now and you need to prove that you care. I want a clear answer before we discuss any other plan together.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.directness", "communication.pressure"],
+      "forbidden_canonical_ids": ["communication.repair"]
+    },
+    {
+      "fixture_id": "confidence_reassurance_repetition",
+      "profile_id": "wording_support",
+      "language_tag": "en-US",
+      "text": "Are you sure our plan is okay, and is everything okay between us? Do you promise we can speak after work when we both have time?",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.reassurance_request", "communication.reassurance_repetition"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "confidence_repair_opening",
+      "profile_id": "wording_support",
+      "language_tag": "en-EU",
+      "text": "I may have misunderstood your message. Let me rephrase my question and make the corrected meaning explicit so that you can answer when ready.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.repair"],
+      "forbidden_canonical_ids": ["communication.pressure", "communication.reassurance_repetition"]
+    },
+    {
+      "fixture_id": "confidence_first_person_obligation_hard_negative",
+      "profile_id": "wording_support",
+      "language_tag": "en-GB",
+      "text": "I have to finish my work before dinner, so I will send a clear update tomorrow morning after I check the calendar carefully.",
+      "expected_state": "NO_TARGETED_CUES",
+      "expected_canonical_ids": [],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "clarity_explicit_topic_navigation",
+      "profile_id": "structure_support",
+      "language_tag": "en-US",
+      "text": "By the way, the museum plan has three separate steps that I want to explain clearly. Looping back, the first step is choosing a quieter arrival time before we decide the rest.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.explicit_transition"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "clarity_dense_information_run",
+      "profile_id": "structure_support",
+      "language_tag": "en-GB",
+      "text": "Detailed itinerary architecture coordinates museum reservations, tram connections, accessibility entrances, sensory breaks, weather alternatives, ticket confirmations, dietary preferences, neighbourhood maps, contingency timing, battery charging, meeting landmarks, coat storage, quieter galleries, return routes, café seating, payment options, emergency contacts, photography rules, exhibition schedules, walking distances, construction detours, platform changes, reservation codes, closing times, seating availability, queue forecasts, temperature changes, umbrella storage, navigation markers, public transport alerts, alternative venues, audio guide availability, translation support, printed summaries, rest intervals, decision checkpoints, shared priorities, explicit transitions, and adjustable departure windows for our planned afternoon together.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.high_lexical_density", "structure.long_information_run"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "clarity_semantic_bridge_review",
+      "profile_id": "structure_support",
+      "language_tag": "en-EU",
+      "text": "The dinner booking includes a quiet table and an early arrival time. Our shared calendar contains the address and the confirmed reservation. Volcanic glass forms rapidly when molten rock cools beside the ocean.",
+      "expected_state": "NO_TARGETED_CUES",
+      "expected_canonical_ids": [],
+      "forbidden_canonical_ids": [],
+      "unsupported_donor_categories": ["semantic_transition_review"]
+    },
+    {
+      "fixture_id": "clarity_long_turn_hard_negative",
+      "profile_id": "structure_support",
+      "language_tag": "en-US",
+      "text": "I enjoyed hearing the complete story about your project because the details helped me understand why the work matters to you, and I would be happy to keep listening when we meet again.",
+      "expected_state": "NO_TARGETED_CUES",
+      "expected_canonical_ids": [],
+      "forbidden_canonical_ids": ["structure.long_information_run", "structure.high_lexical_density"]
+    },
+    {
+      "fixture_id": "mixed_tag_code_switch_repair",
+      "profile_id": "wording_support",
+      "language_tag": "mixed",
+      "text": "[en-GB] I may have misunderstood the timing, so let me rephrase the question carefully. [de-DE] Danke for clarifying; I would like to check the plan again tomorrow.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["communication.directness", "communication.repair"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_processing_with_return_window",
+      "profile_id": "structure_support",
+      "language_tag": "en-EU",
+      "text": "I received this and I need time to process the details. I will come back to this by tomorrow evening with a considered answer and one clear next step.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.processing_request", "structure.response_window_present"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_processing_missing_return_window",
+      "profile_id": "structure_support",
+      "language_tag": "en-GB",
+      "text": "I need some time to think about the message before I answer the questions. I have read everything and will respond when I can explain it clearly.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.processing_request", "structure.response_window_missing"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_thinking_aloud_to_final_position",
+      "profile_id": "structure_support",
+      "language_tag": "en-US",
+      "text": "I am thinking aloud while I compare the two plans and their different tradeoffs. My considered answer is the quieter option because it gives us more time.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.thinking_aloud", "structure.final_position"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_context_reciprocity_offer",
+      "profile_id": "structure_support",
+      "language_tag": "en-EU",
+      "text": "I can explain the transport changes, ticket details, quiet entrances, timing options, backup routes, and accessibility notes. Would you like the short version before I add the remaining context?",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.reciprocity_offer"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_multi_request_load",
+      "profile_id": "wording_support",
+      "language_tag": "en-US",
+      "text": "Which day works for you? What time should we meet? Which place feels easiest? Should I make the booking after you choose the priority question?",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.multi_request_load"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "support_channel_switch_offer",
+      "profile_id": "wording_support",
+      "language_tag": "en-GB",
+      "text": "This topic is becoming difficult to organize in messages. We could switch to a call tomorrow, continue by text, or choose another time that works for both of us.",
+      "expected_state": "CUES_FOUND",
+      "expected_canonical_ids": ["structure.channel_switch_offer"],
+      "forbidden_canonical_ids": ["communication.pressure"]
+    },
+    {
+      "fixture_id": "low_signal_single_greeting",
+      "profile_id": "wording_support",
+      "language_tag": "en-EU",
+      "text": "Hello there.",
+      "expected_state": "LOW_SIGNAL",
+      "expected_canonical_ids": [],
+      "forbidden_canonical_ids": ["communication.directness", "communication.ambiguity", "communication.pressure", "communication.reassurance_request", "communication.repair"]
+    }
+  ]
+}

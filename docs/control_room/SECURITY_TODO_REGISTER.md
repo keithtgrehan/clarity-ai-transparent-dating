@@ -23,5 +23,8 @@ These controls are already represented in release gates and the backlog even tho
 - Diagnosis isolation and removal from service/public matching contracts: R03, G2, Issue 15.
 - Policy-versioned adult eligibility and underage escalation: R11, G2/G5, Issues 16 and 25.
 - Consent-bound contact collection or complete waitlist removal: the preserved API still accepts a syntactically valid email, while the local UI refuses non-`.test` addresses. Direct API use with real contact data is prohibited and blocks recruitment/beta until D010/G4/G5 controls exist.
+- The communication route accepts fictional fixture IDs only. Real self-authored text remains blocked until SG1; received content, audio, training and production each have separate closed gates in `SIGNAL_ENGINE_GATES.md`.
+- The required NER artifact is inventoried but not locally approved or installed. The exact fictional route runs pattern checks only; any real or unattested text path refuses. Installing a package by name is not approval; a managed, hash-verified provisioning design and evaluation are still required.
+- Acoustic code is isolated research code with no HTTP/UI route. Its descriptive measurements and intake-path unlink operation are not emotion/neurotype inference, biometric clearance or storage-erasure evidence.
 
 No item in this register is a claim of implemented security. Closing an item requires code, negative tests, migration/rollback evidence where relevant, and independent review.
