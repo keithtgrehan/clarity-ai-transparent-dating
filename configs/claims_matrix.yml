@@ -1,0 +1,88 @@
+schemaVersion: 1
+owner: Keith Grehan
+lastReviewedAt: "2026-07-14"
+claims:
+  - id: local-typescript-mvp
+    claim: Clarity is a local TypeScript MVP with React/Vite, Fastify and shared Zod schemas.
+    status: supported
+    publicCopyRule: allowed
+    owner: Engineering
+    evidence: [package.json, apps/web/package.json, apps/api/package.json, packages/shared/package.json]
+  - id: current-local-flows
+    claim: Synthetic local flows cover waitlist, onboarding, profiles, candidate retrieval, conversations, messages and report/block scaffolding.
+    status: supported
+    publicCopyRule: allowed_with_local_and_synthetic_qualifier
+    owner: Engineering
+    evidence: [apps/api/src/routes, apps/api/test/mvp.test.ts]
+  - id: deterministic-rules
+    claim: Current profile and matching assistance uses deterministic rules and templates rather than model inference.
+    status: supported
+    publicCopyRule: allowed
+    owner: Engineering
+    evidence: [apps/api/src/services, AI_BOUNDARIES.md]
+  - id: benefit-hypothesis-only
+    claim: Lower-ambiguity participant benefit is a product hypothesis, not an established outcome of the synthetic MVP.
+    status: supported
+    publicCopyRule: allowed_with_hypothesis_and_no_outcome_qualifier
+    owner: Product
+    evidence: [apps/web/src/pages/LandingPage.tsx, docs/charter.md, docs/research/research_protocol.md]
+  - id: production-ready
+    claim: Clarity is production-ready or safe for real participants.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Product
+    evidence: []
+  - id: invite-only-live
+    claim: Clarity currently authenticates invited users.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Engineering
+    evidence: []
+  - id: live-waitlist-recruitment
+    claim: The current waitlist is accepting real contact details or recruiting research participants.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Research
+    evidence: []
+  - id: berlin-adults-enforced
+    claim: Berlin-only and adult-only eligibility are currently enforced.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Product
+    evidence: []
+  - id: diagnosis-private-current
+    claim: Diagnosis is already private and excluded from current service matching responses.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Privacy
+    evidence: []
+  - id: friendship-events-current
+    claim: Friendship and events are current first-class product modes.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Product
+    evidence: []
+  - id: wcag-conformant
+    claim: The current UI conforms to WCAG 2.2.
+    status: unsupported
+    publicCopyRule: forbidden
+    owner: Accessibility
+    evidence: []
+  - id: legal-compliance
+    claim: The repository or its documents establish GDPR, DSA, or other legal compliance.
+    status: prohibited
+    publicCopyRule: forbidden
+    owner: Legal
+    evidence: []
+  - id: relationship-prediction
+    claim: Clarity predicts compatibility, attraction, relationship success, or psychological truth.
+    status: prohibited
+    publicCopyRule: forbidden
+    owner: Product
+    evidence: []
+  - id: diagnosis-or-motive-inference
+    claim: Clarity can infer diagnosis authenticity, motives, attachment, trauma, deception, or hidden mental state.
+    status: prohibited
+    publicCopyRule: forbidden
+    owner: Safety
+    evidence: []

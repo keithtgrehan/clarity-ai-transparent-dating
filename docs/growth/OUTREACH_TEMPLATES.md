@@ -1,5 +1,7 @@
 # Outreach Templates
 
+> **Historical copy; recruitment is blocked.** Do not publish or send these templates. Participant outreach requires an approved research purpose, recruitment language, privacy notice, consent, compensation, accessibility, safeguarding, withdrawal/deletion, and Gate G4 evidence.
+
 ## Template 1: Founder Intro To Berlin Community Organizer
 Subject: exploring a calmer Berlin dating product for ADHD, Autism, and AuDHD adults
 

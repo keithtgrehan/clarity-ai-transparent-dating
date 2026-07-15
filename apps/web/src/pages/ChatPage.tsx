@@ -280,7 +280,7 @@ export function ChatPage() {
                     </div>
                     <p>{message.body}</p>
                     {message.moderationState !== "clear" ? (
-                      <span className="message-meta">Held for safety review</span>
+                      <span className="message-meta">Locally flagged; no active review queue</span>
                     ) : null}
                   </article>
                 ))}

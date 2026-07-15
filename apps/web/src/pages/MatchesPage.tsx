@@ -54,8 +54,8 @@ export function MatchesPage() {
         setCandidates(matchResult.candidates);
         setStatus(
           matchResult.candidates.length > 0
-            ? `${matchResult.candidates.length} people look worth a closer read.`
-            : "No strong fits yet."
+            ? `${matchResult.candidates.length} synthetic profiles are available for rule-output review.`
+            : "No synthetic comparisons are available."
         );
       } catch (error) {
         setStatus(error instanceof Error ? error.message : "Could not load matches.");
@@ -87,11 +87,11 @@ export function MatchesPage() {
     <section className="page stack">
       <header className="page-header">
         <div className="page-header-copy">
-          <p className="eyebrow">Explainable matching</p>
-          <h2>See who feels promising, where friction may show up, and what to ask next.</h2>
+          <p className="eyebrow">Legacy rule-output review</p>
+          <h2>Inspect declared overlaps, possible differences, and a generated conversation prompt.</h2>
           <p className="lead">
-            Each suggestion is broken into shared signal, likely friction, and a sensible next
-            step in plain language.
+            These deterministic v1 heuristics are not compatibility predictions. They are retained
+            with synthetic profiles only while the approved v2 replacement remains unimplemented.
           </p>
         </div>
         <div className="page-header-meta">
@@ -106,7 +106,7 @@ export function MatchesPage() {
           <h3>Finish the core profile first</h3>
           <p className="muted">
             Match explanations only become useful once the basics are in place. Finish onboarding
-            and the fit notes will start to read like something you can actually use.
+            and the rule-generated overlap notes will become available for review.
           </p>
         </article>
       ) : null}
@@ -127,7 +127,7 @@ export function MatchesPage() {
           const saved = savedIds.includes(candidate.candidateUserId);
           const summaryReason = candidate.whyItCouldWork[0] ?? candidate.profile.summary;
           const frictionPreview =
-            candidate.potentialFriction[0] ?? "No major friction is obvious from the current signal.";
+            candidate.potentialFriction[0] ?? "No explicit difference was produced from the available fields.";
 
           return (
             <article className="panel match-card" key={candidate.candidateUserId}>
@@ -168,7 +168,7 @@ export function MatchesPage() {
 
               <div className="match-rationale-grid">
                 <div className="section-card section-card-muted stack-small">
-                  <p className="eyebrow">Why it could work</p>
+                  <p className="eyebrow">Rule-generated overlap notes</p>
                   <ul className="simple-list">
                     {candidate.whyItCouldWork.map((reason) => (
                       <li key={reason}>{reason}</li>
@@ -177,13 +177,13 @@ export function MatchesPage() {
                 </div>
 
                 <div className="section-card stack-small">
-                  <p className="eyebrow">Potential friction</p>
+                  <p className="eyebrow">Possible differences</p>
                   <p className="muted">{frictionPreview}</p>
                   <ul className="simple-list">
                     {candidate.potentialFriction.length > 0 ? (
                       candidate.potentialFriction.map((item) => <li key={item}>{item}</li>)
                     ) : (
-                      <li>No major friction is obvious from the current signal.</li>
+                      <li>No explicit difference was produced from the available fields.</li>
                     )}
                   </ul>
                 </div>
@@ -196,7 +196,7 @@ export function MatchesPage() {
                   <p className="muted">
                     {candidate.firstMessagePrompt
                       ? "Start with a concrete opener based on what already looks shared."
-                      : "Review the structured profile and open a conversation when the fit feels worth testing."}
+                      : "Review the structured fields and decide for yourself whether to open a conversation."}
                   </p>
                 </div>
 

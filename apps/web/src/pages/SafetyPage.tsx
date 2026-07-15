@@ -177,7 +177,7 @@ export function SafetyPage() {
       setStatus(
         blockUser
           ? "Report submitted. This person will be kept out of your normal flow."
-          : "Report submitted. The record has been saved for review."
+          : "Synthetic report record saved locally. No operational reviewer or queue exists."
       );
     } catch (error) {
       if (error instanceof ApiError) {
@@ -208,8 +208,8 @@ export function SafetyPage() {
           <p className="eyebrow">Safety basics</p>
           <h2>Report behavior clearly and block when you need distance.</h2>
           <p className="lead">
-            Reports here are structured safety records. They are not diagnoses, and automated
-            moderation is only a bounded assist.
+            This local flow records synthetic report/block metadata. It has no operational review
+            queue, moderator, appeal process, or sanction authority.
           </p>
         </div>
         <div className="page-header-meta">
@@ -390,8 +390,9 @@ export function SafetyPage() {
           <article className="panel stack-small">
             <p className="eyebrow">Review stance</p>
             <p className="muted">
-              Safety review is platform-focused. It should not infer diagnosis authenticity,
-              clinical severity, or psychological truth.
+              A future authorized review process must remain platform-focused and must not infer
+              diagnosis authenticity, clinical severity, or psychological truth. No such process
+              exists in this MVP.
             </p>
           </article>
         </div>

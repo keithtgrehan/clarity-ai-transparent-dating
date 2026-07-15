@@ -24,8 +24,8 @@ type SensoryCalmValue = NonNullable<ProfileInput["sensoryProfile"]["calm"]>;
 
 const steps = [
   {
-    title: "Identity and diagnosis status",
-    helper: "Choose the neurotype identity and diagnosis status you want matching to respect. No inference, no personality typing."
+    title: "Legacy identity and diagnosis fields",
+    helper: "Synthetic v1 characterization only. These fields are legacy product debt, not an approved participant or matching design."
   },
   {
     title: "Communication style",
@@ -522,6 +522,10 @@ export function OnboardingPage() {
 
   return (
     <section className="page stack">
+      <div className="helper-callout">
+        <strong>Synthetic legacy flow:</strong> do not enter real identity or diagnosis information.
+        The required diagnosis field is preserved only to characterize v1 and blocks participant use.
+      </div>
       <header className="page-header">
         <div className="page-header-copy">
           <p className="eyebrow">Structured onboarding</p>

@@ -1,25 +1,25 @@
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
-import { join } from "node:path";
 import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import type { FastifyInstance } from "fastify";
 import { buildApp } from "../app.js";
 import { resetStoreFromSeeds } from "../lib/seeds.js";
 
 const viewerUserId = "user-you";
 
-async function main() {
+export async function verifyMvp() {
   const tempDirectory = await mkdtemp(join(tmpdir(), "clarity-mvp-"));
+  const previousStorageFile = process.env.API_STORAGE_FILE;
   process.env.API_STORAGE_FILE = join(tempDirectory, "local-db.json");
-
-  await resetStoreFromSeeds();
-
-  const app = await buildApp();
+  let app: FastifyInstance | undefined;
 
   try {
-    const health = await app.inject({
-      method: "GET",
-      url: "/health"
-    });
+    await resetStoreFromSeeds();
+    app = await buildApp({ logger: false });
+
+    const health = await app.inject({ method: "GET", url: "/health" });
     assert.equal(health.statusCode, 200, "Health check should succeed.");
 
     const defaultProfileResponse = await app.inject({
@@ -27,39 +27,32 @@ async function main() {
       url: `/api/profiles/${viewerUserId}`
     });
     assert.equal(defaultProfileResponse.statusCode, 200, "Profile draft should load.");
-
     const defaultProfilePayload = defaultProfileResponse.json();
     assert.equal(defaultProfilePayload.exists, false, "Viewer should start without a saved profile.");
-
-    const onboardingPayload = {
-      userId: viewerUserId,
-      profile: {
-        ...defaultProfilePayload.profile,
-        displayName: "Riley",
-        age: 30,
-        locationLabel: "Neukolln and Kreuzberg",
-        identity: "audhd",
-        openTo: ["adhd", "autism", "audhd"],
-        diagnosisStatus: "self_identified",
-        communicationStyle: "direct",
-        socialEnergy: "medium",
-        sensoryProfile: {
-          noise: "low",
-          crowd: "medium",
-          calm: "essential"
-        },
-        routinePreference: "balanced",
-        relationshipIntent: "dating_with_intent",
-        bio: "I do best with direct updates, calmer plans, and dating that feels explicit rather than performative.",
-        whatDrainsMe: "Vague messaging, pressure, and loud first dates.",
-        whatINeedFromAPartner: "Directness, steadier pacing, and enough clarity that nobody has to guess."
-      }
-    };
 
     const onboarding = await app.inject({
       method: "POST",
       url: "/api/onboarding",
-      payload: onboardingPayload
+      payload: {
+        userId: viewerUserId,
+        profile: {
+          ...defaultProfilePayload.profile,
+          displayName: "Riley",
+          age: 30,
+          locationLabel: "Neukolln and Kreuzberg",
+          identity: "audhd",
+          openTo: ["adhd", "autism", "audhd"],
+          diagnosisStatus: "self_identified",
+          communicationStyle: "direct",
+          socialEnergy: "medium",
+          sensoryProfile: { noise: "low", crowd: "medium", calm: "essential" },
+          routinePreference: "balanced",
+          relationshipIntent: "dating_with_intent",
+          bio: "Synthetic smoke profile for direct communication and calm plans.",
+          whatDrainsMe: "Ambiguous plans in this synthetic scenario.",
+          whatINeedFromAPartner: "Clear expectations in this synthetic scenario."
+        }
+      }
     });
     assert.equal(onboarding.statusCode, 200, "Onboarding should persist.");
 
@@ -67,41 +60,36 @@ async function main() {
       method: "GET",
       url: `/api/profiles/${viewerUserId}`
     });
-    assert.equal(persistedProfile.statusCode, 200, "Persisted profile should load.");
-    assert.equal(
-      persistedProfile.json().profile.onboardingCompleted,
-      true,
-      "Onboarding should mark the profile complete."
-    );
+    assert.equal(persistedProfile.json().profile.onboardingCompleted, true);
 
     const matches = await app.inject({
       method: "GET",
       url: `/api/matches?userId=${viewerUserId}`
     });
-    assert.equal(matches.statusCode, 200, "Matches should load.");
-    assert.ok(matches.json().candidates.length >= 2, "Viewer should receive seeded matches.");
+    assert.deepEqual(
+      matches.json().candidates.map((candidate: { candidateUserId: string }) => candidate.candidateUserId),
+      ["user-jonas", "user-lara", "user-merve", "user-emre", "user-noor"],
+      "Legacy candidate ordering should remain stable during the governed-foundation cut."
+    );
 
     const conversation = await app.inject({
       method: "POST",
       url: "/api/conversations",
-      payload: {
-        participantUserIds: [viewerUserId, "user-merve"]
-      }
+      payload: { participantUserIds: [viewerUserId, "user-merve"] }
     });
-    assert.equal(conversation.statusCode, 201, "Conversation creation should succeed.");
-
+    assert.equal(conversation.statusCode, 201);
     const conversationId = conversation.json().conversation.id as string;
 
-    const sendMessage = await app.inject({
+    const message = await app.inject({
       method: "POST",
       url: "/api/messages",
       payload: {
         conversationId,
         senderUserId: viewerUserId,
-        body: "Hi Merve. Your profile made the pace and environment you prefer very easy to understand."
+        body: "Synthetic smoke message about an explicit first-date plan."
       }
     });
-    assert.equal(sendMessage.statusCode, 201, "Message sending should succeed.");
+    assert.equal(message.statusCode, 201);
 
     const report = await app.inject({
       method: "POST",
@@ -111,29 +99,40 @@ async function main() {
         targetUserId: "user-merve",
         conversationId,
         categories: ["other"],
-        description: "Smoke test report to verify the safety flow and block handling.",
+        description: "Synthetic smoke report used only to verify block handling.",
         blockUser: true
       }
     });
-    assert.equal(report.statusCode, 201, "Report submission should succeed.");
+    assert.equal(report.statusCode, 201);
 
     const matchesAfterBlock = await app.inject({
       method: "GET",
       url: `/api/matches?userId=${viewerUserId}`
     });
-    assert.equal(matchesAfterBlock.statusCode, 200, "Matches should still load after blocking.");
     assert.ok(
-      matchesAfterBlock.json().candidates.every(
-        (candidate: { candidateUserId: string }) => candidate.candidateUserId !== "user-merve"
-      ),
-      "Blocked users should be removed from match results."
+      matchesAfterBlock
+        .json()
+        .candidates.every(
+          (candidate: { candidateUserId: string }) => candidate.candidateUserId !== "user-merve"
+        )
     );
 
-    console.log("Clarity.ai MVP verification passed.");
+    console.log("Clarity local MVP verification passed with synthetic data.");
   } finally {
-    await app.close();
+    await app?.close();
     await rm(tempDirectory, { recursive: true, force: true });
+    if (previousStorageFile === undefined) {
+      delete process.env.API_STORAGE_FILE;
+    } else {
+      process.env.API_STORAGE_FILE = previousStorageFile;
+    }
   }
 }
 
-void main();
+const isCli = process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isCli) {
+  verifyMvp().catch((error) => {
+    console.error("Clarity local MVP verification failed.", error);
+    process.exitCode = 1;
+  });
+}

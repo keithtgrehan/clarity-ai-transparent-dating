@@ -1,97 +1,22 @@
-# Decisions Log
+# Product and technical decisions
 
-## D-001: Berlin-first instead of broad geography
-Date: 2026-04-11
+The authoritative, status-bearing record is `docs/control_room/DECISION_LOG.md`. This file is the concise repository entry point.
 
-Decision:
-- focus the first product learning loop on Berlin
-
-Why:
-- density and trust matter more than total signups
-- founder research loops are easier locally
-- pilot moderation and community learning stay bounded
-
-## D-002: Neurodivergent-first, not “mental health dating”
-Date: 2026-04-11
-
-Decision:
-- center ADHD, Autism, and AuDHD
-- treat anxiety and depression as optional secondary context only
-
-Why:
-- launch users need explicit communication and sensory-fit support
-- “mental health dating” framing muddies the product promise
-
-## D-003: No diagnosis proof wall
-Date: 2026-04-11
-
-Decision:
-- do not require diagnosis proof or clinical validation
-
-Why:
-- exclusionary, privacy-invasive, and not aligned with product scope
-
-## D-004: TypeScript monorepo with Fastify API
-Date: 2026-04-11
-
-Decision:
-- use React + Vite + TypeScript for web
-- use Fastify + TypeScript for API
-- use shared Zod contracts in a workspace package
-
-Why:
-- shared contracts are immediately valuable
-- one language reduces founder overhead
-- local-first scaffolding is fast to review and extend
-
-## D-005: File-backed persistence first
-Date: 2026-04-11
-
-Decision:
-- use JSON persistence under `data/runtime` for local development
-
-Why:
-- transparent, easy to inspect, easy to reseed
-- enough for a serious first-pass repo run
-
-Tradeoff:
-- not production-safe for concurrency or security
-
-## D-006: No infinite swipe
-Date: 2026-04-11
-
-Decision:
-- use a candidate list, not a swipe deck
-
-Why:
-- reduces compulsion loops
-- supports calmer review and more explicit explanations
-
-## D-007: AI only for bounded support
-Date: 2026-04-11
-
-Decision:
-- AI may summarize, extract bounded signals, and support moderation review
-- AI may not infer diagnosis authenticity or clinical truth
-
-Why:
-- product trust depends on legibility and restraint
-
-## D-008: Safety and moderation are foundational, not post-launch garnish
-Date: 2026-04-11
-
-Decision:
-- include report/block structures and policy drafts in the first pass
-
-Why:
-- dating products without safety foundations create avoidable harm
-
-## D-009: Explicit TODOs over fake polish
-Date: 2026-04-11
-
-Decision:
-- mark incomplete logic honestly
-- avoid pretending unfinished flows are ready
-
-Why:
-- tomorrow’s iteration speed depends on clear boundaries today
+| ID | Decision | Status |
+|---|---|---|
+| D001 | Berlin remains the bounded first learning geography. | Retained |
+| D002 | The service is neuroinclusive; self-description is voluntary and is not a diagnosis gate. | Revised |
+| D003 | No proof of neurotype or diagnosis is required. | Retained |
+| D004 | Product runtime remains a React/Vite, Fastify, Zod TypeScript workspace. | Retained |
+| D005 | JSON persistence is permitted only for synthetic local development. | Narrowed |
+| D006 | No infinite swipe or compulsion loop. | Retained |
+| D007 | Automated assistance is evidence-bounded, optional, and under human control. | Tightened |
+| D008 | Safety requires human decision ownership and appeal; current scaffolding is incomplete. | Expanded |
+| D009 | Explicit TODOs and unsupported claims are preferred to fake polish. | Retained |
+| D010 | Service, research, NLP-feedback, marketing, and event consent are separate purposes. | Approved |
+| D011 | Diagnosis is private optional research context only, with separate explicit consent. | Approved |
+| D012 | Future matching has no scalar compatibility or relationship-success score. | Approved |
+| D013 | The project has no selected licence yet; no `LICENSE` is added. | Approved |
+| D014 | Keith Grehan authorizes inbound reuse of Keith-authored domain-neutral donor assets with exact provenance and third-party review. | Approved 2026-07-14 |
+| D015 | `keithtgrehan/clarity-ai-transparent-dating` remains the canonical repository. | Approved |
+| D016 | Breaking migration uses parallel `/api/v2` contracts; v1 is disabled before participant beta. | Approved direction |

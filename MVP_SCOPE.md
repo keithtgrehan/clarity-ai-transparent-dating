@@ -1,94 +1,31 @@
-# Clarity.ai - transparent dating MVP Scope
+# Local MVP scope
 
-## Scope Principle
-The MVP is a disciplined learning product, not a full dating platform. It should support real end-to-end flows locally while keeping risk, complexity, and false confidence low.
+## Implemented
 
-## Must-Have In Scope
+- React routes for landing, onboarding, profile, candidates, chat, and safety information.
+- Fastify routes for health, waitlist, profiles, onboarding, matches, conversations, messages, reports, and destructive synthetic seed loading.
+- Shared Zod schemas, deterministic matching rules, bounded profile checks, local JSON persistence, and synthetic fixtures.
+- Report/block scaffolding and pattern-based moderation metadata.
 
-### 1. Berlin-first waitlist capture
-- capture city, neighborhood, language comfort, relationship intent, and launch interest
-- capture neurotype self-identification without proof requirements
-- record referral source and availability for interviews or pilot groups
+## In the governed-foundation cut
 
-### 2. Guided onboarding skeleton
-- communication preferences
-- sensory preferences
-- relationship intent
-- pacing and energy expectations
-- optional secondary context for anxiety/depression without making it central
+- Repository and agent instructions.
+- Control Room, source-rights registry, claims matrix, and governance checks.
+- Node 22 reproducibility, automated synthetic tests, bounded verification, dependency remediation, and CI.
+- Truthful current-state documentation.
+- Draft privacy, safety, accessibility, research, and v1-to-v2 migration specifications.
 
-### 3. Profile creation and update
-- structured answers plus short text sections
-- explicit “what helps me communicate well” prompts
-- clear filters for neurotype compatibility preferences
+## Not implemented or production-ready
 
-### 4. Match candidate retrieval
-- no swipe deck
-- ranked candidate list with compatibility reasons
-- bounded explanations tied to declared preferences, not psychoanalysis
+- Authentication, invitations, authorization, rate limits, CSRF/security headers, encrypted database, audit logs, export/deletion, retention enforcement, production hosting, or operational monitoring.
+- Policy-versioned adult eligibility, gender/orientation eligibility, consent, account lifecycle, research feedback, moderation decisions/appeals, or evidence provenance.
+- First-class friendship or event modes.
+- Transparent v2 multidimensional matching or exposure fairness.
+- Dataset acquisition, annotation, model training, provider upload, or model serving.
+- Participant recruitment or real-data processing.
 
-### 5. Messaging scaffold
-- conversation list
-- create conversation
-- send message
-- message metadata ready for moderation and rate controls later
+## Safety rule
 
-### 6. Safety foundation
-- report and block structures
-- moderation categories
-- content policy draft
-- legal-review TODO markers for privacy, deletion, consent, and appeals
+The current MVP is reviewable only with synthetic data. It must not be presented as a live invite-only service. The seed endpoint must be disabled before any non-disposable environment.
 
-### 7. AI assistance foundation
-- profile summarization
-- low-signal detection
-- intent clarity detection
-- contradiction detection
-- moderation review prompt/template
-
-## Explicitly Out Of Scope
-- native mobile apps
-- payments or subscriptions
-- algorithmic ranking tuned on live behavioral data
-- push notifications
-- read receipts, streaks, infinite swipe, or reward loops
-- deployment infrastructure
-- identity verification or diagnosis verification
-- therapy, treatment, crisis handling, or clinical claims
-- automated moderation decisions without human review path
-
-## First Release User Journey
-1. User lands on the Berlin-first page and understands the product in under 60 seconds.
-2. User joins the waitlist or enters the product stub locally.
-3. User completes structured onboarding with explicit communication and sensory preferences.
-4. User reviews their profile summary and edits it.
-5. User sees a ranked list of compatible candidates with short reason tags.
-6. User opens or starts a conversation.
-7. User can report or block if something feels unsafe or manipulative.
-
-## Functional Acceptance For This Repo Run
-- web routes exist for landing, onboarding, profile, matches, chat, settings, and report/block
-- API routes exist for waitlist, profiles, onboarding, matches, conversations, messages, reports, and seed load
-- shared schemas cover the key domain models
-- seed fixtures make the product reviewable without manual database setup
-- docs explain what is real, what is stubbed, and what still needs legal or product work
-
-## Quality Threshold
-The MVP foundation should be:
-- understandable by one founder returning tomorrow
-- honest about missing pieces
-- deterministic enough to demo locally
-- structured enough to support future auth, persistence, and moderation depth
-
-## Non-Functional Constraints
-- local-first development only
-- low dependency surface area
-- TypeScript across web, API, and shared contracts
-- file-backed persistence scaffold for early iteration
-
-## Kill Criteria
-Revisit the product thesis if early Berlin interviews show:
-- structured clarity feels patronizing rather than relieving
-- neurodivergent users want a friendship/community product instead of dating
-- users refuse longer onboarding despite clear benefit
-- safety expectations require more manual operations than a solo founder can sustain
+The migration sequence and deletion conditions are in `docs/control_room/MIGRATION_MAP.md`.

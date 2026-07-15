@@ -1,5 +1,7 @@
 # Waitlist Form Schema Notes
 
+> **Historical schema; collection is blocked.** Do not use this form with real people. Neurotype, interview, pilot, marketing, and event interest require separated purposes, notices, minimisation, withdrawal/deletion controls, and Gate G4 approval under `docs/legal/consent_model.md` and `docs/research/research_protocol.md`.
+
 ## Purpose
 Capture enough structured signal to:
 - segment Berlin leads for interviews and pilot invites

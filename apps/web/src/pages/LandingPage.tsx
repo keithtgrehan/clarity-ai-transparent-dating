@@ -9,11 +9,11 @@ export function LandingPage() {
           <div className="stack">
             <div className="stack-small">
               <p className="eyebrow">Quiet precision</p>
-              <h2>Less ambiguity. Better first dates. No swipe theater.</h2>
+              <h2>A local prototype for testing lower-ambiguity connection flows.</h2>
               <p className="lead">
-                Clarity.ai helps people understand each other earlier: how they communicate, what
-                pace feels good, where friction may show up, and whether starting a conversation
-                feels worth the emotional effort.
+                Clarity is exploring whether structured, user-declared preferences can make
+                communication, pacing, and first-conversation choices easier to inspect. The
+                preserved MVP does not establish participant outcomes.
               </p>
             </div>
 
@@ -24,16 +24,16 @@ export function LandingPage() {
               <Link className="button button-secondary" to="/matches">
                 Review matches
               </Link>
-              <span className="status-chip">Berlin early access</span>
+              <span className="status-chip">Local synthetic MVP</span>
             </div>
           </div>
 
           <aside className="section-card section-card-muted stack-small">
             <p className="eyebrow">Why it feels different</p>
-            <h3>Built for people who are tired of guessing</h3>
+            <h3>A product hypothesis, not a proven outcome</h3>
             <p className="muted">
-              Lower pressure, fewer mixed signals, and more readable decisions before time and
-              energy get spent in the wrong place.
+              The intended direction is lower pressure and more readable choices. This synthetic
+              interface has not been tested with participants and makes no effectiveness claim.
             </p>
             <div className="pill-row">
               <span className="info-pill">Berlin-first</span>
@@ -57,8 +57,8 @@ export function LandingPage() {
             <p className="eyebrow">2. Readable profiles</p>
             <h3>Separate facts from interpretation</h3>
             <p className="muted">
-              Profiles stay concrete, so you can tell what daily life with someone might feel like
-              before you start projecting onto them.
+              The current form displays declared fields together so reviewers can inspect the
+              information presented without treating it as a prediction of daily life.
             </p>
           </article>
 
@@ -66,11 +66,17 @@ export function LandingPage() {
             <p className="eyebrow">3. Explainable matching</p>
             <h3>See why the system suggested someone</h3>
             <p className="muted">
-              Fit notes, likely friction, and first-message guidance are shown in plain language
-              without pretending the product can predict chemistry.
+              Rule-generated overlap notes, possible differences, and first-message prompts are
+              shown without treating them as compatibility or chemistry predictions.
             </p>
           </article>
         </div>
+      </div>
+
+      <div className="helper-callout">
+        <strong>Not a live service:</strong> this preserved v1 interface is for synthetic local
+        evaluation only. It is not accepting participants, research volunteers, or real personal
+        data.
       </div>
 
       <WaitlistForm />
