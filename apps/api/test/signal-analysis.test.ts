@@ -29,6 +29,13 @@ function enabledSettings(overrides: Partial<SignalEngineSettings> = {}): SignalE
   return {
     enabled: true,
     syntheticOnly: true,
+    t1ProtocolEnabled: false,
+    userAuthoredText: false,
+    receivedExcerpts: false,
+    audioEnabled: false,
+    modelTrainingEnabled: false,
+    localAuthBypass: false,
+    appEnvironment: "test",
     internalUrl: "http://127.0.0.1:8091",
     internalSecret,
     timeoutMs: 1_000,
@@ -94,7 +101,7 @@ const validAnalysis: CommunicationAnalysisResponse = {
 test("signal settings are default-deny and reject every unsafe gate combination", () => {
   const defaults = readSignalEngineSettings({ APP_ENV: "local" });
   assert.equal(defaults.enabled, false);
-  assert.equal(defaults.syntheticOnly, false);
+  assert.equal(defaults.syntheticOnly, true);
   assert.equal(resolveApiListenHostForSignalReview(defaults), "0.0.0.0");
   assert.equal(resolveApiListenHostForSignalReview(enabledSettings()), "127.0.0.1");
 
@@ -113,7 +120,12 @@ test("signal settings are default-deny and reject every unsafe gate combination"
   }
 
   assert.throws(
-    () => readSignalEngineSettings({ APP_ENV: "local", SIGNAL_ENGINE_ENABLED: "true" }),
+    () =>
+      readSignalEngineSettings({
+        APP_ENV: "local",
+        SIGNAL_ENGINE_ENABLED: "true",
+        SIGNAL_ENGINE_SYNTHETIC_ONLY: "false"
+      }),
     /SYNTHETIC_ONLY=true/
   );
   assert.throws(
@@ -646,12 +658,15 @@ test("the gated UI contains no real-input, upload, persistence, analytics or com
   assert.match(page, /tabIndex=\{-1\}/);
   assert.match(styles, /prefers-reduced-motion/);
   assert.match(environment, /VITE_SIGNAL_ENGINE_ENABLED=false/);
+  assert.match(environment, /^SIGNAL_ENGINE_SYNTHETIC_ONLY=true$/m);
   for (const flag of [
     "SIGNAL_ENGINE_ENABLED",
-    "SIGNAL_ENGINE_SYNTHETIC_ONLY",
+    "SIGNAL_ENGINE_T1_PROTOCOL_ENABLED",
+    "SIGNAL_ENGINE_T1_LOCAL_AUTH_BYPASS",
     "SIGNAL_ENGINE_USER_AUTHORED_TEXT",
     "SIGNAL_ENGINE_RECEIVED_EXCERPTS",
     "SIGNAL_ENGINE_AUDIO",
+    "SIGNAL_ENGINE_MODEL_TRAINING",
     "SIGNAL_ENGINE_SYNTHETIC_TRAINING",
     "SIGNAL_ENGINE_REAL_DATA_TRAINING",
     "SIGNAL_ENGINE_PRODUCTION"

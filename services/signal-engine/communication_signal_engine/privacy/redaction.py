@@ -51,7 +51,7 @@ class ExactLocalSpacyDetector:
         if artifact is None or artifact.name != "xx_ent_wiki_sm-3.8.0-py3-none-any.whl":
             return None
         # A verified wheel is not proof that an independently installed Python
-        # package has identical bytes. The v1 inventory lacks a signed installed-
+        # package has identical bytes. The v1.1 inventory lacks a signed installed-
         # package manifest, so it cannot activate NER even when the wheel exists.
         return None
 
@@ -143,6 +143,13 @@ class PrivacyMinimizer:
             tuple(segment.language_tag for segment in segments),
             receipt,
         )
+
+    def assert_residual_safe(self, sanitized: SanitizedText) -> None:
+        """Recheck high-certainty residuals immediately before T1 analysis."""
+
+        surface = self._PLACEHOLDER.sub("", sanitized._read_attested())
+        if any(pattern.search(surface) for pattern in HIGH_CERTAINTY_RESIDUALS):
+            raise PrivacyBoundaryError("Residual identifier pattern detected")
 
     @staticmethod
     def _pattern_spans(text: str) -> list[EntitySpan]:

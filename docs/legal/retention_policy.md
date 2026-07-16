@@ -12,3 +12,5 @@ Status: proposed controls requiring qualified legal/privacy and operational appr
 - Account deletion must cover service, search indexes, caches, exports, research links, processors and backups, while preserving only explicitly justified safety/legal records.
 
 Exact participant retention periods remain an owner/legal decision and must not be invented in code.
+
+The disabled T1 readiness protocol has a stricter synthetic-test lifecycle documented in `retention_and_deletion.md`: raw request memory only, minimized text for at most ten minutes, one active session per subject, no disk/browser/analytics/backup integration, and invalidation on continue, failure, clear, withdrawal, expiry or restart. Reference removal is not represented as secure physical erasure.

@@ -1,0 +1,45 @@
+schemaVersion: 1
+packId: clarity_t1_fictional_pii_security_cases
+packVersion: "1.0.0"
+sourceId: clarity_authored_synthetic_fixtures
+ownerAuthorization:
+  owner: Keith Grehan
+  decisionId: D020
+  scope: wholly_fictional_local_contract_privacy_and_security_fixtures
+  authorizedUses: [contract_test, deterministic_regression, safety_red_team]
+generation:
+  method: manual_composition_of_bounded_adversarial_fictional_cases
+  tool: OpenAI Codex local repository editor
+  modelIdentifier: GPT-5 Codex family; exact serving build is not exposed
+  promptTemplateFamilyId: clarity_t1_pii_case_matrix_v1
+  externalSourceTextUsed: false
+  privateSourceTextUsed: false
+  participantSourceTextUsed: false
+  publicPlatformSourceTextUsed: false
+  modelArtifactUsed: false
+copiedSourceExclusion:
+  copiedOrParaphrasedRows: false
+  donorFixtureRowsUsed: false
+  publicOrPrivateExamplesUsed: false
+  reviewBasis: case-by-case inspection plus restricted/raw-content scans
+review:
+  independentReviewStatus: passed_before_commit
+  reviewedAt: "2026-07-15"
+  reviewerRoles: [privacy_safety_reviewer, licence_model_provenance_reviewer]
+  realisticIdentifierReview: passed_no_realistic_contact_location_or_health_details
+  humanOwnerReviewStatus: required_before_merge
+fixture:
+  path: services/signal-engine/tests/fixtures/t1_pii_benchmark.json
+  sha256: bbdd95c8c3779827f72c5c1103b8a83423192d576fff761b4ba1449d6504abea
+  caseCount: 8
+  split: local_synthetic_security_characterization
+  duplicateFamilyGroup: clarity_t1_pii_v1_unique_cases
+  languageMetadata: fictional_en_us_en_gb_en_eu_and_mixed_slices_not_population_validation
+  expectedEvidence: direct_span_offsets_and_contextual_limitations_in_fixture
+permission:
+  benchmarkAllowed: synthetic_behavioral_only
+  trainingAllowed: false
+  participantUseAllowed: false
+  productionUseAllowed: false
+  realWorldAccuracyClaimAllowed: false
+  modelApprovalClaimAllowed: false

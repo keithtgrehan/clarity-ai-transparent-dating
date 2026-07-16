@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { isSignalEngineUiEnabled } from "../pages/signalReviewModel";
+import { isT1UserDraftUiEnabled } from "../pages/t1UserDraftReviewModel";
 
 const baseNavItems = [
   { to: "/", label: "Overview", hint: "Hypothesis and synthetic waitlist demo" },
@@ -11,19 +12,36 @@ const baseNavItems = [
 ];
 
 export function AppShell() {
-  const navItems = isSignalEngineUiEnabled(
+  const signalEngineEnabled = isSignalEngineUiEnabled(
     import.meta.env.VITE_SIGNAL_ENGINE_ENABLED,
     import.meta.env.DEV
-  )
-    ? [
-        ...baseNavItems,
-        {
-          to: "/signal-review",
-          label: "Signal review",
-          hint: "Review tracked fictional communication fixtures"
-        }
-      ]
-    : baseNavItems;
+  );
+  const t1UserDraftEnabled = isT1UserDraftUiEnabled(
+    import.meta.env.VITE_SIGNAL_ENGINE_ENABLED,
+    import.meta.env.VITE_SIGNAL_T1_USER_DRAFT_ENABLED,
+    import.meta.env.DEV
+  );
+  const navItems = [
+    ...baseNavItems,
+    ...(signalEngineEnabled
+      ? [
+          {
+            to: "/signal-review",
+            label: "Signal review",
+            hint: "Review tracked fictional communication fixtures"
+          }
+        ]
+      : []),
+    ...(import.meta.env.DEV && t1UserDraftEnabled
+      ? [
+          {
+            to: "/signal-review/user-draft",
+            label: "T1 draft scaffold",
+            hint: "Rehearse a two-step fictional draft privacy review"
+          }
+        ]
+      : [])
+  ];
 
   return (
     <div className="app-shell">
@@ -43,6 +61,7 @@ export function AppShell() {
               className={({ isActive }) =>
                 isActive ? "nav-link nav-link-active" : "nav-link"
               }
+              end={item.to === "/signal-review"}
               to={item.to}
             >
               <span className="nav-label">{item.label}</span>

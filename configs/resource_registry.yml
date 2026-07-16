@@ -28,6 +28,10 @@ inventoryClasses:
     - { name: "@types/node", version: 22.19.17, licence: MIT, source: package-lock.json }
     - { name: "@types/react", version: 18.3.28, licence: MIT, source: package-lock.json }
     - { name: "@types/react-dom", version: 18.3.7, licence: MIT, source: package-lock.json }
+    - { name: "@testing-library/react", version: 16.3.2, licence: MIT, source: package-lock.json }
+    - { name: "@testing-library/user-event", version: 14.6.1, licence: MIT, source: package-lock.json }
+    - { name: "@types/jsdom", version: 21.1.7, licence: MIT, source: package-lock.json }
+    - { name: jsdom, version: 26.1.0, licence: MIT, source: package-lock.json }
     - { name: fastapi, version: ">=0.129,<1", licence: MIT, source: services/signal-engine/pyproject.toml }
     - { name: pydantic, version: ">=2.12,<3", licence: MIT, source: services/signal-engine/pyproject.toml }
     - { name: PyYAML, version: ">=6,<7", licence: MIT, source: services/signal-engine/pyproject.toml }

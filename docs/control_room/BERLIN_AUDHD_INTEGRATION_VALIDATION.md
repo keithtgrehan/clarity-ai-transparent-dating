@@ -1,9 +1,11 @@
 # Berlin AuDHD communication-engine integration validation
 
-Status: pre-commit final review evidence
+Status: historical T0 validation; merged as PR #3 at `f0c1b293c6e89117d60d4ff163390bee4fdf03c7`
 Branch: `codex/berlin-audhd-dating-app`
 Reviewed: 2026-07-15
 Current launch decision: **GO for the local synthetic review branch only**
+
+The separately authorized T1 readiness evidence is maintained in `T1_TECHNICAL_VALIDATION.md`, `T1_PII_BENCHMARK_REPORT.md` and `T1_IMPLEMENTATION_EVIDENCE.md`. That work does not broaden this T0 decision or open real-text, participant, received-content, audio, training or production gates.
 
 ## Scope and base
 

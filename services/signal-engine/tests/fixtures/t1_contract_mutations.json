@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "base_fixture": "t1_fastify_fastapi_contract_response.json",
+  "mutations": [
+    {
+      "mutation_id": "fabricated_observation",
+      "path": ["cues", 0, "observation"],
+      "value": "A fabricated but bounded observation."
+    },
+    {
+      "mutation_id": "fabricated_cue_limitation",
+      "path": ["cues", 0, "limitation"],
+      "value": "A fabricated but bounded cue limitation."
+    },
+    {
+      "mutation_id": "fabricated_syntactic_rule_id",
+      "path": ["cues", 0, "rule_id"],
+      "value": "fabricated_rule_name"
+    },
+    {
+      "mutation_id": "fabricated_repair_copy",
+      "path": ["repair_action", "title"],
+      "value": "Fabricated edit title"
+    },
+    {
+      "mutation_id": "fabricated_fixed_limitation",
+      "path": ["limitations", 0],
+      "value": "A fabricated but bounded global limitation."
+    },
+    {
+      "mutation_id": "fabricated_detector_with_official_revision_and_status",
+      "changes": [
+        {
+          "path": ["provenance", "privacy_detector_id"],
+          "value": "fabricated/local-detector"
+        },
+        {
+          "path": ["provenance", "privacy_detector_revision"],
+          "value": "374ece89b2099818244f5a65ef466b89c0c392ae"
+        },
+        {
+          "path": ["provenance", "privacy_detector_status"],
+          "value": "LOCAL_SPACY_APPLIED"
+        },
+        {
+          "path": ["privacy_receipt", "detector_status"],
+          "value": "LOCAL_SPACY_APPLIED"
+        }
+      ]
+    }
+  ]
+}

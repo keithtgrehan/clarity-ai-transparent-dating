@@ -63,6 +63,9 @@ for (const [index, cue] of cues.entries()) {
     errors.push(`${prefix}.priority must be an integer between 0 and 1000.`);
   }
   if (cue?.status !== "active") errors.push(`${prefix}.status must be active in registry v1.`);
+  if (cue?.multi_turn_context_required !== false) {
+    errors.push(`${prefix}.multi_turn_context_required must be false in registry v1.`);
+  }
   for (const profile of cue?.profiles ?? []) {
     if (!profiles.has(profile)) errors.push(`${prefix}.profiles references unknown profile ${profile}.`);
   }
@@ -122,6 +125,9 @@ if (!isObject(cueDocument?.deprecated_aliases)) {
 for (const [requiredAlias, target] of Object.entries({
   cognitive_load: "structure.multi_request_load",
   cognitive_load_proxy: "structure.multi_request_load",
+  cognitive_overload: "structure.multi_request_load",
+  potential_overload: "structure.multi_request_load",
+  overloaded_message: "structure.multi_request_load",
   request_stacking: "structure.multi_request_load",
   pressure_language: "communication.pressure",
   repair_attempt: "communication.repair",
@@ -134,7 +140,7 @@ for (const [requiredAlias, target] of Object.entries({
   }
 }
 
-if (modelDocument?.schema_version !== "1.0.0") errors.push("model inventory schema_version must be 1.0.0.");
+if (modelDocument?.schema_version !== "1.1.0") errors.push("model inventory schema_version must be 1.1.0.");
 const policy = modelDocument?.runtime_policy;
 for (const [key, expected] of Object.entries({
   network_downloads: false,
@@ -153,7 +159,18 @@ if (models.length === 0) errors.push("model inventory must contain at least one 
 const inventoryIds = new Set();
 for (const [index, model] of models.entries()) {
   const prefix = `models[${index}]`;
-  for (const key of ["inventory_id", "provider", "model_id", "licence", "availability", "runtime_status", "fail_behavior"]) {
+  for (const key of [
+    "inventory_id",
+    "provider",
+    "purpose",
+    "model_id",
+    "licence",
+    "licence_url",
+    "availability",
+    "runtime_status",
+    "review_status",
+    "fail_behavior"
+  ]) {
     if (!nonEmptyString(model?.[key])) errors.push(`${prefix}.${key} is required.`);
   }
   if (inventoryIds.has(model?.inventory_id)) errors.push(`${prefix}.inventory_id is duplicated.`);
@@ -161,6 +178,9 @@ for (const [index, model] of models.entries()) {
   if (!isCommit(model?.revision)) errors.push(`${prefix}.revision must be an exact 40-character commit.`);
   if (model?.trust_remote_code !== false || model?.local_files_only !== true) {
     errors.push(`${prefix} must enforce trust_remote_code=false and local_files_only=true.`);
+  }
+  if (model?.runtime_downloads !== false || model?.telemetry !== false) {
+    errors.push(`${prefix} must enforce runtime_downloads=false and telemetry=false.`);
   }
   if (!Number.isInteger(model?.memory_limit_mb) || model.memory_limit_mb <= 0) errors.push(`${prefix}.memory_limit_mb must be positive.`);
   if (!Number.isInteger(model?.timeout_seconds) || model.timeout_seconds <= 0) errors.push(`${prefix}.timeout_seconds must be positive.`);
@@ -172,6 +192,29 @@ for (const [index, model] of models.entries()) {
   }
   if (!arrayOfStrings(model?.limitations)) errors.push(`${prefix}.limitations must be a non-empty string list.`);
   if (!Array.isArray(model?.validated_languages)) errors.push(`${prefix}.validated_languages must be a list.`);
+  if (!Array.isArray(model?.approved_environments)) errors.push(`${prefix}.approved_environments must be a list.`);
+  if (!Array.isArray(model?.supported_languages)) errors.push(`${prefix}.supported_languages must be a list.`);
+  if (!arrayOfStrings(model?.reviewed_dialect_limitations)) {
+    errors.push(`${prefix}.reviewed_dialect_limitations must be a non-empty string list.`);
+  }
+  if (!arrayOfStrings(model?.blocked_uses)) errors.push(`${prefix}.blocked_uses must be a non-empty string list.`);
+  if (!model?.licence_url?.startsWith("https://")) errors.push(`${prefix}.licence_url must be HTTPS.`);
+  if (!Array.isArray(model?.upstream_data_attributions)) {
+    errors.push(`${prefix}.upstream_data_attributions must be an explicit list.`);
+  }
+  for (const [attributionIndex, attribution] of (model?.upstream_data_attributions ?? []).entries()) {
+    for (const key of ["name", "authors", "source_url", "licence", "licence_url"]) {
+      if (!nonEmptyString(attribution?.[key])) {
+        errors.push(`${prefix}.upstream_data_attributions[${attributionIndex}].${key} is required.`);
+      }
+    }
+    if (!attribution?.source_url?.startsWith("https://") || !attribution?.licence_url?.startsWith("https://")) {
+      errors.push(`${prefix}.upstream_data_attributions[${attributionIndex}] URLs must be HTTPS.`);
+    }
+  }
+  if (model?.purpose === "privacy_identifier_minimisation" && model?.upstream_data_attributions?.length === 0) {
+    errors.push(`${prefix} privacy candidate must preserve reviewed upstream data attribution.`);
+  }
 
   const localAvailable = model?.availability === "local_verified";
   if (localAvailable) {
@@ -179,11 +222,20 @@ for (const [index, model] of models.entries()) {
       errors.push(`${prefix} local_verified entries require local_path and local_sha256.`);
     }
   } else if (
+    model?.availability !== "reviewed_remote_only" ||
     model?.local_path !== null ||
     model?.local_sha256 !== null ||
-    !new Set(["blocked_abstain", "blocked_refuse"]).has(model?.runtime_status)
+    !new Set(["blocked_abstain", "blocked_refuse"]).has(model?.runtime_status) ||
+    model?.review_status !== "candidate_not_approved" ||
+    model?.resource_registry_id !== null ||
+    model?.pretrained_source_registry_id !== null ||
+    model?.benchmark_reference !== null ||
+    model?.approved_environments?.length !== 0 ||
+    model?.supported_languages?.length !== 0 ||
+    model?.memory_limit_enforced !== false ||
+    model?.timeout_enforced !== false
   ) {
-    errors.push(`${prefix} unavailable entries must have null local attestations and a blocked runtime status.`);
+    errors.push(`${prefix} remote candidates must carry no local, benchmark, registry, language, enforcement, environment or approval claim.`);
   }
   if (model?.required_for_text_analysis === true && model?.runtime_status !== "blocked_refuse") {
     errors.push(`${prefix} required unavailable models must fail closed with blocked_refuse.`);
@@ -192,13 +244,23 @@ for (const [index, model] of models.entries()) {
     errors.push(`${prefix} optional unavailable models must abstain rather than refuse all analysis.`);
   }
 
-  if (!Array.isArray(model?.upstream_files) || model.upstream_files.length === 0) {
-    errors.push(`${prefix}.upstream_files must record reviewed upstream metadata.`);
+  if (!Array.isArray(model?.artifact_files) || model.artifact_files.length === 0) {
+    errors.push(`${prefix}.artifact_files must record exact reviewed artifact metadata.`);
   }
-  for (const [fileIndex, file] of (model?.upstream_files ?? []).entries()) {
-    if (!nonEmptyString(file?.path) || !Number.isInteger(file?.bytes) || file.bytes <= 0 || !isSha256(file?.upstream_sha256)) {
-      errors.push(`${prefix}.upstream_files[${fileIndex}] requires path, positive bytes and upstream_sha256.`);
+  const artifactPaths = new Set();
+  for (const [fileIndex, file] of (model?.artifact_files ?? []).entries()) {
+    if (
+      !nonEmptyString(file?.path) ||
+      file.path.startsWith("/") ||
+      file.path.split("/").includes("..") ||
+      artifactPaths.has(file.path) ||
+      !Number.isInteger(file?.bytes) ||
+      file.bytes <= 0 ||
+      !isSha256(file?.sha256)
+    ) {
+      errors.push(`${prefix}.artifact_files[${fileIndex}] requires a unique relative path, positive bytes and sha256.`);
     }
+    artifactPaths.add(file?.path);
   }
 }
 

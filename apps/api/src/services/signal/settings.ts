@@ -2,6 +2,7 @@ const PROHIBITED_SIGNAL_FLAGS = [
   "SIGNAL_ENGINE_USER_AUTHORED_TEXT",
   "SIGNAL_ENGINE_RECEIVED_EXCERPTS",
   "SIGNAL_ENGINE_AUDIO",
+  "SIGNAL_ENGINE_MODEL_TRAINING",
   "SIGNAL_ENGINE_SYNTHETIC_TRAINING",
   "SIGNAL_ENGINE_REAL_DATA_TRAINING",
   "SIGNAL_ENGINE_PRODUCTION"
@@ -10,11 +11,20 @@ const PROHIBITED_SIGNAL_FLAGS = [
 type SignalFlagName =
   | "SIGNAL_ENGINE_ENABLED"
   | "SIGNAL_ENGINE_SYNTHETIC_ONLY"
+  | "SIGNAL_ENGINE_T1_PROTOCOL_ENABLED"
+  | "SIGNAL_ENGINE_T1_LOCAL_AUTH_BYPASS"
   | (typeof PROHIBITED_SIGNAL_FLAGS)[number];
 
 export type SignalEngineSettings = {
   enabled: boolean;
   syntheticOnly: boolean;
+  t1ProtocolEnabled: boolean;
+  userAuthoredText: boolean;
+  receivedExcerpts: boolean;
+  audioEnabled: boolean;
+  modelTrainingEnabled: boolean;
+  localAuthBypass: boolean;
+  appEnvironment: string;
   internalUrl: string | null;
   internalSecret: string | null;
   timeoutMs: number;
@@ -22,9 +32,13 @@ export type SignalEngineSettings = {
   rateLimitWindowMs: number;
 };
 
-function readBoolean(environment: NodeJS.ProcessEnv, name: SignalFlagName) {
+function readBoolean(
+  environment: NodeJS.ProcessEnv,
+  name: SignalFlagName,
+  fallback = false
+) {
   const value = environment[name];
-  if (value === undefined || value === "") return false;
+  if (value === undefined || value === "") return fallback;
   if (value === "true") return true;
   if (value === "false") return false;
   throw new Error(`${name} must be exactly true or false.`);
@@ -64,7 +78,9 @@ export function readSignalEngineSettings(
   environment: NodeJS.ProcessEnv = process.env
 ): SignalEngineSettings {
   const enabled = readBoolean(environment, "SIGNAL_ENGINE_ENABLED");
-  const syntheticOnly = readBoolean(environment, "SIGNAL_ENGINE_SYNTHETIC_ONLY");
+  const syntheticOnly = readBoolean(environment, "SIGNAL_ENGINE_SYNTHETIC_ONLY", true);
+  const t1ProtocolEnabled = readBoolean(environment, "SIGNAL_ENGINE_T1_PROTOCOL_ENABLED");
+  const localAuthBypass = readBoolean(environment, "SIGNAL_ENGINE_T1_LOCAL_AUTH_BYPASS");
   const prohibited = PROHIBITED_SIGNAL_FLAGS.filter((name) => readBoolean(environment, name));
 
   if (prohibited.length > 0) {
@@ -72,6 +88,15 @@ export function readSignalEngineSettings(
   }
   if (enabled && !syntheticOnly) {
     throw new Error("The signal engine can only run with SIGNAL_ENGINE_SYNTHETIC_ONLY=true.");
+  }
+  if (t1ProtocolEnabled && (!enabled || !syntheticOnly)) {
+    throw new Error("The T1 protocol requires the local synthetic signal-engine gate.");
+  }
+  if (t1ProtocolEnabled && !["local", "test"].includes(environment.APP_ENV ?? "")) {
+    throw new Error("The T1 protocol is restricted to explicit local or test environments.");
+  }
+  if (localAuthBypass && (environment.APP_ENV !== "local" || !t1ProtocolEnabled)) {
+    throw new Error("The fixed T1 authentication bypass requires an explicit local T1 protocol.");
   }
   if (enabled && !["local", "test"].includes(environment.APP_ENV ?? "")) {
     throw new Error("The signal engine is restricted to explicit local or test environments.");
@@ -90,6 +115,13 @@ export function readSignalEngineSettings(
   return {
     enabled,
     syntheticOnly,
+    t1ProtocolEnabled,
+    userAuthoredText: false,
+    receivedExcerpts: false,
+    audioEnabled: false,
+    modelTrainingEnabled: false,
+    localAuthBypass,
+    appEnvironment: environment.APP_ENV ?? "",
     internalUrl,
     internalSecret: configuredSecret,
     timeoutMs: readPositiveInteger(environment, "SIGNAL_ENGINE_TIMEOUT_MS", 5_000, 15_000),
